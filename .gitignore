@@ -1,0 +1,9 @@
+*.txt
+*.db
+*.sass-cache
+/Gemfile.lock
+slim
+.DS_STORE
+*.swp
+*.rbc
+*.sass-cache
