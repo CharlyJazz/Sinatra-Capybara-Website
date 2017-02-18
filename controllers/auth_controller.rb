@@ -16,7 +16,7 @@ class AuthController < ApplicationController
 
   before do
     set_title
-    puts current_user.is_anonimous
+    set_current_user
   end
 
   get '/' do
@@ -31,6 +31,7 @@ class AuthController < ApplicationController
     # => If redirect of login:
     # => params[:id] is session[:user]
     @user = User.get(params[:id])
+    # => Si no hay usuario con ese id :
     if @user.class != User
       redirect '/not_found'
     end
@@ -45,7 +46,7 @@ class AuthController < ApplicationController
     create_user
   end
 
-  get 'logout' do
+  get '/logout' do
     session.clear
     redirect '/'
   end

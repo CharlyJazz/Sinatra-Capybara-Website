@@ -4,8 +4,8 @@ require 'sinatra/flash'
 require_relative '../models/models'
 
 class ApplicationController < Sinatra::Base
-
   register Sinatra::Flash
+  helpers Apphelpers
 
   # => config
   configure do

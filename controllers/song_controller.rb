@@ -15,5 +15,7 @@ class SongController < ApplicationController
 
   before do
     set_title
+    set_current_user
   end
+
 end

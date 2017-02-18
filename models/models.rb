@@ -24,13 +24,11 @@ class Base
 end
 
 class User < Base
-  # => User authentication with email and password
   property :username, String, :length => 1..15
   property :email, String, :length => 6..125, :unique => true
-  property :password_hash, String
-  property :password_salt, String
+  property :password, String
   property :recover_password, String
-  property :role, String, :default => 'user', :accessor =>  :protected
+  property :role, String, :default => 'user'
   # Add the image relations in version 2
 end
 

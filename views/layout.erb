@@ -4,11 +4,21 @@
 <head>
   <title><%= @title %></title></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
 </head>
 <body>
+  <% if @current_user.is_anonimous %>
+  <div class="">
+    <a href="/auth/register">register</a>
+  </div>
+  <% else %>
+  <div class="">
+    <a href="/auth/profile/<%= session[:user]%>">profile</a>
+    <a href="/auth/logout">logout</a>
+  </div>
+  <% end %>
   <%= yield %>
   <%= styled_flash %>
-  <script type="text/javascript" src="javascripts/app.js"></script>
+  <script type="text/javascript" src="/javascripts/app.js"></script>
 </body>
 </html>
