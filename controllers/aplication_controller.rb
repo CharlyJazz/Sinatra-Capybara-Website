@@ -1,19 +1,22 @@
 Bundler.require
-
 require 'sinatra/base'
 require 'sinatra/flash'
 require_relative '../models/models'
 
 class ApplicationController < Sinatra::Base
 
+  register Sinatra::Flash
+
   # => config
   configure do
     enable :sessions
     enable :logging
     enable :show_exceptions
-    # => set :static, true
+    set :template_engine, :erb
     set :views, 'views'
     set :public_folder, 'public'
+    set :static, true # Important: This before of public_folder
+    set :static_cache_control, [:public, max_age: 0]
     set :session_secret, '1a2s3d4f5g6h7j8k9l'
   end
 
@@ -33,8 +36,6 @@ class ApplicationController < Sinatra::Base
     :email_password => ENV['SENDGRID_PASSWORD'],
     :email_domain => 'heroku.com'
   end
-
-  register Sinatra::Flash
 
   def send_message
     Pony.mail(
@@ -56,8 +57,7 @@ class ApplicationController < Sinatra::Base
   end
 
   not_found do
-    erb :not_found
+    render :erb, :'error/not_found'
   end
-
 
 end

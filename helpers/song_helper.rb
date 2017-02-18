@@ -1,5 +1,4 @@
 module SongHelpers
-
   def find_songs
     @songs = Song.all
   end
@@ -11,5 +10,4 @@ module SongHelpers
   def create_song
     @song = Song.create(params[:song])
   end
-  
 end
