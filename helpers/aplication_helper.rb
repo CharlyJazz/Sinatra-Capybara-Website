@@ -15,6 +15,9 @@ module Apphelpers
       return GuestUser.new
     end
 
+    rescue NoMethodError
+      return GuestUser.new
+
   end
 
   def set_current_user

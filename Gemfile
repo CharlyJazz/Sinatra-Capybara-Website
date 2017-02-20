@@ -12,5 +12,5 @@ gem "dm-aggregates"
 gem "dm-pager"
 gem 'dm-timestamps'
 gem "dm-sqlite-adapter"
+gem "dm-types"
 gem "pony"
-gem "bcrypt"

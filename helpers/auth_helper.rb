@@ -14,7 +14,7 @@ module AuthHelpers
     if @user.password == params[:password]
       session[:user] = @user.id
       flash[:notice] = "User successfully logged"
-      redirect "/profile/#{session[:user]}"
+      redirect "auth/profile/#{session[:user]}"
     else
       flash[:notice] = "The email or password no are correct"
       redirect '/auth'
