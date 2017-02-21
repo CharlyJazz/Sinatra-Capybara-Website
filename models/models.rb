@@ -32,9 +32,13 @@ class User < Base
   property :recover_password, String
   property :role, String, :default => 'user'
   # Add the image relations in version 2
+  has n, :songs # => has n and belongs_to (or One-To-Many)
+  has n, :albums # => has n and belongs_to (or One-To-Many)
 end
 
-class Album < Base
+class Album
+  include DataMapper::Resource
+  property :id, Serial
   property :name, String
   property :date, Date
   # Add the image relations in version 2
@@ -42,22 +46,26 @@ class Album < Base
   has n, :songs, :through => Resource
   has n, :comment_albums # => has n and belongs_to (or One-To-Many)
                          # => CommentSong ----> comment_songs
+  belongs_to :user
 end
 
-class Song < Base
+class Song
   # https://moodle2013-14.ua.es/moodle/pluginfile.php/73782/mod_resource/content/2/datamapper.org%20docs/docs/dm_more/types.html
+  include DataMapper::Resource
+  property :id, Serial
+  property :url_song, Text
   property :title, Text
   property :description, Text
   property :genre, String
   property :type, Enum[:original, :remix, :live, :recording, :demo, :work, :effect, :other], :default => :original
   property :license, Enum[:creative_commons, :all_right_reserved]
+  property :replay, Integer, :default => 0
   property :likes, Integer, :default => 0
-  def released_on=date
-    super Date.strptime(date, '%m/%d/%Y')
-  end
+  # Add the image relations in version 2
   has n, :albums, :through => Resource
   has n, :comment_songs # => has n and belongs_to (or One-To-Many)
                         # => CommentSong ----> comment_songs
+  belongs_to :user
 end
 
 class CommentAlbum

@@ -1,0 +1,24 @@
+<h2>Upload Music</h2>
+<form action="/music/create" method="POST">
+  <label for="">title</label>
+  <input type="text" name="title">
+  <label>description</label>
+  <input type="text" name="description">
+  <label>genre</label>
+  <input type="text" name="genre">
+  <label>type</label>
+  <select name="type">
+    <option selected="selected" value="original">original</option>
+    <option value="remix">remix</option>
+    <option value="live">live</option>
+    <option value="recording">recording</option>
+    <option value="work">work</option>
+    <option value="effect">effect</option>
+    <option value="other">other</option>
+  </select>
+  <select name="license">
+    <option selected="selected" value="creative_commons">All right reserved</option>
+    <option value="all_right_reserved">Creative Commons</option>
+  </select>
+  <input type="submit" value="Create Song">
+</form>
