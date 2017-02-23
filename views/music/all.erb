@@ -1,6 +1,7 @@
 <% if @songs.any? %>
     <% @songs.each do |song| %>
       <a href="/music/song/<%=song.id %>"> <%= song.title %> </a>
+      <h2><%=song.url_song%></h2>
       <h2><%=song.description%></h2>
       <h2><%=song.genre%></h2>
       <h2><%=song.type%></h2>

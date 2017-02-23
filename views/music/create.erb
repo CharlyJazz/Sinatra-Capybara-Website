@@ -1,13 +1,20 @@
+<div class="column column.is-7">
 <h2>Upload Music</h2>
-<form action="/music/create" method="POST">
+<form action="/music/create"
+      method="POST"
+      enctype="multipart/form-data">
+  <label for="">file</label>
+  <input class="panel-block" type="file" name="file">
   <label for="">title</label>
-  <input type="text" name="title">
+  <input class="panel-block" type="text" name="title"
+         value="sweet, sweet love">
   <label>description</label>
-  <input type="text" name="description">
+  <input class="panel-block" type="text" name="description"
+         value="sweet, sweet love is a un beta loco">
   <label>genre</label>
-  <input type="text" name="genre">
+  <input class="panel-block" type="text" name="genre"  value="block metal">
   <label>type</label>
-  <select name="type">
+  <select class="panel-block" name="type">
     <option selected="selected" value="original">original</option>
     <option value="remix">remix</option>
     <option value="live">live</option>
@@ -16,9 +23,12 @@
     <option value="effect">effect</option>
     <option value="other">other</option>
   </select>
-  <select name="license">
+  <label>license</label>
+  <select class="panel-block" name="license">
     <option selected="selected" value="creative_commons">All right reserved</option>
     <option value="all_right_reserved">Creative Commons</option>
   </select>
-  <input type="submit" value="Create Song">
+  <hr>
+  <input type="submit" value="Create Song" class="button">
 </form>
+</div>

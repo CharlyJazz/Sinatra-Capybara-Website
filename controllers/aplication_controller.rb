@@ -15,9 +15,10 @@ class ApplicationController < Sinatra::Base
     set :template_engine, :erb
     set :views, 'views'
     set :public_folder, 'public'
-    set :static, true # Important: This before of public_folder
+    set :static, true
     set :static_cache_control, [:public, max_age: 0]
     set :session_secret, '1a2s3d4f5g6h7j8k9l'
+    set :music_folder, 'public/music'
   end
 
 
