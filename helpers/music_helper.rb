@@ -34,4 +34,16 @@ module MusicHelpers
 
   end
 
+  def upload_music
+    unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
+       flash[:notice] = "No file selected"
+       redirect '/music/upload'
+    end
+    directory = "public/music"
+    path = File.join(directory, name)
+    File.open(path, "wb") { |f| f.write(tmpfile.read) }
+    flash[:notice] = "File upload!"
+    redirect '/music/upload'
+  end
+
 end

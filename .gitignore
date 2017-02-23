@@ -2,6 +2,7 @@
 *.db
 *.sass-cache
 /Gemfile.lock
+sound_test
 slim
 .DS_STORE
 *.swp

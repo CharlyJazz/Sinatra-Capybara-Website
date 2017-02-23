@@ -32,4 +32,12 @@ class MusicController < ApplicationController
     create_music
   end
 
+  get '/upload' do
+    render :erb, :'music/upload'
+  end
+
+  post '/upload' do
+    upload_music
+  end
+
 end
