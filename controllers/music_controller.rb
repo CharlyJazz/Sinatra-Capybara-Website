@@ -9,6 +9,10 @@ class MusicController < ApplicationController
 
   helpers MusicHelpers
 
+  configure do
+    set :music_folder, "./tracks"
+  end
+
   def set_title
     @title ||= "Explorer Music"
   end
@@ -23,12 +27,19 @@ class MusicController < ApplicationController
     render :erb, :'music/all'
   end
 
+  get '/play/:id' do
+    @song = find_song
+    unless @song.class != Song
+      return render :erb, :'music/one'
+    end
+    redirect not_found
+  end
+
   get '/create' do
     render :erb, :'music/create'
   end
 
   post '/create' do
-    puts params[:music]
     create_music
   end
 

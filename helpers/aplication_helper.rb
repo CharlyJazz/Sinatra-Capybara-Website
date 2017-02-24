@@ -37,6 +37,11 @@ module Apphelpers
       return false
     end
   end
+
+  def upload_file(directory, filename, tmpfile)
+    path = File.join(directory, filename)
+    File.open(path, "wb") { |f| f.write(tmpfile.read) }
+  end
 end
 
 

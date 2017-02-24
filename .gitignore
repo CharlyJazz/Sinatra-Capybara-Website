@@ -2,9 +2,7 @@
 *.db
 *.sass-cache
 /Gemfile.lock
+
+tracks
 sound_test
 slim
-.DS_STORE
-*.swp
-*.rbc
-*.sass-cache

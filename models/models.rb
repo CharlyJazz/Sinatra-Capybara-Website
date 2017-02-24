@@ -31,12 +31,46 @@ class User < Base
   property :password, BCryptHash
   property :recover_password, String
   property :role, String, :default => 'user'
-  # Add the image relations in version 2
-  has n, :songs # => has n and belongs_to (or One-To-Many)
-  has n, :albums # => has n and belongs_to (or One-To-Many)
+  has 1, :user_information # => (One-to-One)
+  has 1, :user_media       # => (One-to-One)
+  has n, :user_socials     # => has n and belongs_to (or One-To-Many)
+  has n, :songs            # => has n and belongs_to (or One-To-Many)
+  has n, :albums           # => has n and belongs_to (or One-To-Many)
+end
+
+class UserMedia
+  include DataMapper::Resource
+  # => Crear imagen default
+  property :id, Serial
+  property :profile_img_url, Text
+  property :banner_img_url, Text
+
+  belongs_to :user
+end
+
+class UserInformation
+  include DataMapper::Resource
+  property :id, Serial
+  property :first_name, String, :length => 2..50
+  property :last_name, String, :length => 2..50
+  property :country, String, :length => 2..50
+  property :city, String, :length => 2..50
+  property :bio, Text, :length => 10..225
+
+  belongs_to :user
+end
+
+class UserSocial
+  include DataMapper::Resource
+  property :id, Serial
+  property :url, Text
+  property :name, String
+
+  belongs_to :user
 end
 
 class Album
+  # => Crear imagen default
   include DataMapper::Resource
   property :id, Serial
   property :name, String
@@ -50,7 +84,7 @@ class Album
 end
 
 class Song
-  # https://moodle2013-14.ua.es/moodle/pluginfile.php/73782/mod_resource/content/2/datamapper.org%20docs/docs/dm_more/types.html
+  # => Crear imagen default
   include DataMapper::Resource
   property :id, Serial
   property :url_song, Text
