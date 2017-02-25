@@ -1,4 +1,9 @@
 module Apphelpers
+
+  def asset_path(source)
+    "/assets/" + settings.sprockets.find_asset(source).digest_path
+  end
+
   def current_user
     if session[:user]
       user = User.first(:id => session[:user])

@@ -12,6 +12,7 @@ class ApplicationController < Sinatra::Base
     enable :sessions
     enable :logging
     enable :show_exceptions
+    set :root,  Pathname(File.expand_path("../..", __FILE__))
     set :template_engine, :erb
     set :views, 'views'
     set :public_folder, 'public'
@@ -19,6 +20,12 @@ class ApplicationController < Sinatra::Base
     set :static_cache_control, [:public, max_age: 0]
     set :session_secret, '1a2s3d4f5g6h7j8k9l'
   end
+
+  set :sprockets, Sprockets::Environment.new(root) { |env|
+    env.append_path(root.join('assets', 'stylesheets'))
+    env.append_path(root.join('assets', 'javascripts'))
+    env.append_path(root.join('assets', 'images'))
+  }
 
 
   configure :development do

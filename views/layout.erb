@@ -4,8 +4,8 @@
 <head>
   <title><%= @title %></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" type="text/css" href="/stylesheets/bulma.css" />
-  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+  <!-- <link rel="stylesheet" type="text/css" href="/stylesheets/bulma.css" /> -->
+  <link rel="stylesheet" type="text/css" href="<%= asset_path('style.css') %>" />
 </head>
 <body>
   <% if @current_user.is_anonimous %>
@@ -20,6 +20,6 @@
   <% end %>
   <%= yield %>
   <%= styled_flash %>
-  <script type="text/javascript" src="/javascripts/app.js"></script>
+  <script type="text/javascript" src="<%= asset_path('app.js') %>"></script>
 </body>
 </html>
