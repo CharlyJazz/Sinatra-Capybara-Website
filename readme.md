@@ -5,6 +5,9 @@ Modular App in Sinatra, based on Soundcloud and the book Jump Start by Darren Jo
 
 Run with bundle:
 
+```ruby
+bundle install
+```
 
 ```ruby
 bundle exec rackup -p 8000

@@ -14,8 +14,6 @@ gem 'dm-timestamps'
 gem "dm-sqlite-adapter"
 gem "dm-types"
 gem "pony"
-
-
 gem 'sprockets'
 gem 'sass'
 gem 'coffee-script'

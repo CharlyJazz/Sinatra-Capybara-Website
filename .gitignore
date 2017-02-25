@@ -1,8 +1,23 @@
 *.txt
 *.db
 *.sass-cache
+
 /Gemfile.lock
 
-tracks
+tracks/*
+!tracks/.gitkeep
+
+assets/images/albums/*
+!assets/images/albums/.gitkeep
+
+assets/images/songs/*
+!assets/images/songs/.gitkeep
+
+assets/images/profiles/*
+!assets/images/profiles/.gitkeep
+
+assets/images/banners/*
+!assets/images/banners/.gitkeep
+
 sound_test
 slim

@@ -5,21 +5,46 @@
   <title><%= @title %></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <!-- <link rel="stylesheet" type="text/css" href="/stylesheets/bulma.css" /> -->
+  <link rel="stylesheet" type="text/css" href="<%= asset_path('materialize.css') %>" />
   <link rel="stylesheet" type="text/css" href="<%= asset_path('style.css') %>" />
+  <link href="//cdn.shopify.com/s/files/1/1775/8583/t/1/assets/gallery-materialize.min.opt.css?16391932235316416049" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-  <% if @current_user.is_anonimous %>
-  <div class="">
-    <a href="/auth/register">register</a>
+  <nav class="nav-extended">
+  <div class="nav-background">
+    <div class="ea k" style="background-image: url('//cdn.shopify.com/s/files/1/1775/8583/t/1/assets/icon-seamless.png?16391932235316416049');"></div>
   </div>
-  <% else %>
-  <div class="">
-    <a href="/auth/profile/<%= session[:user]%>">profile</a>
-    <a href="/auth/logout">logout</a>
+  <div class="nav-wrapper db">
+    <a href="/pages/demo" class="brand-logo"><i class="material-icons">library_music</i>Frank Sinatra App</a>
+    <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    <ul class="bt hide-on-med-and-down">
+      <li class="k"><a href="/pages/demo">Home</a></li>
+      <li><a href="/pages/blog">Explorer</a></li>
+      <% if @current_user.is_anonimous %>
+      <li><a href="/auth/register">Register</a></li>
+      <% else %>
+       <li class=""><a href="/pages/demo">Messages</a></li>
+        <li><a class='dropdown-button' href='#' data-activates='feature-dropdown' data-belowOrigin="true" data-constrainWidth="false">Features<i class="material-icons bt">arrow_drop_down</i></a></li>
+        <ul id='feature-dropdown' class='dropdown-content'>
+          <li><a href="/auth/profile/<%= session[:user]%>">Profile</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+          <li><a href="/auth/logout">Upload</a></li>
+          <li><a href="/auth/logout">Setting</a></li>
+          <li><a href="/auth/logout">Change password</a></li>
+        </ul>
+      <% end %>
+    </ul>
+    <!-- Dropdown Structure -->
+    <div class="nav-header de">
+      <code> Best music = More life</code>
+    </div>
   </div>
-  <% end %>
+</nav>
   <%= yield %>
   <%= styled_flash %>
+  <script type="text/javascript" src="<%= asset_path('jquery.js') %>"></script>
+  <script type="text/javascript" src="<%= asset_path('materialize.js') %>"></script>
   <script type="text/javascript" src="<%= asset_path('app.js') %>"></script>
 </body>
 </html>
