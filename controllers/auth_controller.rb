@@ -27,6 +27,14 @@ class AuthController < ApplicationController
     login_user
   end
 
+  get '/change_password' do
+    render :erb, :'auth/change_password'
+  end
+
+  post '/change_password' do
+    update_password
+  end
+
   get '/profile/:id' do
     # => If redirect of login:
     # => params[:id] is session[:user]
