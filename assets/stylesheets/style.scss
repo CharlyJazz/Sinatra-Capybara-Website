@@ -1,5 +1,20 @@
 $color: rgb(227, 129, 129);
 
-body{
-  background-color: $color
+.user-card{
+  height: 180px;
+}
+
+.image-profile{
+  background-color: transparent;
+  position: relative;
+  width: 115px;
+  margin: 0 auto;
+}
+
+.name_display{
+  color: rgb(219, 75, 75) !important;
+}
+
+.name_display:hover{
+  text-decoration: none
 }

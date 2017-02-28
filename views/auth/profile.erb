@@ -2,29 +2,42 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col s10">
-      <div class="card">
-        <div class="card-content" style="background-image: url(https://cdn.shopify.com/s/files/1/1775/8583/t/1/assets/geometric-aquamarine.jpg?13613967455516916776)">
-          <h2 style="margin:0"><%= @user.username %></h2>
-          <h4><%= @user.email %></h4>
+      <% if @user_media%>
+        <div class="card user-card" id="profile"style="background-image: url(<%@user_media.banner_img_url%>)">
+          <div class="card image-profile" >
+            <div class="card-image z-depth-4">
+              <img class="responsive-img" src="<%@user_media.profile_img_url%>">
+            </div>
+          </div>
+      <% else %>
+        <div class="card user-card" id="profile"style="background-image: url(<%= asset_path('banners/default_banner.jpg')%>)">
+          <div class="card image-profile">
+            <div class="card-image z-depth-4">
+              <img class="responsive-img" src="<%= asset_path('profiles/default_profile.jpg')%>">
+            </div>
+          </div>
+      <% end %>
         </div>
+      <div class="card-content">
         <div class="card-tabs">
           <ul class="tabs tabs-fixed-width">
-            <li class="tab"><a href="#test4" class="">Albums</a></li>
-            <li class="tab"><a class="" href="#test5">Tracks</a></li>
-            <li class="tab"><a href="#test6" class="active">Likes</a></li>
+            <li class="tab"><a href="#albums" class="">Albums</a></li>
+            <li class="tab"><a class="" href="#tracks">Tracks</a></li>
+            <li class="tab"><a href="#likes" class="active">Likes</a></li>
             <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div></ul>
           </div>
           <div class="card-content grey lighten-4">
-            <div id="test4" style="display: none;" class="">Test 1</div>
-            <div id="test5" class="" style="display: none;">Test 2</div>
-            <div id="test6" style="display: block;" class="active">Test 3</div>
+            <div id="albums" style="display: none;" class="">Test 1</div>
+            <div id="tracks" class="" style="display: none;">Test 2</div>
+            <div id="likes" style="display: block;" class="active">Test 3</div>
           </div>
         </div>
       </div>
       <div class="col hide-on-small-only m3 s2 l2">
           <ul class="section table-of-contents">
-            <li><a href="#albums">Activity</a></li>
-            <li><a href="#tracks">Recent Comment</a></li>
+            <li><a href="#profile" class="name_display"><%= @user.username %></a></li>
+            <li><a href="#activity">Activity</a></li>
+            <li><a href="#recentcomment">Recent Comment</a></li>
             <li><a href="#bio">Bio and Info</a></li>
           </ul>
         </div>
@@ -36,7 +49,7 @@
     </div>
     <div id="albums" class="section scrollspy">
     </div>
-    <div id="bio" class="section scrollspy">
+    <div id="likes" class="section scrollspy">
     </div>
   </div>
 </div>

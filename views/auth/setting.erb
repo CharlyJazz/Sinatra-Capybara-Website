@@ -1,0 +1,107 @@
+<div class="container" style="margin-top:2.5%">
+    <div class="row">
+        <h3>Settings</h3>
+        <div class="card-content">
+          <div class="card-tabs">
+            <ul class="tabs tabs-fixed-width">
+              <li class="tab"><a href="#personal" class="active">Personal</a></li>
+              <li class="tab"><a class="" href="#media">Media</a></li>
+              <li class="tab"><a href="#social">Social</a></li>
+              <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div></ul>
+            </div>
+            <div class="card-content grey lighten-4">
+              <div id="personal" class="">
+                <form action="/auth/setting/personal" method="POST">
+                    <div class="col s12">
+                        <div class="input-field col s6">
+                            <input name="display_name" type="text" class="validate">
+                            <label class="active">Display Name</label>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="input-field col s3">
+                            <input name="first_name" type="text" class="validate">
+                            <label class="active">First Name</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input name="last_name" type="text" class="validate">
+                            <label>Last name</label>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="input-field col s3">
+                            <input name="country" type="text" class="validate">
+                            <label>Country</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input name="city" type="text" class="validate">
+                            <label>City</label>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="input-field col s3">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+              </div>
+              <div id="media"  class="" style="display: none;">
+                <form action="/auth/setting/media" method="POST" enctype="multipart/form-data">
+                    <div class="col s12">
+                        <div class="file-field input-field col s6">
+                            <div class="btn">
+                                <span>Profile Image</span>
+                                <input type="file" name="image_profile" required>
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload your profile image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="file-field input-field col s6">
+                            <div class="btn">
+                                <span>Banner Image</span>
+                                <input type="file" name="image_banner" required>
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload your banner">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="input-field col s3">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                  </form>
+              </div>
+              <div id="social" style="display: block;">
+                <form action="/auth/setting/social" method="POST">
+                  <div class="col s12">
+                      <div class="input-field col s3">
+                          <input name="social_url" type="text" class="validate">
+                          <label>Url</label>
+                      </div>
+                      <div class="input-field col s3">
+                          <input name="social_name" type="text" class="validate">
+                          <label>Name</label>
+                      </div>
+                  </div>
+                <div class="col s12">
+                    <div class="input-field col s3">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+    </div>
+</div>

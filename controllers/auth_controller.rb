@@ -42,6 +42,11 @@ class AuthController < ApplicationController
     # => Si no hay usuario con ese id :
     if @user.class != User
       redirect '/not_found'
+    else
+      @user_media = UserMedia.first(:user_id => @user.id)
+      if @user_media.class != UserMedia
+        @user_media = nil
+      end
     end
     render :erb, :'auth/profile'
   end
@@ -52,6 +57,16 @@ class AuthController < ApplicationController
 
   post '/register' do
     create_user
+  end
+
+  get '/setting' do
+    render :erb, :'auth/setting'
+  end
+
+  post '/setting/:action' do
+    if params[:action] == "social" then setting_social end
+    if params[:action] == "personal" then setting_personal end
+    if params[:action] == "media" then setting_media else redirect '/not_found' end
   end
 
   get '/logout' do

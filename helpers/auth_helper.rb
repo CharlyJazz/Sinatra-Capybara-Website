@@ -38,5 +38,20 @@ module AuthHelpers
       redirect 'auth/change_password'
     end
   end
+
+  def setting_social
+    puts "SOCIAL"
+    redirect "auth/profile/#{session[:user]}"
+  end
+
+  def setting_personal
+    puts "PERSONAL"
+    redirect "auth/profile/#{session[:user]}"
+  end
+
+  def setting_media
+    puts "MEDIA"
+    redirect "auth/profile/#{session[:user]}"
+  end
   # Create method access admin
 end
