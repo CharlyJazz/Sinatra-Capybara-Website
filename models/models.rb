@@ -40,17 +40,14 @@ end
 
 class UserMedia
   include DataMapper::Resource
-  # => Crear imagen default
-  property :id, Serial
-  property :profile_img_url, Text, :default => "banners/default_banner.jpg"
-  property :banner_img_url, Text, :default => "profiles/default_profile.jpg"
+  property :profile_img_url, Text, :default => "profiles/default_profile.jpg", :lazy => false 
+  property :banner_img_url, Text, :default => "banners/default_banner.jpg", :lazy => false
 
-  belongs_to :user
+  belongs_to :user, :key => true
 end
 
 class UserInformation
   include DataMapper::Resource
-  property :id, Serial
   property :display_name, String, :length => 2..50
   property :first_name, String, :length => 2..50
   property :last_name, String, :length => 2..50
@@ -58,7 +55,7 @@ class UserInformation
   property :city, String, :length => 2..50
   property :bio, Text, :length => 10..225
 
-  belongs_to :user
+  belongs_to :user, :key => true
 end
 
 class UserSocial

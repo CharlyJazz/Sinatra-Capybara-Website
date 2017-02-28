@@ -2,21 +2,13 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col s10">
-      <% if @user_media%>
-        <div class="card user-card" id="profile"style="background-image: url(<%@user_media.banner_img_url%>)">
-          <div class="card image-profile" >
-            <div class="card-image z-depth-4">
-              <img class="responsive-img" src="<%@user_media.profile_img_url%>">
-            </div>
-          </div>
-      <% else %>
-        <div class="card user-card" id="profile"style="background-image: url(<%= asset_path('banners/default_banner.jpg')%>)">
+        <div class="card user-card" id="profile"
+        style="background-image: url(<%= asset_path(@user.user_media.banner_img_url)%>)">
           <div class="card image-profile">
             <div class="card-image z-depth-4">
-              <img class="responsive-img" src="<%= asset_path('profiles/default_profile.jpg')%>">
+              <img class="responsive-img" src="<%= asset_path(@user.user_media.profile_img_url)%>">
             </div>
           </div>
-      <% end %>
         </div>
       <div class="card-content">
         <div class="card-tabs">

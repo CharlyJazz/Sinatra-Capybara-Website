@@ -10,6 +10,11 @@ class AuthController < ApplicationController
 
   helpers AuthHelpers
 
+  configure do
+    set :profiles_folder, settings.root.join('assets', 'images/profiles')
+    set :banners_folder, settings.root.join('assets', 'images/banners')
+  end
+
   def set_title
     @title ||= "Authentication"
   end
@@ -39,14 +44,8 @@ class AuthController < ApplicationController
     # => If redirect of login:
     # => params[:id] is session[:user]
     @user = User.get(params[:id])
-    # => Si no hay usuario con ese id :
     if @user.class != User
       redirect '/not_found'
-    else
-      @user_media = UserMedia.first(:user_id => @user.id)
-      if @user_media.class != UserMedia
-        @user_media = nil
-      end
     end
     render :erb, :'auth/profile'
   end
