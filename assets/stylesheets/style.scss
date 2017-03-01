@@ -18,3 +18,42 @@ $color: rgb(227, 129, 129);
 .name_display:hover{
   text-decoration: none
 }
+
+@keyframes fadetoggle {
+  0%   {opacity: 0;}
+  50%  {opacity: 1;}
+  100% {opacity: 0; display: none;}
+}
+
+.flash {
+  text-align: center;
+  padding: .3em .4em;
+  margin: 0 auto .5em;
+  clear: both;
+  max-width: 46.923em;
+  /* 610/13 */
+  *max-width: 45.750em;
+  /* 610/13.3333 - for IE */
+  animation: 4s fadetoggle;
+  animation-fill-mode: forwards;
+
+  &.error {
+    border: thin solid rgb(218, 68, 68);
+    background: rgba(184, 96, 96, 0.64);
+  }
+  &.notice, &.info {
+    border: thin solid rgb(47, 217, 176);
+    background: rgba(96, 184, 150, 0.56);
+  }
+  &.warning {
+    border: thin solid rgba(233, 167, 40, 0.56);
+    background: rgba(246, 164, 5, 0.5);
+  }
+  .close {
+    float: right;
+    a {
+      color: rgba(168, 0, 0, 0.85);
+      text-decoration: none;
+    }
+  }
+}

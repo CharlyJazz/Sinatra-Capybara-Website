@@ -13,7 +13,7 @@ module AuthHelpers
   def login_user
     @user = User.first(:email => params[:email])
     if @user.class != User
-      flash[:notice] = "The email no are correct"
+      flash[:warning] = "The email no are correct"
       redirect '/auth'
     end
     if @user.password == params[:password]
@@ -21,7 +21,7 @@ module AuthHelpers
       flash[:notice] = "User successfully logged"
       redirect "auth/profile/#{session[:user]}"
     else
-      flash[:notice] = "The email or password no are correct"
+      flash[:warning] = "The email or password no are correct"
       redirect '/auth'
     end
   end
@@ -30,12 +30,12 @@ module AuthHelpers
     if params[:recover_password].to_s.empty? or
        params[:password_old].to_s.empty? or
        params[:password_new].to_s.empty?
-      flash[:notice] = "You send a empty field..."
+      flash[:warning] = "You send a empty field..."
       return redirect 'auth/change_password'
     end
     @user = User.first(:recover_password => params[:recover_password])
     if @user.class != User or @user.password != params[:password_old]
-      flash[:notice] = "Yours dates not are corrects"
+      flash[:warning] = "Yours dates not are corrects"
       redirect 'auth/change_password'
     else
       @user.update(:password => params[:password_new])
@@ -51,7 +51,7 @@ module AuthHelpers
           (params[:image_banner] &&
             (tmpfile_banner = params[:image_banner][:tempfile]) &&
             (name_banner = params[:image_banner][:filename]))
-        flash[:notice] = "No files selected"
+        flash[:warning] = "No files selected"
         return redirect '/auth/setting'
     end
     @user = User.get(session[:user])
@@ -61,7 +61,7 @@ module AuthHelpers
     name_profile = "#{@user.id}" + "_" + name_profile.gsub(/\s.+/, '') + ext
     upload_file(settings.profiles_folder, name_profile,  tmpfile_profile)
     @user.user_media.update(:profile_img_url => "profiles/" + name_profile)
-    
+
     ext = (/\.[^.]*$/.match(name_banner.to_s)).to_s
     name_banner = "#{@user.id}" + "_" + name_banner.gsub(/\s.+/, '') + ext
     upload_file(settings.banners_folder, name_banner,  tmpfile_banner)
@@ -69,6 +69,11 @@ module AuthHelpers
 
     flash[:notice] = "Your media was updated successfully"
     redirect "auth/profile/#{session[:user]}"
+  end
 
+  def setting_personal
+  end
+
+  def setting_social
   end
 end

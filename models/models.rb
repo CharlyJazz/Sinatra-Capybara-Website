@@ -40,7 +40,7 @@ end
 
 class UserMedia
   include DataMapper::Resource
-  property :profile_img_url, Text, :default => "profiles/default_profile.jpg", :lazy => false 
+  property :profile_img_url, Text, :default => "profiles/default_profile.jpg", :lazy => false
   property :banner_img_url, Text, :default => "banners/default_banner.jpg", :lazy => false
 
   belongs_to :user, :key => true
@@ -73,8 +73,8 @@ class Album
   property :id, Serial
   property :name, String
   property :date, Date
-  # Add the image relations in version 2
-  # Add the likes property in version 2
+  property :likes, Integer, :default => 0
+  property :album_img_url, Text, :default => "album/default_album.jpg", :lazy => false
   has n, :songs, :through => Resource
   has n, :comment_albums # => has n and belongs_to (or One-To-Many)
                          # => CommentSong ----> comment_songs
@@ -93,7 +93,7 @@ class Song
   property :license, Enum[:creative_commons, :all_right_reserved]
   property :replay, Integer, :default => 0
   property :likes, Integer, :default => 0
-  # Add the image relations in version 2
+  property :album_img_url, Text, :default => "songs/default_song.png", :lazy => false
   has n, :albums, :through => Resource
   has n, :comment_songs # => has n and belongs_to (or One-To-Many)
                         # => CommentSong ----> comment_songs
