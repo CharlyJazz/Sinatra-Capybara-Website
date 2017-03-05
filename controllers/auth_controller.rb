@@ -59,13 +59,18 @@ class AuthController < ApplicationController
   end
 
   get '/setting' do
+    @user = User.get(session[:user])
+    puts @user.user_information.display_name
+    puts @user.user_information.first_name
+    puts @user.user_information.last_name
+
     render :erb, :'auth/setting'
   end
 
   post '/setting/:action' do
-    if params[:action] == "social" then setting_social end
-    if params[:action] == "personal" then setting_personal end
-    if params[:action] == "media" then setting_media else redirect '/not_found' end
+    if params[:action] == "social" then return setting_social end
+    if params[:action] == "personal" then return setting_personal end
+    if params[:action] == "media" then return setting_media else redirect '/not_found' end
   end
 
   get '/logout' do

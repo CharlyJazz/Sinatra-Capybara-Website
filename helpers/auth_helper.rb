@@ -68,10 +68,31 @@ module AuthHelpers
     @user.user_media.update(:banner_img_url => "banners/" + name_banner)
 
     flash[:notice] = "Your media was updated successfully"
-    redirect "auth/profile/#{session[:user]}"
+    redirect to("/profile/#{session[:user]}")
   end
 
   def setting_personal
+    if params[:display_name].to_s.empty? || params[:first_name].to_s.empty? ||
+       params[:last_name].to_s.empty? || params[:country].to_s.empty? ||
+       params[:city].to_s.empty? || params[:bio].to_s.empty?
+
+       flash[:error] = "Any field was are empty"
+       redirect to("/setting")
+    end
+
+    @user = User.get(session[:user])
+
+    @user.user_information.update(
+      :display_name => params[:display_name],
+      :first_name => params[:first_name],
+      :last_name => params[:last_name],
+      :country => params[:country],
+      :city => params[:city],
+      :bio => params[:bio]
+      )
+
+    flash[:notice] = "New personal information!"
+    redirect to("/profile/#{session[:user]}")
   end
 
   def setting_social
