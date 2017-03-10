@@ -1,47 +1,100 @@
-
 <div class="container-fluid">
-  <div class="row">
-    <div class="col s10">
-        <div class="card user-card" id="profile"
-        style="background-image: url(<%= asset_path(@user.user_media.banner_img_url)%>)">
-          <div class="card image-profile">
-            <div class="card-image z-depth-4">
-              <img class="responsive-img" src="<%= asset_path(@user.user_media.profile_img_url)%>">
+    <div class="row">
+        <div class="col s12">
+            <div class="card user-card" id="profile" style="background-image: url(<%= asset_path(@user.user_media.banner_img_url)%>)">
+                <div class="card image-profile">
+                    <div class="card-image z-depth-4">
+                        <img class="responsive-img" src="<%= asset_path(@user.user_media.profile_img_url)%>">
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      <div class="card-content">
-        <div class="card-tabs">
-          <ul class="tabs tabs-fixed-width">
-            <li class="tab"><a href="#albums" class="">Albums</a></li>
-            <li class="tab"><a class="" href="#tracks">Tracks</a></li>
-            <li class="tab"><a href="#likes" class="active">Likes</a></li>
-            <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div></ul>
-          </div>
-          <div class="card-content grey lighten-4">
-            <div id="albums" style="display: none;" class="">Test 1</div>
-            <div id="tracks" class="" style="display: none;">Test 2</div>
-            <div id="likes" style="display: block;" class="active">Test 3</div>
-          </div>
+        <div class="col s9">
+            <div class="card-content">
+                <div class="card-tabs">
+                    <ul class="tabs tabs-fixed-width">
+                        <li class="tab">
+                            <a href="#albums" class="">Albums</a>
+                        </li>
+                        <li class="tab">
+                            <a class="" href="#tracks">Tracks</a>
+                        </li>
+                        <li class="tab">
+                            <a href="#likes" class="active">Likes</a>
+                        </li>
+                        <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div>
+                    </ul>
+                </div>
+                <div class="card-content grey lighten-4">
+                    <div id="albums" style="display: none;" class="">Test 1</div>
+                    <div id="tracks" class="" style="display: none;">Test 2</div>
+                    <div id="likes" style="display: block;" class="active">Test 3</div>
+                </div>
+            </div>
         </div>
+        <div class="info--wraper col s3">
+
+        <article class="infoStats">
+            <table class="infoStats__table sc-type-small">
+                <tbody>
+                    <tr>
+                        <td class="infoStats__stat sc-link-light sc-border-light-right">
+                            <a href="/aboutcarlos/followers" rel="nofollow" class="" title="83 followers">
+                                <h3 class="infoTitle">Followers</h3>
+                                <div class="">0</div>
+                                <!-- COUNT FOLLOWERS -->
+                            </a>
+                        </td>
+                        <td class="infoStats__stat sc-link-light sc-border-light-right">
+                            <a href="/aboutcarlos/following" rel="nofollow" class="" title="Following 164 people">
+                                <h3 class="infoTitle">Following</h3>
+                                <div class="">0</div>
+                                <!-- COUNT FOLLOWING -->
+                            </a>
+                        </td>
+                        <td class="infoStats__stat">
+                            <a href="/aboutcarlos/tracks" rel="nofollow" class="" title="18 tracks">
+                                <h3 class="infoTitle">Tracks</h3>
+                                <div class="">0</div>
+                                <!-- COUNT TRACKS -->
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="infoStats__description">
+                <div class="truncatedUserDescription m-collapsed">
+                    <div class="truncatedUserDescription__wrapper" style="max-height: 85px;">
+                        <div class="truncatedUserDescription__content">
+                            <div>
+                              <% if @user.user_information.bio %>
+                                <p><%= @user.user_information.bio%></p>
+                              <% else %>
+                                <p>Add a litle biographic in Setting</p>
+                              <% end %>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="truncatedUserDescription__collapse sc-link-dark g-link-collapse collapsed" href="#">Show more</a>
+                    <!-- Acá habra un modal para el show more -->
+                </div>
+            </div>
+            <div class="web-profiles">
+                <ul class="sc-list-nostyle sc-clearfix">
+                  <!-- if hay social -->
+                    <li class="web-profiles__item">
+                        <div class="sc-truncate">
+                            <a href="https://exit.sc?url=https%3A%2F%2Fplus.google.com%2Fu%2F0%2F106092849867402977611" target="_blank" rel="me nofollow" class="web-profile sc-link-light">
+                                <span class="sc-social-icon sc-social-icon-googleplus"></span>
+                                Social
+                            </a>
+                        </div>
+                    </li>
+                  <!-- endif -->
+                </ul>
+            </div>
+        </article>
       </div>
-      <div class="col hide-on-small-only m3 s2 l2">
-          <ul class="section table-of-contents">
-            <li><a href="#profile" class="name_display"><%= @user.username %></a></li>
-            <li><a href="#activity">Activity</a></li>
-            <li><a href="#recentcomment">Recent Comment</a></li>
-            <li><a href="#bio">Bio and Info</a></li>
-          </ul>
-        </div>
-      </div>
-  </div>
-<div class="row">
-  <div class="col s12 m9 l10">
-    <div id="tracks" class="section scrollspy">
+
     </div>
-    <div id="albums" class="section scrollspy">
-    </div>
-    <div id="likes" class="section scrollspy">
-    </div>
-  </div>
 </div>

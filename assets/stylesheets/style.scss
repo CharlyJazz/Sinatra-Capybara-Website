@@ -57,3 +57,17 @@ $color: rgb(227, 129, 129);
     }
   }
 }
+
+.info--wraper{
+  border-left: 1px solid rgb(214, 214, 214);
+}
+.infoTitle{
+  font-size: 1em
+}
+body > div.container-fluid > div > div.info--wraper.col.s3 > article > table > tbody > tr > td > a > h3{
+  margin:0;
+  margin-top: 5px
+}
+body > div.container-fluid > div > div.col.s3 > article > table > tbody > tr > td{
+  padding: 0;
+}
