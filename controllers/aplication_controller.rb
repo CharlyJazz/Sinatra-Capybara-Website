@@ -25,6 +25,8 @@ class ApplicationController < Sinatra::Base
     env.append_path(root.join('assets', 'stylesheets'))
     env.append_path(root.join('assets', 'javascripts'))
     env.append_path(root.join('assets', 'images'))
+    env.append_path(root.join('assets', 'jquery'))
+    env.append_path(root.join('assets', 'materialize'))
   }
 
 

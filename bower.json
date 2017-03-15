@@ -1,0 +1,24 @@
+{
+  "name": "frank-sinatra-app",
+  "homepage": "https://github.com/CharlyJazz/Frank-Sinatra",
+  "authors": [
+    "charlyjazz <carlosjazzc1@gmail.com>"
+  ],
+  "description": "music app made in ruby!",
+  "main": "config.ru",
+  "keywords": [
+    "ruby",
+    "materialize"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "materialize": "^0.98.0"
+  }
+}

@@ -3,7 +3,16 @@
 Modular App in Sinatra, based on Soundcloud and the book Jump Start by Darren Jones
 
 
+Bower install assets dependenciess:
+
+
+```javascript
+bower install
+```
+
+
 Run with bundle:
+
 
 ```ruby
 bundle install

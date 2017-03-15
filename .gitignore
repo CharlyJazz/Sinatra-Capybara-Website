@@ -19,5 +19,7 @@ assets/images/profiles/*
 assets/images/banners/*
 !assets/images/banners/.gitkeep
 
+assets/materialize/*
+assets/jquery/*
+
 sound_test
-slim
