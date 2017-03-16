@@ -1,20 +1,23 @@
 <div class="">
+	<h1><%= @query_all_modell.model %></h1>
+	<hr>
   <table>
   	<thead>
-  		<tr>
-  			<th></th>
-  			<th></th>
-  			<th></th>
-  			<th></th>
-  		</tr>
+		<tr>
+		<% @model.properties.each do | property |  %>
+				<th><%= property.name.to_s %></th>
+		<% end %>
+		</tr>
   	</thead>
   	<tbody>
   		<tr>
-  			<td></td>
-  			<td></td>
-  			<td></td>
-  			<td></td>
-  		</tr>
+				<% @query_all_modell.each do | register |  %>
+						<td><%= register.key[0] %></td>
+				<% end %>
+  			<% @inspect_array.each do | attr |  %>
+					<th><%= attr %></th>
+				<% end %>
+			</tr>
   	</tbody>
   </table>
 </div>

@@ -60,10 +60,6 @@ class AuthController < ApplicationController
 
   get '/setting' do
     @user = User.get(session[:user])
-    puts @user.user_information.display_name
-    puts @user.user_information.first_name
-    puts @user.user_information.last_name
-
     render :erb, :'auth/setting'
   end
 
