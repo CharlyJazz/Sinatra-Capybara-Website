@@ -9,7 +9,6 @@ require_relative 'aplication_controller'
 class AdminController < ApplicationController
   enable :method_override
   register Sinatra::AdminView
-  # helpers AdminHelpers
 
   configure do
     # set :profiles_folder, settings.root.join('assets', 'images/profiles')

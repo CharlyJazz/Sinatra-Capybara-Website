@@ -1,23 +1,23 @@
-<div class="">
-	<h1><%= @query_all_modell.model %></h1>
-	<hr>
-  <table>
-  	<thead>
+<div class="row">
+	<div class="col s12 admin__block__table">
+	<p><code class=" language-markup">class: <%= @query_all_modell.model %></code></p>
+	<table class="responsive-table striped admin__table">
+		<thead>
 		<tr>
 		<% @model.properties.each do | property |  %>
 				<th><%= property.name.to_s %></th>
 		<% end %>
 		</tr>
-  	</thead>
-  	<tbody>
-  		<tr>
-				<% @query_all_modell.each do | register |  %>
-						<td><%= register.key[0] %></td>
-				<% end %>
-  			<% @inspect_array.each do | attr |  %>
-					<th><%= attr %></th>
-				<% end %>
-			</tr>
-  	</tbody>
-  </table>
+		</thead>
+		<tbody>
+			<% @inspect_array.each do | attributes |  %>
+				<tr>
+					<% attributes.each do | attribute |  %>
+						<th><%= attribute %></th>
+					<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+	</div>
 </div>

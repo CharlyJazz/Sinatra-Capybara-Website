@@ -74,7 +74,7 @@ class Album
   property :name, String
   property :date, Date
   property :likes, Integer, :default => 0
-  property :album_img_url, Text, :default => "album/default_album.jpg", :lazy => false
+  property :album_img_url, Text, :default => "albums/default_album.jpg", :lazy => false
   has n, :songs, :through => Resource
   has n, :comment_albums # => has n and belongs_to (or One-To-Many)
                          # => CommentSong ----> comment_songs

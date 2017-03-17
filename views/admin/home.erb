@@ -2,6 +2,6 @@
 
 <ul class="collection">
   <% @models.each do | model|%>
-    <li class="collection-item"> <a href=""> <%= model %> </a></li>
+    <li class="collection-item"> <a href="/admin/<%= model.name %>"> <%= model %> </a></li>
   <% end %>
 </ul>
