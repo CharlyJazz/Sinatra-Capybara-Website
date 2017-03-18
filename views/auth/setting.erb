@@ -88,16 +88,19 @@
               </div>
               <div id="social" style="display: block;">
                 <form action="/auth/setting/social" method="POST">
+                <a class="add_field_button btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+                <div class="input_fields_wrap">
                   <div class="col s12">
                       <div class="input-field col s3">
-                          <input name="social_url" type="text" class="validate">
-                          <label>Url</label>
+                          <input name="social_url[1]" type="text" class="validate">
+                          <label>Link</label>
                       </div>
                       <div class="input-field col s3">
-                          <input name="social_name" type="text" class="validate">
+                          <input name="social_name[1]" type="text" class="validate">
                           <label>Name</label>
                       </div>
                   </div>
+                </div>
                 <div class="col s12">
                     <div class="input-field col s3">
                         <button class="btn waves-effect waves-light" type="submit" name="action">Submit

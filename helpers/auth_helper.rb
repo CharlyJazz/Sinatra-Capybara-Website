@@ -96,5 +96,19 @@ module AuthHelpers
   end
 
   def setting_social
+    unless(params[:social_url] || params[:social_name])
+       redirect to("/auth/setting")
+    end
+
+    @user = User.get(session[:user])
+
+    arr = (params[:social_url].values).zip(params[:social_name].values)
+    for n in arr do
+      @user.user_socials.create(
+        :url => n[0],
+        :name => n[1]
+      )
+    end
+    "cool"
   end
 end
