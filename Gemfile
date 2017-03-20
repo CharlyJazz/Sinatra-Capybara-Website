@@ -17,5 +17,8 @@ gem "pony"
 gem 'sprockets'
 gem 'sass'
 gem 'coffee-script'
+
 gem "rspec"
 gem "rack-test"
+gem 'capybara'
+
