@@ -19,26 +19,31 @@ RSpec.describe 'Website' do
     expect(last_response).to be_ok
   end
 
-  describe "the change password proccess:", :type => :feature do
+  it 'when get change_password' do
+    get '/change_password'
+    expect(last_response.body).to_not eq("")
+    expect(last_response).to be_ok
+  end
 
-      it 'when get change_password' do
-        get '/change_password'
-        expect(last_response.body).to_not eq("")
-        expect(last_response).to be_ok
+  describe "login and change password process:", :type => :feature do
+    # BUG 
+     before do
+      Capybara.default_driver = :selenium
+     end
+      it "when login" do
+        visit '/'
+        within("form#login") do
+          fill_in 'email', with: 'charlytester@gmail.com'
+          fill_in 'password', with: 'tester'
+        end
+        click_button 'action'
+        expect(page).to have_content 'User successfully logged'
+        page.has_selector?('form#login')
       end
 
-      it "when fill a form" do
-          visit '/change_password'
-          within('#form__change__password') do
-            fill_in 'recover_password', with: 'my secret is...secret'
-            fill_in 'password_old', with: '123456'
-            fill_in 'password_new', with: '654321'
-          end
-          selector('#any_class').click
-          expect(last_response.body).to_not eq("")
-          expect(page).to have_content "Yours dates not are corrects"
-     end
-
+    it "when get a form" do
+        visit '/change_password'
+        page.has_selector?('form#form__change__password')
+    end
   end
-  
 end

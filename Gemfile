@@ -21,4 +21,5 @@ gem 'coffee-script'
 gem "rspec"
 gem "rack-test"
 gem 'capybara'
-
+gem "selenium-webdriver"
+gem "webdrivers", "~> 2.3"

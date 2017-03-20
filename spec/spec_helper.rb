@@ -20,6 +20,10 @@ end
 
 Capybara.app = ApplicationController
 
+Capybara.register_driver :selenium do |app|
+  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+end
+
 RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FormHelpers, :type => :feature
