@@ -10,19 +10,31 @@ Dir.glob('./{helpers,controllers,models}/*.rb').each {|file| require file }
 
 module FormHelpers
   def selector string
-    # selector('#any_class').click
-    find :css, string
+    find :css, string # selector('#any_class').click
   end
   def submit_form
     find('button[type="submit"]').click
   end
 end
 
-Capybara.app = ApplicationController
+Capybara.app = Rack::Builder.new do
+  map('/assets') {  run ApplicationController.sprockets }
+  map('/tracks') { run Rack::Directory.new("./tracks") }
+  map('/music') { run MusicController }
+  map('/auth') { run AuthController }
+  map('/admin') { run AdminController }
+  map('/') { run WebsiteController }
+end.to_app
 
 Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
+
+Capybara.app_host = "http://localhost:8000"
+
+Capybara.server_host = "localhost"
+
+Capybara.server_port = "8000"
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
