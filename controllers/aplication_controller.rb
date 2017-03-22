@@ -29,6 +29,9 @@ class ApplicationController < Sinatra::Base
     env.append_path(root.join('assets', 'materialize'))
   }
 
+  configure :test do
+    DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
+  end
 
   configure :development do
     DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")

@@ -24,21 +24,4 @@ RSpec.describe 'Website' do
     expect(last_response.body).to_not eq("")
     expect(last_response).to be_ok
   end
-
-  describe "login and change password process:", :type => :feature do
-    before do
-    Capybara.default_driver = :selenium
-    end
-
-    it "when login" do
-      visit 'http://127.0.0.1:8000/auth/'
-      within("form#login") do
-        fill_in 'email', with: 'charlytester@gmail.com'
-        fill_in 'password', with: 'tester'
-      end
-      submit_form
-      expect(page).to have_content 'User successfully logged'
-      page.has_selector?('form#login')
-    end
-  end
 end

@@ -1,25 +1,25 @@
 <div class="container" style="margin-top:2.5%">
   <div class="row">
     <h3>Register</h3>
-    <form action="/auth/register" method="POST">
+    <form id="form__register"action="/auth/register" method="POST">
        <div class="input-field col s6">
         <i class="material-icons prefix">account_circle</i>
-        <input name="user[username]" type="text" class="validate">
+        <input name="username" type="text" class="validate">
         <label class="active">Username</label>
        </div>
        <div class="input-field col s6">
         <i class="material-icons prefix">email</i>
-        <input name="user[email]" type="email" class="validate">
+        <input name="email" type="email" class="validate">
         <label>Email</label>
        </div>
       <div class="input-field col s6">
        <i class="material-icons prefix">https</i>
-       <input  name="user[password]" type="password" class="validate">
+       <input  name="password" type="password" class="validate">
        <label>Password</label>
      </div>
      <div class="input-field col s6">
       <i class="material-icons prefix">lock_open</i>
-      <input name="user[recover_password]" placeholder="Any secret" type="text" class="validate">
+      <input name="recover_password" placeholder="Any secret" type="text" class="validate">
       <label>Any secret for recover password</label>
     </div>
     <center>

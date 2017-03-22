@@ -1,13 +1,26 @@
+require 'rack'
+
 module AuthHelpers
   def create_user
-    @user = User.create(params[:user])
-    @user.user_media = UserMedia.create
-    @user.user_information = UserInformation.create
-    @user.save
-    @user.user_media.save
-    @user.user_information.save
-    flash[:notice] = "User successfully signed!"
-    redirect '/auth'
+    @email_use = User.first(:email => params[:email])
+    @username_use = User.first(:username => params[:username])
+    if !@username_use.nil?
+      flash[:warning] = "This username are existing"
+      redirect '/auth'
+    elsif !@email_use.nil?
+      flash[:warning] = "This email are existing"
+      redirect '/auth'
+    else
+      @user = User.create(:username => params[:username], :email => params[:email], 
+                          :password => params[:password], :recover_password => params[:recover_password]) 
+      @user.user_media = UserMedia.create
+      @user.user_information = UserInformation.create
+      @user.save
+      @user.user_media.save
+      @user.user_information.save
+      flash[:notice] = "User successfully signed! #{@email_use.class} #{@username_use.class}"
+      redirect '/auth'   
+    end
   end
 
   def login_user
@@ -34,13 +47,16 @@ module AuthHelpers
       return redirect 'auth/change_password'
     end
     @user = User.first(:recover_password => params[:recover_password])
-    if @user.class != User or @user.password != params[:password_old]
+    if params[:password_old] == params[:password_new]
+      flash[:warning] = "The password are sames"      
+      redirect 'auth/change_password'
+    elsif @user.class != User or @user.password != params[:password_old]
       flash[:warning] = "Yours dates not are corrects"
       redirect 'auth/change_password'
     else
       @user.update(:password => params[:password_new])
       flash[:notice] = "Your secret is correct, your password changed"
-      redirect 'auth/change_password'
+      redirect to("/profile/#{session[:user]}")
     end
   end
 

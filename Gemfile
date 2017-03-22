@@ -18,8 +18,11 @@ gem 'sprockets'
 gem 'sass'
 gem 'coffee-script'
 
+gem 'social-url', '~> 1.1.0'
+
 gem "rspec"
 gem "rack-test"
 gem 'capybara'
 gem "selenium-webdriver"
 gem "webdrivers", "~> 2.3"
+gem 'database_cleaner'

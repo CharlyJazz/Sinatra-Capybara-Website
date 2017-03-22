@@ -8,6 +8,10 @@ require 'bcrypt'
 
 # => http://datamapper.org/docs/associations.html
 
+configure :test do
+  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/test.db")
+end
+
 configure :development do
   DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
 end

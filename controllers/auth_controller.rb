@@ -47,6 +47,7 @@ class AuthController < ApplicationController
     if @user.class != User
       redirect '/not_found'
     end
+    @title = @user.username
     render :erb, :'auth/profile'
   end
 
