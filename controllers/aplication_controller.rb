@@ -6,7 +6,6 @@ require_relative '../models/models'
 class ApplicationController < Sinatra::Base
   register Sinatra::Flash
   helpers Apphelpers
-
   # => config
   configure do
     enable :sessions
@@ -30,7 +29,7 @@ class ApplicationController < Sinatra::Base
   }
 
   configure :test do
-    DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
+    DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/test.db")
   end
 
   configure :development do

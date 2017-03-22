@@ -4,4 +4,5 @@
 $(document).ready ->
   $('.scrollspy').scrollSpy()
   $('select').material_select()
+  $('#modal-delete-song').modal();
   return

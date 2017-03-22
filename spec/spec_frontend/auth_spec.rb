@@ -10,16 +10,7 @@ RSpec.describe 'Website' do
   describe "\ntry register with dates used,\n # login,\n # change password process:", :type => :feature do
     before do
       Capybara.default_driver = :selenium
-      user = {:username => "charlytester", 
-              :email => "charlyjazzc1@gmail.com",
-              :password => "password",
-              :recover_password => "secret"}
-      @user = User.create(user)
-      @user.user_media = UserMedia.create
-      @user.user_information = UserInformation.create
-      @user.save
-      @user.user_media.save
-      @user.user_information.save
+      before_create_user
     end
 
     it "when register" do

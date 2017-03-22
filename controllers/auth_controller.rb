@@ -41,13 +41,13 @@ class AuthController < ApplicationController
   end
 
   get '/profile/:id' do
-    # => If redirect of login:
-    # => params[:id] is session[:user]
+    # => if redirect of login params[:id] is session[:user]
     @user = User.get(params[:id])
     if @user.class != User
       redirect '/not_found'
     end
     @title = @user.username
+    @songs = Song.all(:user_id => session[:user])
     render :erb, :'auth/profile'
   end
 

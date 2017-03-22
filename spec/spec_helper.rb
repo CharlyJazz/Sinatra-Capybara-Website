@@ -1,4 +1,3 @@
-ENV['RACK_ENV'] = 'test'
 require 'rack/test'
 require 'rubygems'
 require 'rack/test'
@@ -7,6 +6,11 @@ require 'capybara'
 require 'capybara/dsl'
 require 'capybara/rspec'
 require 'database_cleaner'
+require 'forgery'
+
+require_relative 'before_helper'
+
+ENV['RACK_ENV'] = 'test'
 
 Dir.glob('./{helpers,controllers,models}/*.rb').each {|file| require file }
 
@@ -25,24 +29,26 @@ Capybara.app = Rack::Builder.new do
   map('/') { run WebsiteController }
 end.to_app
 
+Capybara.app_host = "http://localhost:8000"
+Capybara.server_host = "localhost"
+Capybara.server_port = "8000"
 Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
 
-Capybara.app_host = "http://localhost:8000"
-
-Capybara.server_host = "localhost"
-
-Capybara.server_port = "8000"
-
 RSpec.configure do |config|
   config.include Rack::Test::Methods
+
   config.include Capybara::DSL
   config.include Capybara::RSpecMatchers
-  config.include FormHelpers, :type => :feature
+
   config.expect_with :rspec do |c|
     c.syntax = :expect # expect vs should
   end
+
+  config.include FormHelpers, :type => :feature
+  config.include BeforeHelpers, :type => :feature
+
 
   # database_cleaner config...
 

@@ -18,7 +18,7 @@ module AuthHelpers
       @user.save
       @user.user_media.save
       @user.user_information.save
-      flash[:notice] = "User successfully signed! #{@email_use.class} #{@username_use.class}"
+      flash[:notice] = "User successfully signed!"
       redirect '/auth'   
     end
   end

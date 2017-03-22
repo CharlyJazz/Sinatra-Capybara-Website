@@ -19,6 +19,7 @@ gem 'sass'
 gem 'coffee-script'
 
 gem 'social-url', '~> 1.1.0'
+gem 'forgery', '0.6.0'
 
 gem "rspec"
 gem "rack-test"
