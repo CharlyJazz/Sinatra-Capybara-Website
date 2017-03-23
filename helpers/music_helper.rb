@@ -7,6 +7,17 @@ module MusicHelpers
     Song.get(params[:id])
   end
 
+  def delete_song
+    song = Song.get(params[:id])
+    if song.destroy
+      flash[:notice] = "Song deleted"
+      return redirect "/auth/profile/#{session[:user]}"
+    else
+      flash[:error] = "Error!"
+      return redirect "/auth/profile/#{session[:user]}"
+    end
+  end
+
   def create_music
     unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
        flash[:notice] = "No file selected"

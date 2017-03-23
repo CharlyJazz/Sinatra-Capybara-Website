@@ -35,6 +35,10 @@ class MusicController < ApplicationController
     redirect not_found
   end
 
+  delete '/song/:id' do
+    delete_song
+  end
+
   get '/create' do
     render :erb, :'music/create'
   end

@@ -9,6 +9,8 @@ require 'database_cleaner'
 require 'forgery'
 
 require_relative 'before_helper'
+require_relative 'action_helper'
+
 
 ENV['RACK_ENV'] = 'test'
 
@@ -48,7 +50,7 @@ RSpec.configure do |config|
 
   config.include FormHelpers, :type => :feature
   config.include BeforeHelpers, :type => :feature
-
+  config.include ActionHerlpers, :type => :feature
 
   # database_cleaner config...
 

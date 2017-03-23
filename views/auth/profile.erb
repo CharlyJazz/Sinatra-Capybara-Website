@@ -30,18 +30,20 @@
                     <div id="tracks" class="" style="display: none;">
                     <% if @songs.any? %>
                         <% @songs.each do |song| %>
-                        <img src="<%= asset_path('songs/default_song.png')%>">
-                        <hr>
-                        <a href="/music/play/<%=song.id %>"> <%= song.title %> </a>
-                        <p><%=song.url_song%></p>
-                        <p><%=song.description%></p>
-                        <p><%=song.genre%></p>
-                        <p><%=song.type%></p>
-                        <p><%=song.license%></p>
-                        <audio src="<%=song.url_song%>" controls></audio>
-                        <a href="#">Like</a>
-                        <a class="waves-effect waves-light btn" href="#modal-delete-song">Delete?</a>
-                        <hr>
+                        <div class="song__wrapper">
+                            <img src="<%= asset_path('songs/default_song.png')%>">
+                            <hr>
+                            <a href="/music/play/<%=song.id %>"> <%= song.title %> </a>
+                            <p><%=song.url_song%></p>
+                            <p><%=song.description%></p>
+                            <p><%=song.genre%></p>
+                            <p><%=song.type%></p>
+                            <p><%=song.license%></p>
+                            <audio src="<%=song.url_song%>" controls></audio>
+                            <a href="#">Like</a>
+                            <a class="pre-delete-song waves-effect waves-light btn" href="#modal-delete-song" data-id-song="<%=song.id %>">Delete?</a>
+                            <hr>
+                        </div>
                         <% end %>
                     <% else %>
                         <h1>No have songs</h1>
@@ -124,6 +126,19 @@
     <h4>Are you sure delete this song?</h4>
     </div>
     <div class="modal-footer">
-    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Delete</a>
+    <form id="form-delete-song" action="music/song/>" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="submit" class="modal-action modal-close waves-effect waves-green btn-flat"
+        value="Yes, delete">
+    </form>
     </div>
 </div>
+
+<script>
+    $( document ).ready(function() {
+        $(".pre-delete-song").click(function(){
+            var song_id = $(this).attr("data-id-song");
+            $('#form-delete-song').attr('action', "/music/song/" + song_id);
+        })
+    });
+</script>
