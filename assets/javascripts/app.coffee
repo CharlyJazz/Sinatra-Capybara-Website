@@ -1,6 +1,4 @@
-#= require validations/song
-#= require validations/album
-#= require validations/user
+#= require validations/user_social_setting
 $(document).ready ->
   $('.scrollspy').scrollSpy()
   $('select').material_select()

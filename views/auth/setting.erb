@@ -11,7 +11,7 @@
             </div>
             <div class="card-content grey lighten-4">
               <div id="personal" class="">
-                <form action="/auth/setting/personal" method="POST">
+                <form id="setting-form-personal"action="/auth/setting/personal" method="POST">
                     <div class="col s12">
                         <div class="input-field col s6">
                             <input name="display_name" type="text" class="validate">
@@ -54,7 +54,7 @@
                 </form>
               </div>
               <div id="media"  class="" style="display: none;">
-                <form action="/auth/setting/media" method="POST" enctype="multipart/form-data">
+                <form action="/auth/setting/media" method="POST" enctype="multipart/form-data" >
                     <div class="col s12">
                         <div class="file-field input-field col s6">
                             <div class="btn">
@@ -87,23 +87,24 @@
                   </form>
               </div>
               <div id="social" style="display: block;">
-                <form action="/auth/setting/social" method="POST">
-                <a class="add_field_button btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+                <form id="setting-form-social" action="/auth/setting/social"
+                 method="POST">
+                <a class="add_field_button btn-floating btn-large waves-effect waves-light red"><i class="material-icons add-social-field">add</i></a>
                 <div class="input_fields_wrap">
                   <div class="col s12">
                       <div class="input-field col s3">
-                          <input name="social_url[1]" type="text" class="validate">
+                          <input class="social_url" name="social_url[1]" type="text" class="validate">
                           <label>Link</label>
                       </div>
                       <div class="input-field col s3">
-                          <input name="social_name[1]" type="text" class="validate">
+                          <input class="social_name" name="social_name[1]" type="text" class="validate">
                           <label>Name</label>
                       </div>
                   </div>
                 </div>
                 <div class="col s12">
                     <div class="input-field col s3">
-                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <button id="setting-form-social-submit" class="btn waves-effect waves-light" type="submit" name="action">Submit
                             <i class="material-icons right">send</i>
                         </button>
                     </div>

@@ -125,6 +125,7 @@ module AuthHelpers
         :name => n[1]
       )
     end
-    "cool"
+    flash[:notice] = "New social information!"
+    redirect to("/profile/#{session[:user]}")
   end
 end
