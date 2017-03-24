@@ -2,6 +2,8 @@ require 'sinatra/base'
 require 'sinatra/extension'
 require 'sinatra/flash'
 require 'bcrypt'
+require 'social_url'
+
 require_relative '../models/models'
 require_relative 'aplication_controller'
 
@@ -41,13 +43,11 @@ class AuthController < ApplicationController
   end
 
   get '/profile/:id' do
-    # => if redirect of login params[:id] is session[:user]
     @user = User.get(params[:id])
-    if @user.class != User
-      redirect '/not_found'
-    end
+    if @user.class != User then redirect '/not_found' end
     @title = @user.username
-    @songs = Song.all(:user_id => session[:user])
+    @songs = Song.all(:user_id => params[:id])
+
     render :erb, :'auth/profile'
   end
 

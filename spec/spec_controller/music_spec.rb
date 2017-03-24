@@ -17,9 +17,11 @@ RSpec.describe 'Website' do
     expect(last_response.body).to_not eq("")
     expect(last_response).to be_ok
   end
-  
+
   describe 'when get play song with id 1' do
     before do
+      before_create_user
+      before_create_songs 1
       @song = Song.get(1)
     end
     if @song.instance_of? Song then

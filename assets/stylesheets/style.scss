@@ -82,3 +82,45 @@ body > div.container-fluid > div > div.col.s3 > article > table > tbody > tr > t
 .admin__table th{
   border: 2px solid cornflowerblue
 }
+
+#tracks{
+  padding-top:15px;
+  padding-bottom:15px
+}
+
+div.song__wrapper{
+  padding:15px 0 30px 0;
+  height: 280px;
+}
+
+#tracks > div.song__wrapper > figure {
+  float: left;
+  margin-right: 15px; }
+
+.song-title{
+  font-size: 1.5em;
+  color:#b0797c
+}
+
+.song-title span{
+  color: grey;
+  font-size: 1em;
+}
+
+#tracks > div > div.song-dates > audio{
+  padding: 0
+}
+
+.song__wrapper:nth-child(odd){
+  background-color: #ececec
+}
+
+.song-action{
+  float: right;
+  display: inline-block
+}
+
+.align-icon-text{
+  display: inline-flex !important;
+  vertical-align: text-top !important;
+}

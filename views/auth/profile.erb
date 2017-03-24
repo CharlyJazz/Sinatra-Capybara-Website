@@ -30,19 +30,32 @@
                     <div id="tracks" class="" style="display: none;">
                     <% if @songs.any? %>
                         <% @songs.each do |song| %>
-                        <div class="song__wrapper">
-                            <img src="<%= asset_path('songs/default_song.png')%>">
-                            <hr>
-                            <a href="/music/play/<%=song.id %>"> <%= song.title %> </a>
-                            <p><%=song.url_song%></p>
-                            <p><%=song.description%></p>
-                            <p><%=song.genre%></p>
-                            <p><%=song.type%></p>
-                            <p><%=song.license%></p>
-                            <audio src="<%=song.url_song%>" controls></audio>
-                            <a href="#">Like</a>
-                            <a class="pre-delete-song waves-effect waves-light btn" href="#modal-delete-song" data-id-song="<%=song.id %>">Delete?</a>
-                            <hr>
+                        <div class="song__wrapper z-depth-1">
+                            <figure>
+                                <a href="/music/play/<%=song.id %>">
+                                    <img src="<%= asset_path('songs/default_song.png')%>">
+                                </a>
+                            </figure>
+                            <div class="song-action">
+                                <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
+                                <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
+                                <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
+                                <a class="pre-delete-song  btn-flat" href="#modal-delete-song" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
+                                <ul id="dropdown2" class="dropdown-content">
+                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/play/3"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('songs/default_song.png')%>&media=http%3A//localhost%3A8000/music/play/3&description=<%= song.title %> - <%=song.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://twitter.com/home?status=http%3A//localhost%3A8000/music/play/3"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://plus.google.com/share?url=http%3A//localhost%3A8000/music/play/3"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                    
+                                </ul>                            
+                            </div>                            
+                            <div class="song-dates">
+                                <p class="song-title"><%= song.title %> | <span><%=song.description%></span></p>
+                                <p>Genre <%=song.genre%></p>
+                                <p>Type  <%=song.type%></p>
+                                <p>License  <%=song.license%></p>
+                                <audio class="col l8 s7 m7" src="<%=song.url_song%>" controls></audio>
+                                <a class="btn-flat align-icon-text"  href="#!"><i class="material-icons">play_arrow</i> 0</a>       
+                            </div>
                         </div>
                         <% end %>
                     <% else %>

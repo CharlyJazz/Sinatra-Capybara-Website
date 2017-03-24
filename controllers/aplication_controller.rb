@@ -26,6 +26,7 @@ class ApplicationController < Sinatra::Base
     env.append_path(root.join('assets', 'images'))
     env.append_path(root.join('assets', 'jquery'))
     env.append_path(root.join('assets', 'materialize'))
+    env.append_path(root.join('assets', 'components-font-awesome'))
   }
 
   configure :test do
