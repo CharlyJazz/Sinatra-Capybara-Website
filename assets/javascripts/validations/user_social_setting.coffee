@@ -20,6 +20,7 @@ $(add_button).click (e) ->
 
 $(wrapper).on 'click', '.remove_field', (e) ->
   e.preventDefault()
+  id_social = $(this).data("id")
   $(this).parent('div').remove()
   x--
   # Reset x for correct index for a validation
@@ -33,6 +34,15 @@ $(wrapper).on 'click', '.remove_field', (e) ->
       console.log $(field)
       $(field).attr("name", "social_name[" + count + "]")
       count++
+  console.log id_social.substring(id_social.indexOf('-') + 1) # ID
+  # Si el campo esta lleno por datos de la
+  # db entonces si se elimina se borra de la bd
+  # el data-id es para diferenciar los que vienen
+  # de la db.
+
+  # Debo al darle sudmit y enviar al controllador
+  # un helper se debe ocupar de eliminar todos los socials
+  # del usuario y recrearlos, con los editos y o nuevos
   return
 
 

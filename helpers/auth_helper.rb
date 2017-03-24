@@ -120,10 +120,7 @@ module AuthHelpers
 
     arr = (params[:social_url].values).zip(params[:social_name].values)
     for n in arr do
-      @user.user_socials.create(
-        :url => n[0],
-        :name => n[1]
-      )
+      @user.user_socials.create(:url => n[0], :name => n[1])
     end
     flash[:notice] = "New social information!"
     redirect to("/profile/#{session[:user]}")

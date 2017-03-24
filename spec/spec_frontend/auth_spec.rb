@@ -12,6 +12,7 @@ RSpec.describe 'Website' do
       Capybara.default_driver = :selenium
       Capybara.default_wait_time = 5
       before_create_user
+      before_create_social 4
     end
 
     # it "when register" do
@@ -68,6 +69,8 @@ RSpec.describe 'Website' do
     # end
 
     it "when setting social info" do
+      # 4 social + 4 social - 1 social  = 7 social
+      # reset all index socials and fill the last 3
       action_login
       
       click_link('charlytester')
@@ -78,9 +81,9 @@ RSpec.describe 'Website' do
           find(:css, 'i.add-social-field.material-icons').click
           if x == 4 - 1 then find(:css, 'a.remove-4').click end
         end
-        4.times do | x |
-          fill_in "social_url[#{x + 1}]", with: "https://webpage.com/" + Forgery(:internet).user_name
-          fill_in "social_name[#{x + 1}]", with: Forgery(:lorem_ipsum).word
+        3.times do | x |
+          fill_in "social_url[#{x + 5}]", with: "https://webpage.com/" + Forgery(:internet).user_name
+          fill_in "social_name[#{x + 5}]", with: Forgery(:lorem_ipsum).word
         end
       end
       submit_form

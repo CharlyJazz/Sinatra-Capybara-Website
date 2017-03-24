@@ -66,8 +66,6 @@ class UserSocial
   property :id, Serial
   property :url, Text,   :lazy => false
   property :name, String
-  property :created_at, Date
-  property :updated_at, Date
 
   belongs_to :user
 end

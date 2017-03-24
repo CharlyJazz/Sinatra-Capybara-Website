@@ -87,20 +87,23 @@
                   </form>
               </div>
               <div id="social" style="display: block;">
-                <form id="setting-form-social" action="/auth/setting/social"
-                 method="POST">
+                <form id="setting-form-social" action="/auth/setting/social" method="POST">
                 <a class="add_field_button btn-floating btn-large waves-effect waves-light red"><i class="material-icons add-social-field">add</i></a>
                 <div class="input_fields_wrap">
-                  <div class="col s12">
-                      <div class="input-field col s3">
-                          <input class="social_url" name="social_url[1]" type="text" class="validate">
-                          <label>Link</label>
+                      <% if @user.user_socials.any? %>
+                        <% @user.user_socials.each do | social | %>
+                        <div class="col s12">
+                            <div class="input-field col s3"> <input value="<%= social.url %>" class="social_url" name="social_url[<%= social.id %>]" type="text"> </div>
+                            <div class="input-field col s3"> <input value="<%= social.name %>" class="social_name" name="social_name[<%= social.id %>]" type="text"> </div>
+                            <a href="#" class="btn waves-effect waves-light remove_field" data-id="remove-<%= social.id %>">Remove</a>
+                        </div>                      
+                        <% end %>
+                      <% else %>
+                      <div class="col s12">
+                        <div class="input-field col s3"><input class="social_url" name="social_url[1]" type="text" class="validate"><label>Link</label></div>
+                        <div class="input-field col s3"><input class="social_name" name="social_name[1]" type="text" class="validate"><label>Name</label></div>
                       </div>
-                      <div class="input-field col s3">
-                          <input class="social_name" name="social_name[1]" type="text" class="validate">
-                          <label>Name</label>
-                      </div>
-                  </div>
+                      <% end %>
                 </div>
                 <div class="col s12">
                     <div class="input-field col s3">
