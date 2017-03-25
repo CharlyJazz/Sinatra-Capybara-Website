@@ -3,6 +3,7 @@ require 'sinatra/extension'
 require 'sinatra/flash'
 require 'bcrypt'
 require 'social_url'
+require 'uri'
 
 require_relative '../models/models'
 require_relative 'aplication_controller'

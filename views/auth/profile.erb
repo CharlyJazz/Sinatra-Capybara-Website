@@ -4,9 +4,12 @@
             <div class="card user-card" id="profile" style="background-image: url(<%= asset_path(@user.user_media.banner_img_url)%>)">
                 <div class="card image-profile">
                     <div class="card-image z-depth-4">
-                        <img class="responsive-img" src="<%= asset_path(@user.user_media.profile_img_url)%>">
+                      <a class="dialog-change-photo-profile" href="#modal-change-image">
+                        <img class="responsive-img" src="<%= asset_path(@user.user_media.profile_img_url)%>" style="cursor:pointer">                      
+                      </a>
                     </div>
                 </div>
+                <a href="#modal-change-image" class="dialog-change-banner-profile btn transparent btn-upload-banner"><i class="material-icons">&#xE255;</i></a>
             </div>
         </div>
         <div class="col s9">
@@ -147,11 +150,52 @@
     </div>
 </div>
 
+<div id="modal-change-image" class="modal">
+    <div class="modal-content">
+        <h4 class="modal-image-type"></h4>
+    </div>
+    <div class="modal-footer">
+        <form id="form-media-profile" action="" method="POST" enctype="multipart/form-data">
+            <div class="file-field input-field s3">
+                <div class="btn" style="margin:0 !important">
+                    <span>Image</span>
+                    <input type="file" name="file" required>
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+                <input type="submit" class="modal-action modal-close waves-effect waves-green btn-flat" value="Upload image">
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     $( document ).ready(function() {
+        var url = "/auth/setting/media";
+
         $(".pre-delete-song").click(function(){
             var song_id = $(this).attr("data-id-song");
             $('#form-delete-song').attr('action', "/music/song/" + song_id);
-        })
+        });
+        $('.dialog-change-photo-profile').tooltip({
+            delay: 40,
+            tooltip: "Click for change the image profile",
+            position: "button"
+        });
+        $('.dialog-change-banner-profile').tooltip({
+            delay: 40,
+            tooltip: "Click for change the image profile",
+            position: "top"
+        });
+        $(".dialog-change-photo-profile").click(function(){
+            $(".modal-image-type").text("Change image profile");
+            $("#form-media-profile").attr("action", url + "?" + "photo")
+        });
+        $(".dialog-change-banner-profile").click(function(){
+            $(".modal-image-type").text("Change banner");
+            $("#form-media-profile").attr("action", url + "?" + "banner")
+        });        
     });
+       
 </script>

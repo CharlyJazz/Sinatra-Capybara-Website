@@ -42,7 +42,7 @@ $(wrapper).on 'click', '.remove_field', (e) ->
 
   # Debo al darle sudmit y enviar al controllador
   # un helper se debe ocupar de eliminar todos los socials
-  # del usuario y recrearlos, con los editos y o nuevos
+  # del usuario y recrearlos, con los edito y o nuevos
   return
 
 
@@ -55,12 +55,21 @@ $("#setting-form-social").submit (e) ->
   count = 1
   for field in fields
     if $(field).attr("name") == "social_url[" + count + "]"
-      unless validateUrl $(field).val()
-        console.log "url"
+      if not $(field).val()
+        $('#modal1').modal("open")
+        $(".modal-flash-description").text("Any field url are empty");
         return false
+         
+      else if !validateUrl $(field).val()
+        $('#modal1').modal("open")
+        $(".modal-flash-description").text("Url format invalid in " + $(field).val() );        
+        return false
+
     else if $(field).attr("name") == "social_name[" + count + "]"
       if not $(field).val()
-        console.log "name"      
+        $('#modal1').modal("open")
+        $(".modal-flash-description").text("Any field name are empty");   
         return false
+
       count++
   return true

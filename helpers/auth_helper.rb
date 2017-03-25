@@ -113,13 +113,23 @@ module AuthHelpers
 
   def setting_social
     unless(params[:social_url] || params[:social_name])
-       redirect to("/auth/setting")
+       flash[:error] = "Are your created any thing?"
+       return redirect("/auth/setting#social")
     end
-
     @user = User.get(session[:user])
-
     arr = (params[:social_url].values).zip(params[:social_name].values)
-    for n in arr do
+    for n in arr do # validation
+      url = n[0].to_s
+      if !(url =~ /\A#{URI::regexp(['http', 'https'])}\z/)
+        flash[:error] = "Any url format are invalid #{url}"
+        return redirect("/auth/setting#social") 
+      elsif n[0].to_s.empty? || n[1].to_s.empty?
+        flash[:error] = "Any field are empty"
+        return redirect("/auth/setting#social")       
+      end
+    end
+    @user.user_socials.destroy # delete all socials of the user
+    for n in arr do # add record
       @user.user_socials.create(:url => n[0], :name => n[1])
     end
     flash[:notice] = "New social information!"

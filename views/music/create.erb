@@ -28,7 +28,7 @@
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Drum and Bass..." type="text" name="genre" required>
+                <input id="autocomplete-genre" placeholder="Drum and Bass..." type="text" name="genre" required>
                 <label>Genre</label>
             </div>
             <label>Materialize Select</label>
@@ -54,3 +54,16 @@
     </form>
 </div>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $('input#autocomplete-genre').autocomplete({
+        data:{Rock:null,Blues:null,"Classic Rock":null,Country:null,Dance:null,Disco:null,Funk:null,Grunge:null,"Hip-Hop":null,Jazz:null,Metal:null,"New Age":null,Oldies:null,Other:null,Pop:null,"R&B":null,Rap:null,Reggae:null,Rock:null,Techno:null,Industrial:null,Alternative:null,Skap:null,"Death Metal":null,Pranks:null,Soundtrack:null,"Euro-Techno":null,Ambient:null,"Trip-Hop":null,Vocal:null,Jazz:null,Fusion:null,Trance:null,Classical:null,Instrumental:null,Acid:null,House:null,Game:null,"Sound Clip":null,Gospel:null,Noise:null,"Alternative Rock":null,Bass:null,Soul:null,Punk:null,Space:null,Meditative:null,"Instrumental Pop":null,"Instrumental Rock":null,Ethnic:null,Gothic:null,Darkwave:null,"Techno-Industrial":null,Electronic:null,"Pop-Folk":null,Eurodance:null,Dream:null,"Southern Rock":null,Comedy:null,Cult:null,Gangsta:null,"Top 40":null,"Christian Rap":null,"Pop/Funk":null,Jungle:null,"Native US":null,Cabaret:null,"New Wave":null,Psychadelic:null,Rave:null,Showtunes:null,Trailer:null,"Lo-Fi":null,Tribal:null,"Acid Punk":null,"Acid Jazz":null,Polka:null,Retro:null,Musical:null,"Rock & Roll":null,"Hard Rock":null,Folk:null,"Folk-Rock":null,"National Folk":null,Swing:null,"Fast Fusion":null,Bebob:null,Latin:null,Revival:null,Celtic:null,Bluegrass:null,Avantgarde:null,"Gothic Rock":null,"Progressive Rock":null,"Psychedelic Rock":null,"Symphonic Rock":null,"Slow Rock":null,"Big Band":null,Chorus:null,"Easy Listening":null,Acoustic:null,Humour:null,Speech:null,Chanson:null,Opera:null,"Chamber Music":null,Sonata:null,Symphony:null,"Booty Bass":null,Primus:null,"Porn Groove":null,Satire:null,"Slow Jam":null,Club:null,Tango:null,Samba:null,Folklore:null,Ballad:null,"Power Ballad":null,"Rhythmic Soul":null,Freestyle:null,Duet:null,"Punk Rock":null,"Drum Solo":null,Acapella:null,"Euro-House":null,"Dance Hall":null,Goa:null,"Drum & Bass":null,"Club - House":null,Hardcore:null,Terror:null,Indie:null,BritPop:null,Negerpunk:null,"Polsk Punk":null,Beat:null,"Christian Gangsta Rap":null,"Heavy Metal":null,"Black Metal":null,Crossover:null,"Contemporary Christian":null,"Christian Rock":null,Merengue:null,Salsa:null,"Thrash Metal":null,Anime:null,JPop:null,Synthpop:null,Trap:null},
+        limit: 15, // The max amount of results that can be shown at once. Default: Infinity.
+        onAutocomplete: function(val) {
+        // Callback function when value is autcompleted.
+        },
+        minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
+ });
+</script>
