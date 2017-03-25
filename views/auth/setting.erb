@@ -93,8 +93,8 @@
                       <% if @user.user_socials.any? %>
                         <% @user.user_socials.each do | social | %>
                         <div class="col s12">
-                            <div class="input-field col s3"> <input value="<%= social.url %>" class="social_url" name="social_url[<%= social.id %>]" type="text"> </div>
-                            <div class="input-field col s3"> <input value="<%= social.name %>" class="social_name" name="social_name[<%= social.id %>]" type="text"> </div>
+                            <div class="input-field col s3"> <input value="<%= social.url %>" class="social_url" name="social_url[]" type="text"> </div>
+                            <div class="input-field col s3"> <input value="<%= social.name %>" class="social_name" name="social_name[]" type="text"> </div>
                             <a href="#" class="btn waves-effect waves-light remove_field" data-id="remove-<%= social.id %>">Remove</a>
                         </div>                      
                         <% end %>

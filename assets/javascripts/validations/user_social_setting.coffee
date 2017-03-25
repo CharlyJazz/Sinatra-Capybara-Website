@@ -28,21 +28,11 @@ $(wrapper).on 'click', '.remove_field', (e) ->
   count = 1
   for field in fields
     if $(field).attr("class") == "social_url"
-      console.log $(field)
       $(field).attr("name", "social_url[" + count + "]")
     else if $(field).attr("class") == "social_name"
-      console.log $(field)
       $(field).attr("name", "social_name[" + count + "]")
       count++
   console.log id_social.substring(id_social.indexOf('-') + 1) # ID
-  # Si el campo esta lleno por datos de la
-  # db entonces si se elimina se borra de la bd
-  # el data-id es para diferenciar los que vienen
-  # de la db.
-
-  # Debo al darle sudmit y enviar al controllador
-  # un helper se debe ocupar de eliminar todos los socials
-  # del usuario y recrearlos, con los edito y o nuevos
   return
 
 
@@ -52,7 +42,16 @@ validateUrl = (value) ->
 
 $("#setting-form-social").submit (e) ->
   fields = $("#setting-form-social").find("input")
+  _count = 1 
   count = 1
+
+  for field in fields
+    if $(field).attr("class") == "social_url"
+      $(field).attr("name", "social_url[" + _count + "]")
+    else if $(field).attr("class") == "social_name"
+      $(field).attr("name", "social_name[" + _count + "]")
+      _count++
+
   for field in fields
     if $(field).attr("name") == "social_url[" + count + "]"
       if not $(field).val()
@@ -62,14 +61,14 @@ $("#setting-form-social").submit (e) ->
          
       else if !validateUrl $(field).val()
         $('#modal1').modal("open")
-        $(".modal-flash-description").text("Url format invalid in " + $(field).val() );        
+        $(".modal-flash-description").text("Url format invalid in " + $(field).val() );  
         return false
 
     else if $(field).attr("name") == "social_name[" + count + "]"
       if not $(field).val()
         $('#modal1').modal("open")
-        $(".modal-flash-description").text("Any field name are empty");   
+        $(".modal-flash-description").text("Any field name are empty");
         return false
 
       count++
-  return true
+  return false
