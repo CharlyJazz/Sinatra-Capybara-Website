@@ -71,6 +71,10 @@ class AuthController < ApplicationController
     if params[:action] == "media" then return setting_media else redirect '/not_found' end
   end
 
+  post '/setting/media/ajax' do
+    setting_media_ajax(params[:type])
+  end
+
   get '/logout' do
     session.clear
     redirect '/'

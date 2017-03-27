@@ -5,7 +5,7 @@
                 <div class="card image-profile">
                     <div class="card-image z-depth-4">
                       <a class="dialog-change-photo-profile" href="#modal-change-image">
-                        <img class="responsive-img" src="<%= asset_path(@user.user_media.profile_img_url)%>" style="cursor:pointer">                      
+                        <img class="responsive-img" id="img-profile" src="<%= asset_path(@user.user_media.profile_img_url)%>" style="cursor:pointer">                      
                       </a>
                     </div>
                 </div>
@@ -62,7 +62,8 @@
                         </div>
                         <% end %>
                     <% else %>
-                        <h1>No have songs</h1>
+                        <h5>No have songs</h5>
+                        <hr>
                     <% end %>
 
                     </div>
@@ -159,7 +160,7 @@
             <div class="file-field input-field s3">
                 <div class="btn" style="margin:0 !important">
                     <span>Image</span>
-                    <input type="file" name="file" required>
+                    <input id="image_file_data" type="file" name="file" required>
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text">
@@ -172,7 +173,7 @@
 
 <script>
     $( document ).ready(function() {
-        var url = "/auth/setting/media";
+        var url = "/auth/setting/media/ajax?type=";
 
         $(".pre-delete-song").click(function(){
             var song_id = $(this).attr("data-id-song");
@@ -190,12 +191,47 @@
         });
         $(".dialog-change-photo-profile").click(function(){
             $(".modal-image-type").text("Change image profile");
-            $("#form-media-profile").attr("action", url + "?" + "photo")
+            $("#form-media-profile").attr("action", url + "photo")
+            
         });
         $(".dialog-change-banner-profile").click(function(){
             $(".modal-image-type").text("Change banner");
-            $("#form-media-profile").attr("action", url + "?" + "banner")
-        });        
+            $("#form-media-profile").attr("action", url + "banner")
+        });
+
+        $("#form-media-profile").submit(function(e){
+            e.preventDefault();
+            var file_data = $('#image_file_data').prop('files')[0];
+            var form_data = new FormData();                  
+            form_data.append('file', file_data);
+            alert(form_data);             
+            $.ajax({
+                url:  $("#form-media-profile").attr("action"),
+                type: 'POST',
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,                
+                data: form_data
+                })
+                .done(function(response) {
+                if(response.img_profile){
+                    $("#img-profile").attr("src", "/assets/" + response.img_profile)
+                }
+                if(response.img_banner){
+                    $("#profile").css("background-image", "url(/assets/" + response.img_banner +  ")");  
+                    console.log(response.img_banner);
+                }
+                console.log("success");
+                })
+                .fail(function() {
+                console.log("error");
+                })
+                .always(function() {
+                console.log("complete");
+            });        
+        });
+
     });
-       
+
 </script>

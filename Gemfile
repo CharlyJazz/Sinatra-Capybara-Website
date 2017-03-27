@@ -18,6 +18,7 @@ gem 'sprockets'
 gem 'sass'
 gem 'coffee-script'
 
+gem 'fastimage'
 gem 'social-url', '~> 1.1.0'
 gem 'forgery', '0.6.0'
 

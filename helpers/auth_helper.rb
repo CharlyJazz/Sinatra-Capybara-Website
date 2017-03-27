@@ -135,4 +135,32 @@ module AuthHelpers
     flash[:notice] = "New social information!"
     redirect to("/profile/#{session[:user]}")
   end
+
+  def setting_media_ajax(type)
+    content_type 'application/json', :charset => 'utf-8' if request.xhr?
+
+    if type == "photo" || type == "banner" then
+      if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true
+        return { :error => "Format invalid"}.to_json
+      end
+    else
+        return { :error => "Request error"}.to_json
+    end
+
+    @user = User.get(session[:user])
+    filename = params[:file][:filename].to_s
+    tmpfile = params[:file][:tempfile]
+    ext = (/\.[^.]*$/.match(filename)).to_s
+    name_file_formated = "#{@user.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+
+    if type == "photo"
+      @user.user_media.update(:profile_img_url => "profiles/" + name_file_formated)
+      upload_file(settings.profiles_folder, name_file_formated,  tmpfile)
+      return { :img_profile => @user.user_media.profile_img_url}.to_json
+    elsif type == "banner"
+      @user.user_media.update(:banner_img_url => "banners/" + name_file_formated)
+      upload_file(settings.banners_folder, name_file_formated,  tmpfile)
+      return { :img_banner => @user.user_media.banner_img_url}.to_json         
+    end
+  end 
 end

@@ -71,4 +71,4 @@ $("#setting-form-social").submit (e) ->
         return false
 
       count++
-  return false
+  return true
