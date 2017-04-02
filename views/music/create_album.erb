@@ -1,0 +1,118 @@
+<div class="container" style="margin-top:2.5%">
+    <div class="row">
+      <div class="col s7">
+        <h3>Create Album</h3>
+        <form action="/music/create/album" method="POST" enctype="multipart/form-data">
+            <label>Album Image</label>
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Browse</span>
+                    <input type="file" name="file" required>
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="Upload image">
+                </div>
+            </div>
+
+           <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input id="input-hidden-id-song" placeholder="id of songs..." type="text" name="description" required>
+                <label>IDs of songs</label>
+            </div>
+
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input placeholder="Name of album" type="text" name="name" required>
+                <label>Name</label>
+            </div>
+
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input placeholder="Date of album" type="date" name="date" class="datepicker" required>
+                <label>Date</label>
+            </div>
+
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input placeholder="Description of the album" type="text" name="description" required>
+                <label>Description</label>
+            </div>
+
+            <div class="chips chips-autocomplete">
+                <input id="" class="input" placeholder="">
+                <ul class="autocomplete-content dropdown-content"></ul>
+            </div>
+
+            <button class="btn waves-effect waves-light" type="submit" name="action">Create Album
+                <i class="material-icons right">send</i>
+            </button>
+        </center>
+    </div>
+    <div class="col s5" style="height: 550px;overflow-y: overlay;">
+      <div class="block-choose-song">
+        <ul class="collection">
+        <% if @songs.any? %>
+          <% @songs.each do |song| %>        
+          <li class="collection-item avatar">
+            <img src="<%= asset_path(song.song_img_url)%>" alt="song image" class="circle">
+            <span class="title"><%= song.title%></span>
+            <a href="#!" class="secondary-content align-icon-text" style="margin-right:50px"><i class="material-icons">play_arrow</i> 0</a> 
+            <a href="#!" id="add_song" data-id-song="<%=song.id %>" class="secondary-content"><i class="material-icons">add_circle</i></a>
+          </li>
+          <% end %>
+        <% else %>
+          <li class="collection-item avatar">
+            <span class="title">You not have a Songs | </span>
+            <span class="title"><a href="/music/create/song">Upload Songs</a></span>
+          </li>
+        <% end %>                     
+        </ul>
+      </div>
+    </div>
+        </form>
+  </div>
+</div>
+
+<script>
+
+$( document ).ready(function() {
+  $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+  });
+  $('button.btn-flat.picker__today:nth-child(1)').css("padding-left", "0");
+  $('button.btn-flat.picker__today').css("font-size","1.1em");
+  
+  $('.chips-autocomplete').material_chip({
+    placeholder: 'Enter a tag',
+    secondaryPlaceholder: '+Tag',
+    autocompleteOptions: {
+      data:{Rock:null,Blues:null,"Classic Rock":null,Country:null,Dance:null,Disco:null,Funk:null,Grunge:null,"Hip-Hop":null,Jazz:null,Metal:null,"New Age":null,Oldies:null,Other:null,Pop:null,"R&B":null,Rap:null,Reggae:null,Rock:null,Techno:null,Industrial:null,Alternative:null,Skap:null,"Death Metal":null,Pranks:null,Soundtrack:null,"Euro-Techno":null,Ambient:null,"Trip-Hop":null,Vocal:null,Jazz:null,Fusion:null,Trance:null,Classical:null,Instrumental:null,Acid:null,House:null,Game:null,"Sound Clip":null,Gospel:null,Noise:null,"Alternative Rock":null,Bass:null,Soul:null,Punk:null,Space:null,Meditative:null,"Instrumental Pop":null,"Instrumental Rock":null,Ethnic:null,Gothic:null,Darkwave:null,"Techno-Industrial":null,Electronic:null,"Pop-Folk":null,Eurodance:null,Dream:null,"Southern Rock":null,Comedy:null,Cult:null,Gangsta:null,"Top 40":null,"Christian Rap":null,"Pop/Funk":null,Jungle:null,"Native US":null,Cabaret:null,"New Wave":null,Psychadelic:null,Rave:null,Showtunes:null,Trailer:null,"Lo-Fi":null,Tribal:null,"Acid Punk":null,"Acid Jazz":null,Polka:null,Retro:null,Musical:null,"Rock & Roll":null,"Hard Rock":null,Folk:null,"Folk-Rock":null,"National Folk":null,Swing:null,"Fast Fusion":null,Bebob:null,Latin:null,Revival:null,Celtic:null,Bluegrass:null,Avantgarde:null,"Gothic Rock":null,"Progressive Rock":null,"Psychedelic Rock":null,"Symphonic Rock":null,"Slow Rock":null,"Big Band":null,Chorus:null,"Easy Listening":null,Acoustic:null,Humour:null,Speech:null,Chanson:null,Opera:null,"Chamber Music":null,Sonata:null,Symphony:null,"Booty Bass":null,Primus:null,"Porn Groove":null,Satire:null,"Slow Jam":null,Club:null,Tango:null,Samba:null,Folklore:null,Ballad:null,"Power Ballad":null,"Rhythmic Soul":null,Freestyle:null,Duet:null,"Punk Rock":null,"Drum Solo":null,Acapella:null,"Euro-House":null,"Dance Hall":null,Goa:null,"Drum & Bass":null,"Club - House":null,Hardcore:null,Terror:null,Indie:null,BritPop:null,Negerpunk:null,"Polsk Punk":null,Beat:null,"Christian Gangsta Rap":null,"Heavy Metal":null,"Black Metal":null,Crossover:null,"Contemporary Christian":null,"Christian Rock":null,Merengue:null,Salsa:null,"Thrash Metal":null,Anime:null,JPop:null,Synthpop:null,Trap:null},
+      limit: 10,
+      minLength: 1
+    }
+  });
+
+  // ----- Functionality: add songs to album.
+    var id_songs_array = new Array();
+    $("a.secondary-content").click(function(){
+        var hidden_input = $("#input-hidden-id-song"); // input escondido donde pondre los id
+        var song_id = $(this).attr("data-id-song"); // song id
+        
+        if ($(this).hasClass("select-song")){
+            $(this).removeClass("select-song");
+            id_songs_array.splice(id_songs_array.indexOf(song_id), 1);
+        }
+        else{
+            $(this).addClass("select-song");            
+            id_songs_array.push(song_id); 
+        }
+
+        hidden_input.val(id_songs_array.toString());
+
+    });
+
+});
+
+
+</script>

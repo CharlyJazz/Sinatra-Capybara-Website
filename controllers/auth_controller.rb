@@ -4,6 +4,7 @@ require 'sinatra/flash'
 require 'bcrypt'
 require 'social_url'
 require 'uri'
+require 'date'
 
 require_relative '../models/models'
 require_relative 'aplication_controller'
@@ -69,6 +70,10 @@ class AuthController < ApplicationController
     if params[:action] == "social" then return setting_social end
     if params[:action] == "personal" then return setting_personal end
     if params[:action] == "media" then return setting_media else redirect '/not_found' end
+  end
+
+  delete '/setting/social/:id' do
+    delete_social
   end
 
   post '/setting/media/ajax' do

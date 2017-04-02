@@ -7,6 +7,10 @@ module MusicHelpers
     Song.get(params[:id])
   end
 
+  def find_song_by_user(id)
+    @songs = Song.all(:user_id => id)  
+  end
+
   def delete_song
     song = Song.get(params[:id])
     if song.destroy
@@ -21,7 +25,7 @@ module MusicHelpers
   def create_music
     unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
        flash[:notice] = "No file selected"
-       return redirect '/music/create'
+       return redirect '/music/create/song'
     end
 
     @song = Song.create(:title => params[:title],
@@ -40,9 +44,18 @@ module MusicHelpers
       redirect "/music/play/#{@song.id}"
     else
       flash[:notice] = "Wow your have a error, try again."
-      redirect '/music/create'
+      redirect '/music/create/song'
     end
 
+  end
+
+  def song_social_link(song)
+    @message = SocialUrl::Message.new({
+      text: song.title + " | " + song.description,
+      url: "http://localhost:8000/music/play/#{song.id}",
+      hashtags: %w(#{@song.genre})
+    })
+    return @message
   end
 
 end

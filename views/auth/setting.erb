@@ -12,35 +12,37 @@
             <div class="card-content grey lighten-4">
               <div id="personal" class="">
                 <form id="setting-form-personal"action="/auth/setting/personal" method="POST">
-                    <div class="col s12">
+                        <div class="col s12">
                         <div class="input-field col s6">
-                            <input name="display_name" type="text" class="validate">
+                            <input name="display_name" type="text" class="validate" value="<%= @user.user_information.display_name %>">
                             <label class="active">Display Name</label>
                         </div>
-                    </div>
-                    <div class="col s12">
+                        </div>
+                        <div class="col s12">
                         <div class="input-field col s3">
-                            <input name="first_name" type="text" class="validate">
+                            <input name="first_name" type="text" class="validate" value="<%= @user.user_information.first_name %>">
                             <label class="active">First Name</label>
                         </div>
                         <div class="input-field col s3">
-                            <input name="last_name" type="text" class="validate">
+                            <input name="last_name" type="text" class="validate" value="<%= @user.user_information.last_name %>">
                             <label>Last name</label>
                         </div>
                     </div>
                     <div class="col s12">
                         <div class="input-field col s3">
-                            <input name="country" type="text" class="validate">
+                            <input name="country" type="text" class="validate" value="<%= @user.user_information.country %>">
                             <label>Country</label>
                         </div>
                         <div class="input-field col s3">
-                            <input name="city" type="text" class="validate">
+                            <input name="city" type="text" class="validate" value="<%= @user.user_information.city %>">
                             <label>City</label>
                         </div>
                     </div>
                     <div class="col s12">
                       <div class="input-field col s6">
-                        <textarea name="bio" class="materialize-textarea"></textarea>
+                        <textarea name="bio" class="materialize-textarea">
+                            <%= @user.user_information.bio %>
+                        </textarea>
                         <label for="address">Bio</label>
                       </div>
                     </div>

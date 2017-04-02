@@ -1,6 +1,15 @@
 <div class="row">
 	<div class="col s12 admin__block__table">
-	<p><code class=" language-markup">class: <%= @query_all_modell.model %></code></p>
+		<p>
+		<code class="language-markup">
+			class: <%= @query_all_modell.model %>
+		</code>
+		</p>
+		<a class="delete-model btn-flat">
+			<i class="material-icons">delete_forever</i>
+		</a>
+	</div>
+	<div class="col s12 admin__block__table">
 	<table class="responsive-table striped admin__table">
 		<thead>
 		<tr>
@@ -15,9 +24,65 @@
 					<% attributes.each do | attribute |  %>
 						<th><%= attribute %></th>
 					<% end %>
+				<th>
+				<p>
+				<input type="checkbox" class="filled-in" id="filled-in-<%= attributes[0] %>" data-id="<%= attributes[0] %>"/>
+				<label for="filled-in-<%= attributes[0] %>"></label>
+				</p>
+				</th>
 				</tr>
 			<% end %>
 		</tbody>
 	</table>
+
+		<form>
+			<input type="text" id="input-hidden-id-models" hidden>	
+		</form>
+
 	</div>
 </div>
+
+<script>
+$( document ).ready(function() {
+    var hidden_input = $("#input-hidden-id-models"); // input escondido donde pondre los id
+    var id_array = new Array();
+    $(".filled-in").click(function(){
+        var _id = $(this).attr("data-id"); // model id
+        
+        if (!$(this).is(':checked')){
+            id_array.splice(id_array.indexOf(_id), 1);
+        }
+        else{
+            id_array.push(_id); 
+        }
+        hidden_input.val(id_array.toString());
+	  });
+
+    $(".delete-model").click(function(){
+			if(!id_array.length == 0){
+				console.log("ajax!");
+				var model = document.URL.substring(document.URL.lastIndexOf("/"));
+				$.ajax({
+					type: 'DELETE',
+					url: '/admin' + model ,
+					dataType: 'json',
+					data: {data: hidden_input.val()},
+					success: function(response){
+						arr = response.success.split(",");
+						for(let i = 0;i<=arr.length;i++){
+							k = arr[i]
+							$(".filled-in[data-id=" + k + "]").parents('tr').remove();
+							id_array.splice(k, 1); // delete the id in the id_array
+																		 // for fix the bug when the array is 0
+																		 // o the array have orphan ids
+						}
+					},
+					error: function(xhr, type, exception) { 
+						console.log("ajax error response type " + type);
+					}
+				});
+			} // end if
+		}); // end function click
+}); // document function
+
+</script>

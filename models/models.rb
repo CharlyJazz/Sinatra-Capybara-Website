@@ -75,7 +75,7 @@ class Album
   include DataMapper::Resource
   property :id, Serial
   property :name, String
-  property :date, Date
+  property :description, String
   property :likes, Integer, :default => 0
   property :album_img_url, Text, :default => "albums/default_album.jpg", :lazy => false
   property :created_at, Date
@@ -90,7 +90,7 @@ class Song
   # => Crear imagen default
   include DataMapper::Resource
   property :id, Serial
-  property :url_song, Text
+  property :url_song, Text # File music url
   property :title, Text
   property :description, Text
   property :genre, String
@@ -98,7 +98,7 @@ class Song
   property :license, Enum[:creative_commons, :all_right_reserved]
   property :replay, Integer, :default => 0
   property :likes, Integer, :default => 0
-  property :album_img_url, Text, :default => "songs/default_song.png", :lazy => false
+  property :song_img_url, Text, :default => "songs/default_song.png", :lazy => false
   property :created_at, Date
   property :updated_at, Date
   has n, :albums, :through => Resource

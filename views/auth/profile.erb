@@ -29,7 +29,10 @@
                     </ul>
                 </div>
                 <div class="card-content grey lighten-4">
-                    <div id="albums" style="display: none;" class="">Test 1</div>
+                    <div id="albums" style="display: none;" class="">
+                    <h5>No have Albums <a class="btn-flat align-icon-text"  href="/music/create/album">Create Album</a></h5>
+                    <hr>
+                    </div>
                     <div id="tracks" class="" style="display: none;">
                     <% if @songs.any? %>
                         <% @songs.each do |song| %>
@@ -62,7 +65,7 @@
                         </div>
                         <% end %>
                     <% else %>
-                        <h5>No have songs</h5>
+                        <h5>No have songs <a class="btn-flat align-icon-text"  href="/music/create/song">Upload</a></h5>
                         <hr>
                     <% end %>
 

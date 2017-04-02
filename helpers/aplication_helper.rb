@@ -4,14 +4,6 @@ module Apphelpers
     "/assets/" + settings.sprockets.find_asset(source).digest_path
   end
 
-  def song_social_link
-      message = SocialUrl::Message.new({
-        text: song.title + " | " + song.description,
-        url: "http://localhost:8000/music/play/#{song.id}",
-        hashtags: %w(#{song.genre})
-      })
-  end
-
   def current_user
     if session[:user]
       user = User.first(:id => session[:user])

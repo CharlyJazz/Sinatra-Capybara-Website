@@ -95,18 +95,17 @@ module AuthHelpers
        flash[:error] = "Any field was are empty"
        redirect to("/setting")
     end
-
     @user = User.get(session[:user])
-
     @user.user_information.update(
       :display_name => params[:display_name],
       :first_name => params[:first_name],
       :last_name => params[:last_name],
       :country => params[:country],
       :city => params[:city],
-      :bio => params[:bio]
-      )
-
+      :bio => params[:bio],
+      :created_at => DateTime.now,
+      :updated_at => DateTime.now
+    )
     flash[:notice] = "New personal information!"
     redirect to("/profile/#{session[:user]}")
   end
@@ -162,5 +161,17 @@ module AuthHelpers
       upload_file(settings.banners_folder, name_file_formated,  tmpfile)
       return { :img_banner => @user.user_media.banner_img_url}.to_json         
     end
-  end 
+  end
+
+  def delete_social
+    content_type 'application/json', :charset => 'utf-8' if request.xhr?    
+    @user = User.get(session[:user])
+    social = @user.user_socials.get(params[:id])
+    if social.destroy
+      return { :success => "Social link deleted!"}.to_json
+    else
+      return { :error => "Error!"}.to_json
+    end
+  end
+
 end

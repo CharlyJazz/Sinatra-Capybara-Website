@@ -32,7 +32,19 @@ $(wrapper).on 'click', '.remove_field', (e) ->
     else if $(field).attr("class") == "social_name"
       $(field).attr("name", "social_name[" + count + "]")
       count++
-  console.log id_social.substring(id_social.indexOf('-') + 1) # ID
+  id = id_social.substring(id_social.indexOf('-') + 1) # ID
+
+  $.ajax '/auth/setting/social/' + id,
+    type: 'DELETE',
+    dataType: 'json',
+    success: (resp) ->
+      if resp.success then console.log "success #{resp.success}"
+      if resp.error then console.log "error #{resp.error}"
+    error: () ->
+      console.log "error"
+    fail: () ->
+      console.log "fail"
+
   return
 
 

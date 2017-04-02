@@ -130,3 +130,21 @@ div.song__wrapper{
     right: 0;
     position: absolute;
 }
+
+.song-figure{
+  float: left;
+  margin-right: 15px;
+}
+
+.block-choose-song .collection .collection-item.avatar{
+  min-height:60px !important
+}
+
+#add_song:hover{
+  color:lightgrey;
+  transition: color .5s
+}
+
+.select-song{
+  color: mediumspringgreen
+}

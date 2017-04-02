@@ -1,27 +1,41 @@
 <div class="row">
-  <div class="col s6 m10">
-        <figure>
+  <div class="col s6 m8">
+        <figure class="song-figure">
           <img src="<%= asset_path('songs/default_song.png')%>">
-          <span class="card-title"><%=@song.title%></span>
         </figure>
+        <div class="song-action" style="margin-top:15px">
+              <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
+              <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
+              <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
+              <a class="pre-delete-song  btn-flat" href="#modal-delete-song"><i class="material-icons">delete_forever</i></a>
+              <ul id="dropdown2" class="dropdown-content">
+                  <li><a href="<%=@message.facebook_url%>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                  <li><a href="<%=@message.pinterest_url%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                  <li><a href="<%=@message.twitter_url%>"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                  <li><a href="<%=@message.google_url%>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                  
+              </ul>                            
+        </div>             
         <figcaption>
+          <p><%=@song.title%></p>
           <p><%=@song.description%></p>
-          <p><%=@song.genre%>  <%=@song.type%>  <%=@song.license%></p>  
-          <audio src="<%=@song.url_song%>" controls></audio>
-          <a href="#">Like</a>
-            <!-- Modal Trigger -->
-            <a class="waves-effect waves-light btn" href="#modal-delete-song">Delete?</a>
+          <p><%=@song.genre%></p>
+          <p><%=@song.type%></p>
+          <p><%=@song.license%></p>
         </figcaption>
+        <audio src="<%=@song.url_song%>" controls></audio>     
     </div>
   </div>
 
-  <!-- Modal Structure -->
-  <div id="modal-delete-song" class="modal">
+<div id="modal-delete-song" class="modal">
     <div class="modal-content">
-      <h4>Are you sure delete this song?</h4>
+    <h4>Are you sure delete this song?</h4>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Delete</a>
+    <form id="form-delete-song" action="/music/song/<%=@song.id %>" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="submit" class="modal-action modal-close waves-effect waves-green btn-flat"
+        value="Yes, delete">
+    </form>
     </div>
-  </div>
+</div>
          

@@ -1,5 +1,4 @@
 module AdminHelpers
-
     def verify_model_exist(model) 
         @models.each do | model_registered |
             if model_registered.name == model.capitalize ||
@@ -12,11 +11,11 @@ module AdminHelpers
             flash[:error] = "Model no exist"
             redirect to('/')
         end
-    end # end verify_model_exist
+    end
 
     def select_from_all_query(model)
         model.all
-    end # end select_from_all_query
+    end
 
     def create_array_result(query)
         @inspect_array = Array.new
@@ -30,6 +29,14 @@ module AdminHelpers
                                attr.gsub!(">", "")}
             @inspect_array.push(attributes)
         end
-    end # end create_array_result
+    end
+
+    def delete_record(record, model)
+        array_id = record.split(",")
+        model_class = Object.const_get(model) # convert string to class
+        array_id.each do | id |
+            model_class.get(id).destroy
+        end
+    end
     
-end # end helpers
+end
