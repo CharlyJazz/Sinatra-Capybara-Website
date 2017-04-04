@@ -1,13 +1,18 @@
+<style>
+.select-song{
+    color:#00cd67
+}
+</style>
 <div class="container" style="margin-top:2.5%">
     <div class="row">
       <div class="col s7">
         <h3>Create Album</h3>
-        <form action="/music/create/album" method="POST" enctype="multipart/form-data">
+        <form id="user_create_album"action="/music/create/album" method="POST" enctype="multipart/form-data">
             <label>Album Image</label>
             <div class="file-field input-field">
                 <div class="btn">
                     <span>Browse</span>
-                    <input type="file" name="file" required>
+                    <input type="file" name="file" > 
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" placeholder="Upload image">
@@ -16,30 +21,34 @@
 
            <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input id="input-hidden-id-song" placeholder="id of songs..." type="text" name="description" required>
-                <label>IDs of songs</label>
-            </div>
+                <input id="input-hidden-id-song" placeholder="id of songs..." type="text" name="songs_id" >
+           </div>
+
+           <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input id="input-hidden-tag-album" placeholder="" type="text" name="tags" >
+           </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Name of album" type="text" name="name" required>
+                <input placeholder="Name of album" type="text" name="name" >
                 <label>Name</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Date of album" type="date" name="date" class="datepicker" required>
+                <input placeholder="Date of album" type="date" name="date" class="datepicker" >
                 <label>Date</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Description of the album" type="text" name="description" required>
+                <input placeholder="Description of the album" type="text" name="description" >
                 <label>Description</label>
             </div>
 
             <div class="chips chips-autocomplete">
-                <input id="" class="input" placeholder="">
+                <input id="" class="input" placeholder="" name="chips">
                 <ul class="autocomplete-content dropdown-content"></ul>
             </div>
 

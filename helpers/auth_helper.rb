@@ -11,8 +11,10 @@ module AuthHelpers
       flash[:warning] = "This email are existing"
       redirect '/auth'
     else
-      @user = User.create(:username => params[:username], :email => params[:email], 
-                          :password => params[:password], :recover_password => params[:recover_password]) 
+      @user = User.create(:username => params[:username],
+                          :email => params[:email], 
+                          :password => params[:password],
+                          :recover_password => params[:recover_password])
       @user.user_media = UserMedia.create
       @user.user_information = UserInformation.create
       @user.save
@@ -102,9 +104,7 @@ module AuthHelpers
       :last_name => params[:last_name],
       :country => params[:country],
       :city => params[:city],
-      :bio => params[:bio],
-      :created_at => DateTime.now,
-      :updated_at => DateTime.now
+      :bio => params[:bio]
     )
     flash[:notice] = "New personal information!"
     redirect to("/profile/#{session[:user]}")

@@ -1,6 +1,5 @@
 require 'dm-core'
 require 'dm-migrations'
-require 'dm-timestamps'
 require 'dm-types'
 require 'dm-validations'
 require 'sinatra'
@@ -28,8 +27,7 @@ class User
   property :password, BCryptHash
   property :recover_password, String
   property :role, String, :default => 'user'
-  property :created_at, Date  
-  property :created_on, DateTime
+ 
   has 1, :user_information # => (One-to-One)
   has 1, :user_media       # => (One-to-One)
   has n, :user_socials     # => has n and belongs_to (or One-To-Many)
@@ -41,9 +39,6 @@ class UserMedia
   include DataMapper::Resource
   property :profile_img_url, Text, :default => "profiles/default_profile.jpg", :lazy => false
   property :banner_img_url, Text, :default => "banners/default_banner.jpg", :lazy => false
-  property :created_at, Date
-  property :updated_at, Date  
-
   belongs_to :user, :key => true
 end
 
@@ -55,8 +50,6 @@ class UserInformation
   property :country, String, :length => 2..50
   property :city, String, :length => 2..50
   property :bio, Text, :length => 10..225,   :lazy => false
-  property :created_at, Date
-  property :updated_at, Date  
 
   belongs_to :user, :key => true
 end
@@ -78,12 +71,20 @@ class Album
   property :description, String
   property :likes, Integer, :default => 0
   property :album_img_url, Text, :default => "albums/default_album.jpg", :lazy => false
-  property :created_at, Date
-  property :updated_at, Date
+ 
   has n, :songs, :through => Resource
+  has n, :album_tags
   has n, :comment_albums # => has n and belongs_to (or One-To-Many)
                          # => CommentSong ----> comment_songs
   belongs_to :user
+end
+
+class AlbumTag
+  include DataMapper::Resource
+  property :id, Serial
+  property :name, String
+
+  belongs_to :album  
 end
 
 class Song
@@ -99,11 +100,9 @@ class Song
   property :replay, Integer, :default => 0
   property :likes, Integer, :default => 0
   property :song_img_url, Text, :default => "songs/default_song.png", :lazy => false
-  property :created_at, Date
-  property :updated_at, Date
+
   has n, :albums, :through => Resource
-  has n, :comment_songs # => has n and belongs_to (or One-To-Many)
-                        # => CommentSong ----> comment_songs
+  has n, :comment_songs # => has n and belongs_to (or One-To-Many), CommentSong ----> comment_songs
   belongs_to :user
 end
 
@@ -112,8 +111,6 @@ class CommentAlbum
   property :id, Serial
   property :text, String
   property :likes, Integer, :default => 0
-  property :created_at, Date
-  property :updated_at, DateTime  
 
   belongs_to :album
 end
@@ -123,8 +120,6 @@ class CommentSong
   property :id, Serial
   property :text, String
   property :likes, Integer, :default => 0
-  property :created_at, Date
-  property :updated_at, Date 
 
   belongs_to :song
 end

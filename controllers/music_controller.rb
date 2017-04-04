@@ -55,7 +55,7 @@ class MusicController < ApplicationController
   end  
 
   post '/create/album' do
-    p("ALBUM")
+    create_album
   end  
 
 end

@@ -36,12 +36,11 @@ def create_admin
     return
   end
   unless email.to_s.empty? || username.to_s.empty? || password.to_s.empty?
-    if User.create!(:email => email,
+    if User.create!(:username => username,
+                    :email => email,
                     :password => password,
-                    :role => 'admin',
-                    :created_at =>  DateTime.now ,
-                    :created_on => Date.today)
-                    DataMapper.finalize.auto_upgrade!
+                    :role => 'admin')
+      DataMapper.finalize.auto_upgrade!
       puts "The admin was created successfully...
             Admin: #{username} Date: #{DateTime.now}"
     else

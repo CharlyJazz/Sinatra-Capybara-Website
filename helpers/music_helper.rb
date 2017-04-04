@@ -58,4 +58,32 @@ module MusicHelpers
     return @message
   end
 
+  def create_album
+    if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true ||
+        params[:songs_id].to_s.empty? || params[:tags].to_s.empty? ||
+        params[:description].to_s.empty? || params[:date].to_s.empty? ||
+        params[:name].to_s.empty?
+
+      flash[:error] = "Any field was are empty"
+      redirect to("/create/album")
+    end
+  
+    arr_tags = params[:tags].to_s.split(",")
+    arr_id_songs = params[:songs_id].to_s.split(",")
+
+    @album = Album.create(:name => params[:name],
+                          :description => params[:description],
+                          :user_id => session[:user])
+
+    arr_tags.each { | tag | @album.album_tags.create(:name => tag) }
+
+    arr_id_songs.each do | id |
+      @song = Song.get(id)
+      @album.songs << @song
+      @album.save
+    end
+
+    return redirect "/auth/profile/#{session[:user]}"
+
+  end
 end

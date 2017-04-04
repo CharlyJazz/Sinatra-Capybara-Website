@@ -26,6 +26,7 @@ class AdminController < ApplicationController
   end
 
   add_model_in_view(args:[User,UserMedia, UserInformation, UserSocial,
-                          Song, CommentSong, Album, CommentAlbum])
+                          Song, CommentSong, Album, CommentAlbum, AlbumTag,
+                          AlbumSong])
 
 end
