@@ -24,14 +24,14 @@ class MusicController < ApplicationController
 
   get '/' do
     find_songs
-    render :erb, :'music/all'
+    render :erb, :'music/songs'
   end
 
-  get '/play/:id' do
+  get '/song/:id' do
     @song = find_song
     unless @song.class != Song
-      song_social_link @song
-      return render :erb, :'music/one'
+      social_link @song
+      return render :erb, :'music/song'
     end
     redirect not_found
   end
@@ -48,6 +48,15 @@ class MusicController < ApplicationController
     create_music
   end
 
+  get '/album/:id' do
+    @album = find_album
+    unless @album.class != Album
+      social_link @album
+      @user = User.get(@album.user_id)
+      return render :erb, :'music/album'
+    end
+    redirect not_found    
+  end
 
   get '/create/album' do
     find_song_by_user session[:user]

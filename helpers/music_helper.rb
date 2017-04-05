@@ -41,7 +41,7 @@ module MusicHelpers
     upload_file(settings.music_folder, filename, tmpfile)
     if @song.saved?
       flash[:notice] = "Successfully created..."
-      redirect "/music/play/#{@song.id}"
+      redirect "/music/song/#{@song.id}"
     else
       flash[:notice] = "Wow your have a error, try again."
       redirect '/music/create/song'
@@ -49,12 +49,21 @@ module MusicHelpers
 
   end
 
-  def song_social_link(song)
-    @message = SocialUrl::Message.new({
-      text: song.title + " | " + song.description,
-      url: "http://localhost:8000/music/play/#{song.id}",
-      hashtags: %w(#{@song.genre})
-    })
+  def social_link(class_model)
+    if class_model.class == Song then
+      @message = SocialUrl::Message.new({
+        text: class_model.title + " | " + class_model.description,
+        url: "http://localhost:8000/music/song/#{class_model.id}",
+        hashtags: %w(#{class_model.genre})
+      })
+    elsif class_model.class == Album then
+      first_tag = class_model.album_tags.get(1)
+      @message = SocialUrl::Message.new({
+        text: class_model.name + " | " + class_model.description,
+        url: "http://localhost:8000/music/album/#{class_model.id}",
+        hashtags: %w(#{first_tag})
+      })
+    end
     return @message
   end
 
@@ -86,6 +95,9 @@ module MusicHelpers
 
     flash[:notice] = "New album created!"
     return redirect "/auth/profile/#{session[:user]}"
+  end
 
+  def find_album
+    Album.get(params[:id])
   end
 end
