@@ -23,7 +23,7 @@ gem 'forgery', '0.6.0'
 
 gem "rspec"
 gem "rack-test"
-gem 'capybara'
+gem 'capybara', "~>2.12.0"
 gem "selenium-webdriver"
 gem "webdrivers", "~> 2.3"
 gem 'database_cleaner'

@@ -30,8 +30,35 @@
                 </div>
                 <div class="card-content grey lighten-4">
                     <div id="albums" style="display: none;" class="">
+                    <% if @albums.any? %>
+                      <% @albums.each do |album | %>
+                        <div class="album_wrapper z-depth-1">
+                            <figure>
+                                <a href="/music/album/<%=album.id %>">
+                                    <img src="<%= asset_path('albums/default_album.jpg')%>"  width="230px">
+                                </a>
+                            </figure>
+                            <div class="song-action">
+                                <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
+                                <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
+                                <a class="pre-delete-album  btn-flat" href="#modal-delete-album" data-id-album="<%=album.id %>"><i class="material-icons">delete_forever</i></a>
+                                <a class="btn-flat" href=""><i class="material-icons">play_arrow</i>0</a>       
+                                <ul id="dropdown2" class="dropdown-content">
+                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/play/<%=album.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('albums/default_album.jpg')%>&media=http%3A//localhost%3A8000/music/play/<%=album.id%>&description=<%= album.name %> - <%=album.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://twitter.com/home?status=http%3A//localhost%3A8000/music/album/<%=album.id %>"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://plus.google.com/share?url=http%3A//localhost%3A8000/music/album/<%=album.id %>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                    
+                                </ul>                            
+                            </div>                           
+                            <div class="song-dates">
+                                <p class="song-title"> <%= album.name %> | <span><%=album.description%></span></p>
+                            </div>                            
+                        </div>
+                      <% end %>
+                    <% else %>
                     <h5>No have Albums <a class="btn-flat align-icon-text"  href="/music/create/album">Create Album</a></h5>
                     <hr>
+                    <% end %>
                     </div>
                     <div id="tracks" class="" style="display: none;">
                     <% if @songs.any? %>
@@ -48,10 +75,10 @@
                                 <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
                                 <a class="pre-delete-song  btn-flat" href="#modal-delete-song" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
                                 <ul id="dropdown2" class="dropdown-content">
-                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/play/3"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                    <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('songs/default_song.png')%>&media=http%3A//localhost%3A8000/music/play/3&description=<%= song.title %> - <%=song.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-                                    <li><a href="https://twitter.com/home?status=http%3A//localhost%3A8000/music/play/3"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                    <li><a href="https://plus.google.com/share?url=http%3A//localhost%3A8000/music/play/3"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                    
+                                    <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/play/<%=song.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('songs/default_song.png')%>&media=http%3A//localhost%3A8000/music/play/<%=song.id %>&description=<%= song.title %> - <%=song.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://twitter.com/home?status=http%3A//localhost%3A8000/music/play/<%=song.id %>"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://plus.google.com/share?url=http%3A//localhost%3A8000/music/play/<%=song.id %>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                    
                                 </ul>                            
                             </div>                            
                             <div class="song-dates">

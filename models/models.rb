@@ -37,6 +37,7 @@ end
 
 class UserMedia
   include DataMapper::Resource
+  property :id, Serial  
   property :profile_img_url, Text, :default => "profiles/default_profile.jpg", :lazy => false
   property :banner_img_url, Text, :default => "banners/default_banner.jpg", :lazy => false
   belongs_to :user, :key => true
@@ -44,6 +45,7 @@ end
 
 class UserInformation
   include DataMapper::Resource
+  property :id, Serial  
   property :display_name, String, :length => 2..50
   property :first_name, String, :length => 2..50
   property :last_name, String, :length => 2..50
@@ -68,6 +70,7 @@ class Album
   include DataMapper::Resource
   property :id, Serial
   property :name, String
+  property :date, String
   property :description, String
   property :likes, Integer, :default => 0
   property :album_img_url, Text, :default => "albums/default_album.jpg", :lazy => false

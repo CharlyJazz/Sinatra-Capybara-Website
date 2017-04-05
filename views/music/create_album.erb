@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col s7">
         <h3>Create Album</h3>
-        <form id="user_create_album"action="/music/create/album" method="POST" enctype="multipart/form-data">
+        <form id="user_create_album" action="/music/create/album" method="POST" enctype="multipart/form-data">
             <label>Album Image</label>
             <div class="file-field input-field">
                 <div class="btn">
@@ -21,12 +21,12 @@
 
            <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input id="input-hidden-id-song" placeholder="id of songs..." type="text" name="songs_id" >
+                <input id="input-hidden-id-song" hidden placeholder="id of songs..." type="text" name="songs_id" >
            </div>
 
            <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input id="input-hidden-tag-album" placeholder="" type="text" name="tags" >
+                <input id="input-hidden-tag-album" hidden placeholder="" type="text" name="tags" >
            </div>
 
             <div class="input-field">
@@ -47,8 +47,8 @@
                 <label>Description</label>
             </div>
 
-            <div class="chips chips-autocomplete">
-                <input id="" class="input" placeholder="" name="chips">
+            <div class="chips chips-autocomplete" style="visible:visible;display:block;opacity:1">
+                <input id="chips-id" class="input" placeholder="" name="chips"  style="visible:visible;display:block;opacity:1" >
                 <ul class="autocomplete-content dropdown-content"></ul>
             </div>
 

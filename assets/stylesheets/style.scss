@@ -148,3 +148,15 @@ div.song__wrapper{
 .select-song{
   color: mediumspringgreen
 }
+
+.album_wrapper{
+  @extend .song__wrapper;
+  display: flex;
+}
+.album_wrapper figure{
+  margin:10px
+}
+
+.album_wrapper > div.song-dates > .song-title{
+  margin: 0;
+}

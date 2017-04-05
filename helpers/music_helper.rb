@@ -73,6 +73,7 @@ module MusicHelpers
 
     @album = Album.create(:name => params[:name],
                           :description => params[:description],
+                          :date => params[:date],
                           :user_id => session[:user])
 
     arr_tags.each { | tag | @album.album_tags.create(:name => tag) }
@@ -83,6 +84,7 @@ module MusicHelpers
       @album.save
     end
 
+    flash[:notice] = "New album created!"
     return redirect "/auth/profile/#{session[:user]}"
 
   end
