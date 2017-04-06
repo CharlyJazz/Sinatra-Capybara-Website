@@ -34,8 +34,17 @@ end.to_app
 Capybara.app_host = "http://localhost:8000"
 Capybara.server_host = "localhost"
 Capybara.server_port = "8000"
+Capybara.raise_server_errors = true
 Capybara.register_driver :selenium do |app|
-  Capybara::Selenium::Driver.new(app, :browser => :chrome)
+  Capybara::Selenium::Driver.new(
+   app,
+   :browser => :chrome,
+   desired_capabilities: {
+      "chromeOptions" => {
+       "args" => %w{ window-size=1920,1080 no-sandbox user-data-dir=/root }
+     }
+    }
+  )
 end
 
 RSpec.configure do |config|
@@ -71,11 +80,3 @@ RSpec.configure do |config|
   end
 
 end
-
-=begin
-
-Spec for controllers:      $ bundle exec rspec spec/spec_controller/file.rb
-Spec for database models:  $ bundle exec rspec spec/spec_models/file.rb
-Spec for any class:        $ bundle exec rspec spec/spec_class/file.rb
-
-=end

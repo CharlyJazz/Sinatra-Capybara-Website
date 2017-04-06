@@ -94,9 +94,9 @@ class Song
   # => Crear imagen default
   include DataMapper::Resource
   property :id, Serial
-  property :url_song, Text # File music url
-  property :title, Text
-  property :description, Text
+  property :url_song, String # File music url
+  property :title, String
+  property :description, String
   property :genre, String
   property :type, Enum[:original, :remix, :live, :recording, :demo, :work, :effect, :other], :default => :original
   property :license, Enum[:creative_commons, :all_right_reserved]

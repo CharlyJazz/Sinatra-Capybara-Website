@@ -13,7 +13,7 @@ $(add_button).click (e) ->
                           <div class="input-field col s3">
                               <input class="social_name" name="social_name['+x+']" type="text" class="validate">
                           </div>
-                          <a href="#" class="btn waves-effect waves-light remove_field remove-'+x+'">Remove</a></div>
+                          <a href="#" class="btn waves-effect waves-light remove_field" data-id="remove-'+x+'">Remove</a></div>
                        </div>'
   return
 
@@ -23,15 +23,17 @@ $(wrapper).on 'click', '.remove_field', (e) ->
   id_social = $(this).data("id")
   $(this).parent('div').remove()
   x--
-  # Reset x for correct index for a validation
+  that = $(this)
   fields = $("#setting-form-social").find("input")
   count = 1
+  
   for field in fields
     if $(field).attr("class") == "social_url"
       $(field).attr("name", "social_url[" + count + "]")
     else if $(field).attr("class") == "social_name"
       $(field).attr("name", "social_name[" + count + "]")
       count++
+
   id = id_social.substring(id_social.indexOf('-') + 1) # ID
 
   $.ajax '/auth/setting/social/' + id,

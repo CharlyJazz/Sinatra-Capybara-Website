@@ -36,32 +36,32 @@ RSpec.describe 'Website' do
     #   expect(page).to have_selector('div.song__wrapper', count: 4)
     # end
 
-    # it "when delete any song in play" do
-    #   action_login("charlyjazzc1@gmail.com", "password")
-    #   visit '/music/play/1'
-    #   find(:css, 'a.pre-delete-song').click
-    #   click_button('Yes, delete')
-    #   expect(page).to have_content 'Song deleted'
-    # end
-
-    it "when create album" do
+    it "when delete any song in play" do
       action_login("charlyjazzc1@gmail.com", "password")
-      visit '/music/create/album'
-      5.times do | n |
-        find("a[data-id-song='" + (n + 1).to_s+ "']").click
-      end
-      within("form#user_create_album") do
-        attach_file("file", File.absolute_path('./assets/images/songs/default_song.png'), {make_visible: true }) 
-        fill_in 'name', with: Forgery(:internet).user_name
-        find_field('date').click()
-        click_button('Today')
-        fill_in 'description', with: Forgery(:lorem_ipsum).words(5)
-        page.execute_script "$('#input-hidden-id-song').show()"
-        page.execute_script "$('#input-hidden-tag-album').show()"
-        page.execute_script "$('.chips').material_chip({data:[{tag:'Apple'},{tag:'Microsoft'},{tag:'Google'}]});"
-      end
-      submit_form
-      expect(page).to have_content 'New album created!'
+      visit '/music/song/1'
+      find(:css, 'a.pre-delete-song').click
+      click_button('Yes, delete')
+      expect(page).to have_content 'Song deleted'
     end
+
+    # it "when create album" do
+    #   action_login("charlyjazzc1@gmail.com", "password")
+    #   visit '/music/create/album'
+    #   5.times do | n |
+    #     find("a[data-id-song='" + (n + 1).to_s+ "']").click
+    #   end
+    #   within("form#user_create_album") do
+    #     attach_file("file", File.absolute_path('./assets/images/songs/default_song.png'), {make_visible: true }) 
+    #     fill_in 'name', with: Forgery(:internet).user_name
+    #     find_field('date').click()
+    #     click_button('Today')
+    #     fill_in 'description', with: Forgery(:lorem_ipsum).words(5)
+    #     page.execute_script "$('#input-hidden-id-song').show()"
+    #     page.execute_script "$('#input-hidden-tag-album').show()"
+    #     page.execute_script "$('.chips').material_chip({data:[{tag:'Apple'},{tag:'Microsoft'},{tag:'Google'}]});"
+    #   end
+    #   submit_form
+    #   expect(page).to have_content 'New album created!'
+    # end
   end
 end

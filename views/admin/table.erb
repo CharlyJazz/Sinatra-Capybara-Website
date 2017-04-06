@@ -20,14 +20,16 @@
 		</thead>
 		<tbody>
 			<% @inspect_array.each do | attributes |  %>
-				<tr>
+				<tr class="tr-model">
 					<% attributes.each do | attribute |  %>
 						<th><%= attribute %></th>
 					<% end %>
 				<th>
 				<p>
-				<input type="checkbox" class="filled-in" id="filled-in-<%= attributes[0] %>" data-id="<%= attributes[0] %>"/>
-				<label for="filled-in-<%= attributes[0] %>"></label>
+				<form class="form-checkbox-<%= attributes[0] %>">
+					<input type="checkbox" class="filled-in" id="filled-in-<%= attributes[0] %>" data-id="<%= attributes[0] %>"/>
+					<label for="filled-in-<%= attributes[0] %>"></label>
+				</form>
 				</p>
 				</th>
 				</tr>
