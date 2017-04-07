@@ -16,8 +16,6 @@ RSpec.describe 'Website' do
       before_create_social 4
     end
 
-
-
     # it "when register" do
     #   visit '/auth/register'
     #   within("form#form__register") do

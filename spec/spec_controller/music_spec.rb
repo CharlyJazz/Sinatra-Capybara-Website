@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rack/test'
 
-RSpec.describe 'Website' do
+RSpec.describe 'Music Controller' do
   def app
     MusicController
   end

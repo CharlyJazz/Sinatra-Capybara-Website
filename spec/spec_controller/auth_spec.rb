@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rack/test'
 require 'capybara/rspec'
 
-RSpec.describe 'Website' do
+RSpec.describe 'Auth Controller' do
   def app
     AuthController
   end

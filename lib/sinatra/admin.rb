@@ -1,4 +1,8 @@
 require 'sinatra/base'
+require 'dm-core'
+require 'dm-migrations'
+require 'dm-types'
+require 'dm-validations'
 require_relative './admin_helper'
 
 module Sinatra
@@ -31,11 +35,8 @@ module Sinatra
       end
 
       app.delete '/:model' do
-        # params[:data] are the ids of the records (send for ajax)
-        # params[:model] are the models class name
         content_type 'application/json', :charset => 'utf-8' if request.xhr?
         verify_model_exist(params[:model])
-
         delete_record(params[:data], params[:model])
         return { :success => params[:data] }.to_json
       end

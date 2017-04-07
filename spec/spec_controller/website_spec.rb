@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rack/test'
 
-RSpec.describe 'Website' do
+RSpec.describe 'Website Controller' do
   def app
     WebsiteController
   end

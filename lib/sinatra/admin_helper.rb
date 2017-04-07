@@ -31,44 +31,50 @@ module AdminHelpers
         end
     end
 
-    def delete_associations(id, model_class)
-        case model_class
-        when User
-            # User basic data . . .
+    def delete_orphan(id, parent_model, child_model, cardinality_tipe)
+    end
+
+    def prevent_orphan_records(id, model_class)
+        parent_model = model_class
+        cardinality_tipe = "ManyToMany,ManyToOne,OneToMany,OneToOne".split(",")
+        parent_model.relationships.each { | relationship |
+            cardinality = relationship.class.name
+            inverse_cardinality = relationship.inverse.class.name
+            cardinality_tipe.each  do | tipe |
+                if cardinality.include? tipe
+                    puts "With this model: " + relationship.child_model.to_s
+                    puts "Cardinality: " + tipe
+                    # delete_orphan(id, parent_model, relationship.child_model, tipe)
+                end
+            end
+        }
+        
+        #  -------codigo no escalable pero guia algoritmica--------
+        if model_class == User
+            # User basic data . . . ONE TO ONE
             UserMedia.first(:user_id => id).destroy
             UserInformation.first(:user_id => id).destroy
-            UserSocial.all(:user_id).destroy
-            # User albums . . .
-            user_albums = Album.all(:user_id => id)
-            user_albums.each { | album |
-                AlbumTag.all(:album_id => album.id ).destroy
-                CommentAlbum.all(:album_id => album.id ).destroy
-                AlbumSong.all(:album_id => album.id).destroy
-            }
-            user_albums.destroy
-            # User Songs . . .
-            user_songs = Song.all(:user_id => id)
-            user_songs.each { | music |
-                CommentSong.all(:song_id => music.id ).destroy
-                AlbumSong.all(:song_id => music.id).destroy
-            }
-            user_songs.destroy
-            # User Comments . . .
-            CommentAlbum.all(:user_id).destroy            
-            CommentSong.all(:user_id).destroy
-        when Album
-            puts "Eliminar comentarios, Eliminar registros en \
-                  AlbumSong que es many to many con varias canciones, \
-                  Eliminar registros en AlbumTag "
-        when Song
-            puts "Eliminar comentarios, Eliminar registros en \
-                  AlbumSong que es many to many con varios albumes, \
-                  Eliminar registros en AlbumTag "
-        when AlbumSong
-            puts "Eliminar comentarios del album, Eliminar registros  \
-                  en AlbumTag, Eliminar Album "
-        else
-            return # BUG ?
+            if !UserSocial.all(:user_id => id).nil?
+                UserSocial.all(:user_id => id).destroy
+            end
+            # # User albums . . .
+            # user_albums = Album.all(:user_id => id)
+            # user_albums.each { | album |
+            #     AlbumTag.all(:album_id => album.id ).destroy
+            #     CommentAlbum.all(:album_id => album.id ).destroy
+            #     AlbumSong.all(:album_id => album.id).destroy
+            # }
+            # user_albums.destroy
+            # # User Songs . . .
+            # user_songs = Song.all(:user_id => id)
+            # user_songs.each { | music |
+            #     CommentSong.all(:song_id => music.id ).destroy
+            #     AlbumSong.all(:song_id => music.id).destroy
+            # }
+            # user_songs.destroy
+            # # User Comments . . .
+            # CommentAlbum.all(:user_id).destroy            
+            # CommentSong.all(:user_id).destroy
         end
     end
 
@@ -76,9 +82,21 @@ module AdminHelpers
         array_id = record.split(",")
         model_class = Object.const_get(model) # convert string to class
         array_id.each do | id |
-            delete_associations(id, model_class)
+            prevent_orphan_records(id, model_class)
             model_class.get(id).destroy
         end
     end
     
 end
+
+# when Album
+#     puts "Eliminar comentarios, Eliminar registros en \
+#           AlbumSong que es many to many con varias canciones, \
+#           Eliminar registros en AlbumTag "
+# when Song
+#     puts "Eliminar comentarios, Eliminar registros en \
+#           AlbumSong que es many to many con varios albumes, \
+#           Eliminar registros en AlbumTag "
+# when AlbumSong
+#     puts "Eliminar comentarios del album, Eliminar registros  \
+#           en AlbumTag, Eliminar Album "
