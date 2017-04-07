@@ -11,9 +11,10 @@ RSpec.describe 'Website' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_max_wait_time = 8
-      before_create_admin("admin_user", "admin@gmail.com", "random", "admin_secret")
+      before_create_user(:username => "admin_user", :email => "admin@gmail.com",
+                         :password => "password", :amount => 1, :role => "admin")
+      before_create_user(:amount => 7)
       before_create_songs 7
-      before_create_users 7
     end
 
     it "when delete song records" do

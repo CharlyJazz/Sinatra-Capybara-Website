@@ -33,6 +33,9 @@ class User
   has n, :user_socials     # => has n and belongs_to (or One-To-Many)
   has n, :songs            # => has n and belongs_to (or One-To-Many)
   has n, :albums           # => has n and belongs_to (or One-To-Many)
+  has n, :comment_albums   # => has n and belongs_to (or One-To-Many)
+  has n, :comment_songs    # => has n and belongs_to (or One-To-Many)
+
 end
 
 class UserMedia
@@ -116,6 +119,7 @@ class CommentAlbum
   property :likes, Integer, :default => 0
 
   belongs_to :album
+  belongs_to :user  
 end
 
 class CommentSong
@@ -125,6 +129,7 @@ class CommentSong
   property :likes, Integer, :default => 0
 
   belongs_to :song
+  belongs_to :user    
 end
 
 DataMapper.finalize.auto_upgrade!

@@ -1,43 +1,28 @@
 module BeforeHelpers
-  def before_create_admin(username, email, password, secret="secret")
-      user = {:username => username,
-              :email => email,
-              :password => password,
-              :recover_password => secret,
-              :role => "admin"}
-      @user = User.create(user)
-      @user.user_media = UserMedia.create
-      @user.user_information = UserInformation.create
-      @user.save
-      @user.user_media.save
-      @user.user_information.save
-  end
-
-  def before_create_user(username, email, password, secret="secret")
-      user = {:username => username,
-              :email => email,
-              :password => password,
-              :recover_password => secret}
-      @user = User.create(user)
-      @user.user_media = UserMedia.create
-      @user.user_information = UserInformation.create
-      @user.save
-      @user.user_media.save
-      @user.user_information.save
-  end
-
-  def before_create_users(n)
-    n.times do | i |
-      user = {:username => Forgery(:internet).user_name,
-              :email => Forgery(:internet).email_address,
-              :password => Forgery(:basic).password,
-              :recover_password => Forgery(:lorem_ipsum).words(i)}
-      @user = User.create(user)
-      @user.user_media = UserMedia.create
-      @user.user_information = UserInformation.create
-      @user.save
-      @user.user_media.save
-      @user.user_information.save
+  def before_create_user(options={:username=>nil, :email=>nil, :password=>nil, :recover_password=>"secret"})
+    p(options)
+    if options[:amount] > 1
+      options[:amount].times do | i |
+        @user = User.create(:username => Forgery(:internet).user_name,
+                :email => Forgery(:internet).email_address,
+                :password => Forgery(:basic).password,
+                :recover_password => Forgery(:lorem_ipsum).words(i))
+        @user.user_media = UserMedia.create
+        @user.user_information = UserInformation.create
+        @user.save
+        @user.user_media.save
+        @user.user_information.save
+      end
+    else
+        @user = User.create(:username => options[:username],
+                :email => options[:email],
+                :password => options[:password],
+                :recover_password => options[:recover_password])
+        @user.user_media = UserMedia.create
+        @user.user_information = UserInformation.create
+        @user.save
+        @user.user_media.save
+        @user.user_information.save
     end
   end
 

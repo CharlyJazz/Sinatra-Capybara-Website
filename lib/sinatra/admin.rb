@@ -7,7 +7,7 @@ module Sinatra
       app.set :models_in_view, []
       app.enable :method_override
       app.helpers AdminHelpers
-
+      
       def app.add_model_in_view(value:0, args:[])
         args.each do | model|
           settings.models_in_view << model

@@ -11,7 +11,8 @@ RSpec.describe 'Website' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_wait_time = 0
-      before_create_user("charlytester", "charlyjazzc1@gmail.com", "password")
+      before_create_user(:username => "charlytester", :email => "charlytester",
+                         :password => "password", :amount => 1, :role => "user")
       before_create_social 4
     end
 
