@@ -28,5 +28,7 @@ class AdminController < ApplicationController
   add_model_in_view(args:[User,UserMedia, UserInformation, UserSocial,
                           Song, CommentSong, Album, CommentAlbum, AlbumTag,
                           AlbumSong])
+  
+  add_many_to_many_no_delete_model(:model_delete => Album, :model_life => Song)
 
 end

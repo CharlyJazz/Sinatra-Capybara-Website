@@ -57,20 +57,20 @@ module BeforeHelpers
     end    
   end
 
-  def before_create_comment_album(n)
+  def before_create_comment_album(n, album_id, user_id)
     n.times do | i |
       CommentAlbum.create(:text => Forgery(:lorem_ipsum).words(5),
                           :likes => Forgery(:basic).number,
-                          :album_id => 1,
-                          :user_id => 2)
+                          :album_id => album_id,
+                          :user_id => user_id)
     end
   end
-  def before_create_comment_song(n)
+  def before_create_comment_song(n, song_id, user_id)
     n.times do | i |
       CommentSong.create(:text => Forgery(:lorem_ipsum).words(5),
                           :likes => Forgery(:basic).number,
-                          :song_id => 1,
-                          :user_id => 2)
+                          :song_id => song_id,
+                          :user_id => user_id)
     end
   end  
 end

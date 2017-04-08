@@ -8,19 +8,15 @@ require 'capybara/rspec'
 require 'database_cleaner'
 require 'forgery'
 
-require_relative 'before_helper'
-require_relative 'action_helper'
+require_relative 'spec_support/before_helper'
+require_relative 'spec_support/action_helper'
+require_relative 'spec_support/form_helper'
+require_relative 'spec_support/wait_for_ajax'
 
 
 ENV['RACK_ENV'] = 'test'
 
 Dir.glob('./{helpers,controllers,models}/*.rb').each {|file| require file }
-
-module FormHelpers
-  def submit_form
-    find('button[type="submit"]').click
-  end
-end
 
 Capybara.app = Rack::Builder.new do
   map('/assets') {  run ApplicationController.sprockets }
@@ -49,7 +45,7 @@ end
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods
-  
+
   config.include Capybara::DSL
   config.include Capybara::RSpecMatchers
 
@@ -60,6 +56,7 @@ RSpec.configure do |config|
   config.include FormHelpers, :type => :feature
   config.include BeforeHelpers, :type => :feature
   config.include ActionHerlpers, :type => :feature
+  config.include WaitForAjax, :type => :feature
 
   # database_cleaner config...
 

@@ -19,14 +19,9 @@ RSpec.describe 'Admin Controller' do
       before_create_user :amount => 6 # 5 user
       before_create_social 3
       before_create_song 3
-      before_create_comment_song 3
+      before_create_comment_song 3, 2, 1
       before_create_album 3
-      before_create_comment_album 3
-    end
-
-    it 'when get user' do
-      request '/User', :method => :get
-      expect(last_response).to be_ok
+      before_create_comment_album 3, 2, 1
     end
 
     it 'when delete user' do
@@ -35,13 +30,27 @@ RSpec.describe 'Admin Controller' do
       expect(UserInformation.all.length).to eq 4
       expect(UserMedia.all.length).to eq 4
       expect(UserSocial.all.length).to eq 0
-      # expect(Song.all.length).to eq 0
-      # expect(CommentSong.all.length).to eq 0
-      # expect(Album.all.length).to eq 0
-      # expect(CommentAlbum.all.length).to eq 0
-      
+      expect(Song.all.length).to eq 0
+      expect(Album.all.length).to eq 0
+      expect(CommentAlbum.all.length).to eq 0
+      expect(CommentSong.all.length).to eq 0
+    end
+
+    it 'when delete user_information' do
+      delete '/UserInformation',  {:data => "1"}
+      expect(UserInformation.all.length).to eq 4
+    end
+
+    it 'when delete user_media' do
+      delete '/UserMedia',  {:data => "1"}
+      expect(UserMedia.all.length).to eq 4
     end
     
+    it 'when delete album' do
+      delete '/Album',  {:data => "1"}
+      expect(Album.all.length).to eq 2
+    end
+
   end
 
 end

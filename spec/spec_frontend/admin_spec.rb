@@ -13,10 +13,9 @@ RSpec.describe 'Website' do
       Capybara.default_max_wait_time = 8
       before_create_user(:username => "admin_user", :email => "admin@gmail.com",
                          :password => "password", :amount => 1, :role => "admin")
-      before_create_user(:amount => 7)
-      before_create_songs 7
+      before_create_user(:amount => 5)
+      before_create_song 7
     end
-
     it "when delete song records" do
       action_login("admin@gmail.com", "random")
       visit '/admin'
@@ -28,10 +27,12 @@ RSpec.describe 'Website' do
         end
       end
       find(:css, 'a.delete-model > i.material-icons', wait: 10).click
+      wait_for_ajax
       visit '/admin'
       click_link('User')      
-      expect(page).to have_selector('tr.tr-model', count: 3)
+      expect(page).to have_selector('tr.tr-model', count: 1)
     end
+
 
     it "when delete song records" do
       action_login("admin@gmail.com", "random")
@@ -44,6 +45,7 @@ RSpec.describe 'Website' do
         end
       end
       find(:css, 'a.delete-model > i.material-icons', wait: 10).click
+      wait_for_ajax
       visit '/admin'
       click_link('Song')      
       expect(page).to have_selector('tr.tr-model', count: 3)

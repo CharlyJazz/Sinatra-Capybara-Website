@@ -31,56 +31,73 @@ module AdminHelpers
         end
     end
 
-    def delete_orphan(id, parent_model, child_model, cardinality_tipe)
+    def delete_orphan(id, parent_model, child_model, child_key, cardinality_tipe)
+        # Delete orphan records of parent_model before delete this
+        # Parameters:
+        # id : id of parent_model
+        # parent_model: Main model to be deleted
+        # child_model: Model that has relation with parent_model
+        # child_key: Foreign key of the child model_class
+        # cardinality_tipe: Tipe of relations e.g: "Many To Many"
+        puts "ENTRAMOS EN DELETE ORPHAN"
+        child_key = child_key[0]
+        puts "child_key " + child_key.to_s
+        puts "parent_model " + parent_model.to_s
+        puts "child_model " + child_model.to_s
+        puts "cadinality " + cardinality_tipe
+        if cardinality_tipe == "OneToOne" # Ready for: User
+            records = child_model.all(child_key.to_sym => id)
+            if !records.nil? then records.destroy end
+
+        elsif cardinality_tipe == "OneToMany" # Ready for: User
+            records = child_model.all(child_key.to_sym => id)
+            if !records.nil? then records.destroy end
+
+        elsif cardinality_tipe == "ManyToOne"
+            records = child_model.all(child_key.to_sym => id)          
+            if !records.nil? then records.destroy end 
+
+        elsif cardinality_tipe == "ManyToMany"
+           records = child_model.all(child_key.to_sym => id)          
+           if !records.nil? then records.destroy end            
+        end    
     end
 
     def prevent_orphan_records(id, model_class)
-        parent_model = model_class
+        # indexes no sirve para many to many
+        # parent_key = relationship.parent_key.indexes.values[0]
+        # puts "PARENT KEY " + parent_key.to_s
         cardinality_tipe = "ManyToMany,ManyToOne,OneToMany,OneToOne".split(",")
-        parent_model.relationships.each { | relationship |
+
+        model_class.relationships.each { | relationship |
+            # TENGO QUE CREAR LA OPCION DE EVITAR A SONG Y MATAR A ALBUMSONG
+            puts "exp : " + relationship.instance_variable_name.to_s # DE TODAS FORMAS ESTO ME AYUDA A MATAR A SONG PERO DA BUGS
+            parent_model = relationship.parent_model
+            # puts parent_model
+            child_model = relationship.child_model 
+            # puts child_model
             cardinality = relationship.class.name
+            # puts cardinality
             inverse_cardinality = relationship.inverse.class.name
-            cardinality_tipe.each  do | tipe |
-                if cardinality.include? tipe
-                    puts "With this model: " + relationship.child_model.to_s
-                    puts "Cardinality: " + tipe
-                    # delete_orphan(id, parent_model, relationship.child_model, tipe)
+            # puts inverse_cardinality
+
+            if model_class == child_model then cardinality = inverse_cardinality end
+            cardinality_tipe.each  { | tipe |
+                if cardinality.include? tipe then
+                    if tipe != "ManyToMany"
+                        child_key = relationship.child_key.indexes.values[0]
+                    else
+                        child_key = 0
+                    end
+                    delete_orphan(id, parent_model, child_model, child_key, tipe)
                 end
-            end
+            }
         }
-        
-        #  -------codigo no escalable pero guia algoritmica--------
-        if model_class == User
-            # User basic data . . . ONE TO ONE
-            UserMedia.first(:user_id => id).destroy
-            UserInformation.first(:user_id => id).destroy
-            if !UserSocial.all(:user_id => id).nil?
-                UserSocial.all(:user_id => id).destroy
-            end
-            # # User albums . . .
-            # user_albums = Album.all(:user_id => id)
-            # user_albums.each { | album |
-            #     AlbumTag.all(:album_id => album.id ).destroy
-            #     CommentAlbum.all(:album_id => album.id ).destroy
-            #     AlbumSong.all(:album_id => album.id).destroy
-            # }
-            # user_albums.destroy
-            # # User Songs . . .
-            # user_songs = Song.all(:user_id => id)
-            # user_songs.each { | music |
-            #     CommentSong.all(:song_id => music.id ).destroy
-            #     AlbumSong.all(:song_id => music.id).destroy
-            # }
-            # user_songs.destroy
-            # # User Comments . . .
-            # CommentAlbum.all(:user_id).destroy            
-            # CommentSong.all(:user_id).destroy
-        end
     end
 
     def delete_record(record, model)
         array_id = record.split(",")
-        model_class = Object.const_get(model) # convert string to class
+        model_class = Object.const_get(model)
         array_id.each do | id |
             prevent_orphan_records(id, model_class)
             model_class.get(id).destroy
@@ -88,15 +105,3 @@ module AdminHelpers
     end
     
 end
-
-# when Album
-#     puts "Eliminar comentarios, Eliminar registros en \
-#           AlbumSong que es many to many con varias canciones, \
-#           Eliminar registros en AlbumTag "
-# when Song
-#     puts "Eliminar comentarios, Eliminar registros en \
-#           AlbumSong que es many to many con varios albumes, \
-#           Eliminar registros en AlbumTag "
-# when AlbumSong
-#     puts "Eliminar comentarios del album, Eliminar registros  \
-#           en AlbumTag, Eliminar Album "
