@@ -38,17 +38,23 @@ RSpec.describe 'Admin Controller' do
 
     it 'when delete user_information' do
       delete '/UserInformation',  {:data => "1"}
+      expect(User.all.length).to eq 5
       expect(UserInformation.all.length).to eq 4
     end
 
     it 'when delete user_media' do
       delete '/UserMedia',  {:data => "1"}
+      expect(User.all.length).to eq 5
       expect(UserMedia.all.length).to eq 4
     end
     
     it 'when delete album' do
       delete '/Album',  {:data => "1"}
+      expect(User.all.length).to eq 5
+      expect(Song.all.length).to eq 3     
       expect(Album.all.length).to eq 2
+      expect(AlbumTag.all.length).to eq 2
+      expect(AlbumSong.all.length).to eq 2
     end
 
   end

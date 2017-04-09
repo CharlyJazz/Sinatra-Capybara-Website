@@ -54,6 +54,9 @@ module BeforeHelpers
                             :user_id => 1)
       @album_tag = AlbumTag.create(:name => Forgery(:name).company_name,
                                    :album_id => i + 1)
+      @song = Song.get(1)
+      @album.songs << @song
+      @album.save
     end    
   end
 
