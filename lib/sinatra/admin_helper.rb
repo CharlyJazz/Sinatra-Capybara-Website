@@ -47,7 +47,6 @@ module AdminHelpers
                     convert_to_symbol = parent_model.to_s.downcase!
                     convert_to_symbol += "_id"
                     records = child_model.all(convert_to_symbol => id)
-                    records.each do |a| p(a) end
                     if !records.nil? then records.destroy end
                 end
             end

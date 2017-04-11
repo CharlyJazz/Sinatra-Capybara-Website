@@ -71,9 +71,9 @@ module BeforeHelpers
   def before_create_comment_song(n, song_id, user_id)
     n.times do | i |
       CommentSong.create(:text => Forgery(:lorem_ipsum).words(5),
-                          :likes => Forgery(:basic).number,
-                          :song_id => song_id,
-                          :user_id => user_id)
+                         :likes => Forgery(:basic).number,
+                         :song_id => song_id,
+                         :user_id => user_id)
     end
   end  
 end

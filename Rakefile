@@ -20,13 +20,13 @@ end
 def create_admin
   puts "You will be prompted to enter an username, email and password for the new admin"
   puts "Username: "
-  username = STDIN.gets
+  username = STDIN.gets.chomp
   puts "Email: "
-  email = STDIN.gets
+  email = STDIN.gets.chomp
   puts "Password: "
-  password = STDIN.gets
+  password = STDIN.gets.chomp
   puts "Repeat password: "
-  repeat = STDIN.gets
+  repeat = STDIN.gets.chomp
   if username.is_number?
     puts "Sorry, the username need more letters."
     return
