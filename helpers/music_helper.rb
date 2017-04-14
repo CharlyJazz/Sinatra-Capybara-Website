@@ -49,6 +49,38 @@ module MusicHelpers
 
   end
 
+def edit_song_ajax(type, id)
+    content_type 'application/json', :charset => 'utf-8' if request.xhr?
+
+    if type == "image" || type == "all" then
+      if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true
+        return { :error => "Format invalid"}.to_json
+      end
+    else
+        return { :error => "Request error"}.to_json
+    end
+
+    @song = Song.get(id)
+    filename = params[:file][:filename].to_s
+    tmpfile = params[:file][:tempfile]
+    ext = (/\.[^.]*$/.match(filename)).to_s
+    name_file_formated = "#{@song.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+    @song.update(:song_img_url => "songs/" + name_file_formated)
+    upload_file(settings.song_image_folder, name_file_formated,  tmpfile)
+
+    return { :song_image => @song.song_img_url}.to_json
+  end
+
+  def add_replay_ajax
+    content_type 'application/json', :charset => 'utf-8' if request.xhr?    
+    @song = Song.get(params[:id])
+    if @song.update(:replay => @song.replay.to_i + 1)
+      return {:replay => @song.replay}.to_json
+    else
+      return {:error => "Wow, a ocurrido un error"}.to_json
+    end
+  end
+
   def social_link(class_model)
     if class_model.class == Song then
       @message = SocialUrl::Message.new({
@@ -100,4 +132,38 @@ module MusicHelpers
   def find_album
     Album.get(params[:id])
   end
+
+  def delete_album
+    album = Album.get(params[:id])
+    if album.album_tags.destroy && album.destroy
+      flash[:notice] = "Album deleted"
+      return redirect "/auth/profile/#{session[:user]}"
+    else
+      flash[:error] = "Error!"
+      return redirect "/auth/profile/#{session[:user]}"
+    end
+  end
+  
+  def edit_album_ajax(type, id)
+    content_type 'application/json', :charset => 'utf-8' if request.xhr?
+
+    if type == "image" || type == "all" then
+      if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true
+        return { :error => "Format invalid"}.to_json
+      end
+    else
+        return { :error => "Request error"}.to_json
+    end
+
+    @album = Album.get(id)
+    filename = params[:file][:filename].to_s
+    tmpfile = params[:file][:tempfile]
+    ext = (/\.[^.]*$/.match(filename)).to_s
+    name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+    @album.update(:album_img_url => "albums/" + name_file_formated)
+    upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
+
+    return { :album_image => @album.album_img_url}.to_json
+  end
+
 end

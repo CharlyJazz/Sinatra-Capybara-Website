@@ -23,8 +23,9 @@ class ApplicationController < Sinatra::Base
   set :sprockets, Sprockets::Environment.new(root) { |env|
     env.append_path(root.join('assets', 'stylesheets'))
     env.append_path(root.join('assets', 'javascripts'))
-    env.append_path(root.join('assets', 'images'))
     env.append_path(root.join('assets', 'jquery'))
+    env.append_path(root.join('assets', 'jquery-validation'))
+    env.append_path(root.join('assets', 'images'))
     env.append_path(root.join('assets', 'materialize'))
     env.append_path(root.join('assets', 'components-font-awesome'))
   }

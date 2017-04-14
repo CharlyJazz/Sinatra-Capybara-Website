@@ -11,6 +11,8 @@ class MusicController < ApplicationController
 
   configure do
     set :music_folder, "./tracks"
+    set :song_image_folder, settings.root.join('assets', 'images/songs')
+    set :album_image_folder, settings.root.join('assets', 'images/albums')
   end
 
   def set_title
@@ -40,8 +42,17 @@ class MusicController < ApplicationController
     delete_song
   end
 
+  post '/song/edit/:id' do
+    # params[type] all or image
+    edit_song_ajax(params[:type], params[:id])
+  end
+
   get '/create/song' do
     render :erb, :'music/create_song'
+  end
+
+  post '/song/replay' do
+    add_replay_ajax
   end
 
   post '/create/song' do
@@ -58,6 +69,15 @@ class MusicController < ApplicationController
     redirect not_found    
   end
 
+  delete '/album/:id' do
+    delete_album
+  end
+
+  post '/album/edit/:id' do
+    # params[type] all or image
+    edit_album_ajax(params[:type], params[:id])
+  end  
+
   get '/create/album' do
     find_song_by_user session[:user]
     render :erb, :'music/create_album'
@@ -65,6 +85,6 @@ class MusicController < ApplicationController
 
   post '/create/album' do
     create_album
-  end  
+  end
 
 end

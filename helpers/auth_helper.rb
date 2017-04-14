@@ -2,26 +2,32 @@ require 'rack'
 
 module AuthHelpers
   def create_user
-    @email_use = User.first(:email => params[:email])
-    @username_use = User.first(:username => params[:username])
-    if !@username_use.nil?
-      flash[:warning] = "This username are existing"
-      redirect '/auth'
-    elsif !@email_use.nil?
-      flash[:warning] = "This email are existing"
-      redirect '/auth'
-    else
-      @user = User.create(:username => params[:username],
-                          :email => params[:email], 
-                          :password => params[:password],
-                          :recover_password => params[:recover_password])
-      @user.user_media = UserMedia.create
-      @user.user_information = UserInformation.create
-      @user.save
-      @user.user_media.save
-      @user.user_information.save
-      flash[:notice] = "User successfully signed!"
-      redirect '/auth'   
+    if params[:username].to_s.empty? || params[:email].to_s.empty? ||
+       params[:password].to_s.empty? || params[:recover_password].to_s.empty?
+       flash[:error] = "Any field are empty!"
+       redirect '/auth'
+    else       
+      @email_use = User.first(:email => params[:email])
+      @username_use = User.first(:username => params[:username])
+      if !@username_use.nil?
+        flash[:warning] = "This username are existing"
+        redirect '/auth'
+      elsif !@email_use.nil?
+        flash[:warning] = "This email are existing"
+        redirect '/auth'
+      else
+        @user = User.create(:username => params[:username],
+                            :email => params[:email], 
+                            :password => params[:password],
+                            :recover_password => params[:recover_password])
+        @user.user_media = UserMedia.create
+        @user.user_information = UserInformation.create
+        @user.save
+        @user.user_media.save
+        @user.user_information.save
+        flash[:notice] = "User successfully signed!"
+        redirect '/auth'   
+      end
     end
   end
 
@@ -166,8 +172,7 @@ module AuthHelpers
   def delete_social
     content_type 'application/json', :charset => 'utf-8' if request.xhr?    
     @user = User.get(session[:user])
-    social = @user.user_socials.get(params[:id])
-    if social.destroy
+    if social = @user.user_socials.get(params[:id]) && social.destroy
       return { :success => "Social link deleted!"}.to_json
     else
       return { :error => "Error!"}.to_json

@@ -37,10 +37,6 @@ module Sinatra
         render :erb, :'admin/home', :layout => :'admin/layout'
       end
 
-      app.get '/x' do
-         return @many_to_many_no_delete_model.to_s
-      end
-
       app.get '/:model' do
         verify_model_exist(params[:model])
 

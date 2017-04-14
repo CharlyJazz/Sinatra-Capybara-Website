@@ -2,6 +2,13 @@
     <div class="row">
         <div class="col s12">
             <div class="card user-card" id="profile" style="background-image: url(<%= asset_path(@user.user_media.banner_img_url)%>)">
+                <h1 style="color:white; text-transform: capitalize; display:table-row-group">
+                     <% if @user.user_information %>
+                         <%= @user.user_information.display_name%>
+                     <%else%>
+                         <%= @user.username%>                        
+                     <%end%>
+                </h1>
                 <div class="card image-profile">
                     <div class="card-image z-depth-4">
                       <a class="dialog-change-photo-profile" href="#modal-change-image">
@@ -22,9 +29,6 @@
                         <li class="tab">
                             <a class="" href="#tracks">Tracks</a>
                         </li>
-                        <li class="tab">
-                            <a href="#likes" class="active">Likes</a>
-                        </li>
                         <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div>
                     </ul>
                 </div>
@@ -41,8 +45,7 @@
                             <div class="song-action">
                                 <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
                                 <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
-                                <a class="pre-delete-album  btn-flat" href="#modal-delete-album" data-id-album="<%=album.id %>"><i class="material-icons">delete_forever</i></a>
-                                <a class="btn-flat" href=""><i class="material-icons">play_arrow</i>0</a>       
+                                <a class="pre-delete-album  btn-flat" href="#modal-delete" data-id-album="<%=album.id %>"><i class="material-icons">delete_forever</i></a>
                                 <ul id="dropdown2" class="dropdown-content">
                                     <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/song/<%=album.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                     <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('albums/default_album.jpg')%>&media=http%3A//localhost%3A8000/music/song/<%=album.id%>&description=<%= album.name %> - <%=album.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -66,14 +69,14 @@
                         <div class="song__wrapper z-depth-1">
                             <figure>
                                 <a href="/music/song/<%=song.id %>">
-                                    <img src="<%= asset_path('songs/default_song.png')%>">
+                                    <img src="<%= asset_path(song.song_img_url)%>" width="250px">
                                 </a>
                             </figure>
                             <div class="song-action">
                                 <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
                                 <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
                                 <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
-                                <a class="pre-delete-song  btn-flat" href="#modal-delete-song" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
+                                <a class="pre-delete-song  btn-flat" href="#modal-delete" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
                                 <ul id="dropdown2" class="dropdown-content">
                                     <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/song/<%=song.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                     <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('songs/default_song.png')%>&media=http%3A//localhost%3A8000/music/song/<%=song.id %>&description=<%= song.title %> - <%=song.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -86,8 +89,8 @@
                                 <p>Genre <%=song.genre%></p>
                                 <p>Type  <%=song.type%></p>
                                 <p>License  <%=song.license%></p>
-                                <audio class="col l8 s7 m7" src="<%=song.url_song%>" controls></audio>
-                                <a class="btn-flat align-icon-text"  href="#!"><i class="material-icons">play_arrow</i> 0</a>       
+                                <audio class="col l8 s7 m7" data-id="<%=song.id%>" src="<%=song.url_song%>" controls></audio>
+                                <a class="btn-flat align-icon-text" id="song-replay" href="#!"><i class="material-icons">play_arrow</i><%=song.replay%></a>       
                             </div>
                         </div>
                         <% end %>
@@ -97,7 +100,6 @@
                     <% end %>
 
                     </div>
-                    <div id="likes" style="display: block;" class="active">Test 3</div>
                 </div>
             </div>
         </div>
@@ -108,24 +110,15 @@
                 <tbody>
                     <tr>
                         <td class="infoStats__stat sc-link-light sc-border-light-right">
-                            <a href="/aboutcarlos/followers" rel="nofollow" class="" title="83 followers">
-                                <h3 class="infoTitle">Followers</h3>
-                                <div class="">0</div>
-                                <!-- COUNT FOLLOWERS -->
-                            </a>
-                        </td>
-                        <td class="infoStats__stat sc-link-light sc-border-light-right">
-                            <a href="/aboutcarlos/following" rel="nofollow" class="" title="Following 164 people">
-                                <h3 class="infoTitle">Following</h3>
-                                <div class="">0</div>
-                                <!-- COUNT FOLLOWING -->
+                            <a href="#" rel="nofollow" class="" title="Following 164 people">
+                                <h3 class="infoTitle">Albums</h3>
+                                <div class=""><%= @user.albums.count%></div>
                             </a>
                         </td>
                         <td class="infoStats__stat">
-                            <a href="/aboutcarlos/tracks" rel="nofollow" class="" title="18 tracks">
+                            <a href="#" rel="nofollow" class="" title="18 tracks">
                                 <h3 class="infoTitle">Tracks</h3>
-                                <div class="">0</div>
-                                <!-- COUNT TRACKS -->
+                                <div class=""><%= @user.songs.count%></div>
                             </a>
                         </td>
                     </tr>
@@ -136,16 +129,16 @@
                     <div class="truncatedUserDescription__wrapper" style="max-height: 85px;">
                         <div class="truncatedUserDescription__content">
                             <div>
-                              <% if @user.user_information.bio %>
-                                <p><%= @user.user_information.bio%></p>
+                              <% if @user.user_information %>
+                                <p>- <%= @user.user_information.first_name%> <%= @user.user_information.last_name%></p>
+                                <p>Spot: <%= @user.user_information.country%> <%= @user.user_information.city%></p>
+                                <p>Bio: <%= @user.user_information.bio%></p>
                               <% else %>
                                 <p>Add a litle biographic in Setting</p>
                               <% end %>
                             </div>
                         </div>
                     </div>
-                    <a class="truncatedUserDescription__collapse sc-link-dark g-link-collapse collapsed" href="#">Show more</a>
-                    <!-- Acá habra un modal para el show more -->
                 </div>
             </div>
             <div class="web-profiles">
@@ -153,10 +146,14 @@
                   <!-- if hay social -->
                     <li class="web-profiles__item">
                         <div class="sc-truncate">
-                            <a href="https://exit.sc?url=https%3A%2F%2Fplus.google.com%2Fu%2F0%2F106092849867402977611" target="_blank" rel="me nofollow" class="web-profile sc-link-light">
-                                <span class="sc-social-icon sc-social-icon-googleplus"></span>
-                                Social
-                            </a>
+                            <% if @user.user_socials.any? %>
+                                <% @user.user_socials.each do | social |%>
+                                    <a href="<%= social.url %>" target="_blank" class="web-profile sc-link-light">
+                                        <span class="sc-social-icon sc-social-icon-googleplus"></span>
+                                        <%= social.name %>
+                                    </a>
+                                <%end%>
+                            <%end%>
                         </div>
                     </li>
                   <!-- endif -->
@@ -168,12 +165,12 @@
     </div>
 </div>
 
-<div id="modal-delete-song" class="modal">
+<div id="modal-delete" class="modal">
     <div class="modal-content">
     <h4>Are you sure delete this song?</h4>
     </div>
     <div class="modal-footer">
-    <form id="form-delete-song" action="music/song/>" method="post">
+    <form id="form-delete" action="" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <input type="submit" class="modal-action modal-close waves-effect waves-green btn-flat"
         value="Yes, delete">
@@ -206,8 +203,12 @@
         var url = "/auth/setting/media/ajax?type=";
 
         $(".pre-delete-song").click(function(){
-            var song_id = $(this).attr("data-id-song");
-            $('#form-delete-song').attr('action', "/music/song/" + song_id);
+            var id = $(this).attr("data-id-song");
+            $('#form-delete').attr('action', "/music/song/" + id);
+        });
+        $(".pre-delete-album").click(function(){
+            var id = $(this).attr("data-id-album");
+            $('#form-delete').attr('action', "/music/album/" + id);
         });
         $('.dialog-change-photo-profile').tooltip({
             delay: 40,
@@ -222,7 +223,6 @@
         $(".dialog-change-photo-profile").click(function(){
             $(".modal-image-type").text("Change image profile");
             $("#form-media-profile").attr("action", url + "photo")
-            
         });
         $(".dialog-change-banner-profile").click(function(){
             $(".modal-image-type").text("Change banner");
@@ -234,7 +234,6 @@
             var file_data = $('#image_file_data').prop('files')[0];
             var form_data = new FormData();                  
             form_data.append('file', file_data);
-            alert(form_data);             
             $.ajax({
                 url:  $("#form-media-profile").attr("action"),
                 type: 'POST',
@@ -245,14 +244,19 @@
                 data: form_data
                 })
                 .done(function(response) {
-                if(response.img_profile){
-                    $("#img-profile").attr("src", "/assets/" + response.img_profile)
+                if(response.error){
+                    $('#modal1').modal("open")
+                    $(".modal-flash-description").text("Only images!");
                 }
-                if(response.img_banner){
-                    $("#profile").css("background-image", "url(/assets/" + response.img_banner +  ")");  
-                    console.log(response.img_banner);
+                else{
+                    if(response.img_profile){
+                        $("#img-profile").attr("src", "/assets/" + response.img_profile)
+                    }
+                    if(response.img_banner){
+                        $("#profile").css("background-image", "url(/assets/" + response.img_banner +  ")");  
+                        console.log(response.img_banner);
+                    }
                 }
-                console.log("success");
                 })
                 .fail(function() {
                 console.log("error");
@@ -260,6 +264,30 @@
                 .always(function() {
                 console.log("complete");
             });        
+        });
+
+        $("audio").on("play",function(){
+            var id_song = $(this).attr("data-id");
+            var that = this;
+            $.ajax({
+                url: '/music/song/replay',
+                type: 'POST',
+                dataType: 'json',
+                data: {id: id_song}
+            }).done(function(response) {
+                if(response.error){
+                    $('#modal1').modal("open")
+                    $(".modal-flash-description").text(response.error);
+                }
+                else if(response.replay){
+                    $(that).parent().find("#song-replay").html("<i class='material-icons'>play_arrow</i>" + response.replay);
+                }  
+            }).fail(function() {
+                console.log("error");
+
+            }).always(function() {
+                console.log("complete");
+            }); 
         });
 
     });

@@ -1,13 +1,15 @@
 <div class="row">
   <div class="col s6 m8">
+      <a class="change-image-album" href="#modal-change-image">
         <figure class="song-figure">
-          <img src="<%= asset_path(@album.album_img_url)%>">
+            <img src="<%= asset_path(@album.album_img_url)%>">
         </figure>
+      </a>
         <div class="song-action" style="margin-top:15px">
               <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
               <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
               <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
-              <a class="pre-delete-song  btn-flat" href="#modal-delete-song"><i class="material-icons">delete_forever</i></a>
+              <a class="pre-delete-album  btn-flat" href="#modal-delete-album"><i class="material-icons">delete_forever</i></a>
               <ul id="dropdown2" class="dropdown-content">
                   <li><a href="<%=@message.facebook_url%>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                   <li><a href="<%=@message.pinterest_url%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -48,9 +50,7 @@
     </div>
 </div>
 
-
-
-<div id="modal-delete-song" class="modal">
+<div id="modal-delete-album" class="modal">
     <div class="modal-content">
     <h4>Are you sure delete this album?</h4>
     </div>
@@ -62,4 +62,73 @@
     </form>
     </div>
 </div>
+
+<div id="modal-change-image" class="modal">
+    <div class="modal-content">
+        <h4 class="modal-image-type">Upload any image</h4>
+    </div>
+    <div class="modal-footer">
+        <form id="form-update-image-album" action="/music/album/edit/<%= @album.id  %>?type=image">
+            <div class="file-field input-field s3">
+                <div class="btn" style="margin:0 !important">
+                    <span>Image</span>
+                    <input id="image_file_data" type="file" name="file" required>
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+                <input type="submit" class="modal-action modal-close waves-effect waves-green btn-flat" value="Upload image">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+  $( document ).ready(function() {
+    $(".change-image-album").tooltip({
+        delay: 40,
+        tooltip: "Click for change the image",
+        position: "button"
+    });
+
+    $("#form-update-image-album").validate({
+      rules: {
+        image_file_data:{
+          required: true,
+          extension: 'png|jpeg|jpg',
+        }
+      },
+      submitHandler: function (form) {
+        var file_data = $('#image_file_data').prop('files')[0];
+        var form_data = new FormData();                  
+        form_data.append('file', file_data);
+          $.ajax({
+            url:  $("#form-update-image-album").attr("action"),
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,                
+            data: form_data
+            })
+            .done(function(response) {
+              if(response.error){
+                  $('#modal1').modal("open")
+                  $(".modal-flash-description").text("Only images!");
+              }
+              else if (response.album_image){
+                  $(".song-figure img").attr("src", "/assets/" + response.album_image)
+              }
+            })
+            .fail(function() {
+              console.log("error");
+            })
+            .always(function() {
+              console.log("complete");
+            });      
+      }
+    });
+
+  });
+</script>
          
