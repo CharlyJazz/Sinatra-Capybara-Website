@@ -38,14 +38,17 @@ class MusicController < ApplicationController
     redirect not_found
   end
 
-  delete '/song/:id' do
-    delete_song
+  
+  get '/edit/song/:id' do
+    @mode = "EDIT"
+    @song = find_song
+    render :erb, :'music/create_song'
   end
 
-  post '/song/edit/:id' do
-    # params[type] all or image
-    edit_song_ajax(params[:type], params[:id])
+  post '/edit/song/:id' do# , :provides => :json do
+    edit_song_ajax(params[:mode], params[:id])
   end
+
 
   get '/create/song' do
     render :erb, :'music/create_song'
@@ -59,6 +62,10 @@ class MusicController < ApplicationController
     create_music
   end
 
+  delete '/song/:id' do
+    delete_song
+  end
+
   get '/album/:id' do
     @album = find_album
     unless @album.class != Album
@@ -69,13 +76,28 @@ class MusicController < ApplicationController
     redirect not_found    
   end
 
-  delete '/album/:id' do
-    delete_album
+  get '/edit/album/:id' do
+    @mode = "EDIT"
+    @album = find_album
+    find_song_by_user session[:user]
+    @name_tags, @id_songs = [], []
+    if @album.songs.any? then
+      @album.songs.each { | song | 
+        @id_songs.push song.id
+      }
+      @id_songs = @id_songs.join(",")
+    end
+    if @album.album_tags.any? then
+      @album.album_tags.each { | tag |
+        @name_tags.push tag.name
+      }
+    end
+    @name_tags = @name_tags.join(",")
+    render :erb, :'music/create_album'
   end
 
-  post '/album/edit/:id' do
-    # params[type] all or image
-    edit_album_ajax(params[:type], params[:id])
+  post '/edit/album/:id' do
+    edit_album_ajax(params[:mode], params[:id])
   end  
 
   get '/create/album' do
@@ -87,4 +109,8 @@ class MusicController < ApplicationController
     create_album
   end
 
+  delete '/album/:id' do
+    delete_album
+  end
+  
 end

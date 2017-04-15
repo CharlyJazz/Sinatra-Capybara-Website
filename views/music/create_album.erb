@@ -6,44 +6,83 @@
 <div class="container" style="margin-top:2.5%">
     <div class="row">
       <div class="col s7">
-        <h3>Create Album</h3>
-        <form id="user_create_album" action="/music/create/album" method="POST" enctype="multipart/form-data">
-            <label>Album Image</label>
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>Browse</span>
-                    <input type="file" name="file" > 
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload image">
-                </div>
-            </div>
+        <% if @mode == "EDIT" %>
+            <h3> Edit your Album </h3>
+        <% else %>
+            <h3>Create Album</h3>
+        <% end %>        
 
-           <div class="input-field">
-                <i class="material-icons prefix"></i>
-                <input id="input-hidden-id-song" hidden placeholder="id of songs..." type="text" name="songs_id" >
-           </div>
+        <form id="user_create_album"
+            <% if @mode == "EDIT" %>
+                action="/music/edit/album/<%= @album.id %>?mode=all"
+            <% else %>
+                action="/music/create/album"
+            <% end %> method="POST" enctype="multipart/form-data">
+            <% if !@mode %>
+                <label>Album Image</label>
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Browse</span>
+                        <input type="file" name="file" > 
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Upload image">
+                    </div>
+                </div>
+            <% end %>
 
-           <div class="input-field">
-                <i class="material-icons prefix"></i>
-                <input id="input-hidden-tag-album" hidden placeholder="" type="text" name="tags" >
-           </div>
+                <input id="input-hidden-id-song" hidden type="text" name="songs_id"
+                    <% if @mode == "EDIT" %>
+                       <% if @album.songs.any? %>
+                        value="<%= @id_songs %>">
+                        <% else %>
+                        >
+                       <% end %>
+                    <% else %>
+                        >
+                    <% end %>
+
+                <input id="input-hidden-tag-album" hidden type="text" name="tags"
+                <% if @mode == "EDIT" %>
+                    value="<%= @name_tags %>">
+                <% else %>
+                    >                
+                <% end %>
+
+                <% if @mode == "EDIT" %>
+                    <input id="input-hidden-id-song-delete" hidden type="text" name="tags">
+                <% end %>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Name of album" type="text" name="name" >
+                <input placeholder="Name of album" type="text" name="name"
+                <% if @mode == "EDIT" %>
+                    value="<%= @album.name %>">
+                <% else %>
+                    >                  
+                <% end %>
                 <label>Name</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Date of album" type="date" name="date" class="datepicker" >
+                <input placeholder="Date of album" type="text" name="date" class="datepicker"
+                <% if @mode == "EDIT" %>
+                    value="<%= @album.date %>">
+                <% else %>
+                    >                  
+                <% end %>                
                 <label>Date</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Description of the album" type="text" name="description" >
+                <input placeholder="Description of the album" type="text" name="description"
+                <% if @mode == "EDIT" %>
+                    value="<%= @album.description %>">
+                <% else %>
+                    >                  
+                <% end %>                   
                 <label>Description</label>
             </div>
 
@@ -55,7 +94,7 @@
             <button class="btn waves-effect waves-light" type="submit" name="action">Create Album
                 <i class="material-icons right">send</i>
             </button>
-        </center>
+        </form>            
     </div>
     <div class="col s5" style="height: 550px;overflow-y: overlay;">
       <div class="block-choose-song">
@@ -65,8 +104,8 @@
           <li class="collection-item avatar">
             <img src="<%= asset_path(song.song_img_url)%>" alt="song image" class="circle">
             <span class="title"><%= song.title%></span>
-            <a href="#!" class="secondary-content align-icon-text" style="margin-right:50px"><i class="material-icons">play_arrow</i> 0</a> 
-            <a href="#!" id="add_song" data-id-song="<%=song.id %>" class="secondary-content"><i class="material-icons">add_circle</i></a>
+            <a href="#!" class="secondary-content align-icon-text" style="margin-right:50px"><i class="material-icons">play_arrow</i> <%= song.replay %></a> 
+            <a href="#!" data-id-song="<%=song.id %>" class="add_song secondary-content"><i class="material-icons">add_circle</i></a>
           </li>
           <% end %>
         <% else %>
@@ -78,43 +117,88 @@
         </ul>
       </div>
     </div>
-        </form>
   </div>
 </div>
 
 <script>
 
 $( document ).ready(function() {
+  var id_songs_array = [];
+  var id_songs_delete_array = [];
+  var hidden_input = $("#input-hidden-id-song"); // input escondido donde pondre los id
+
   $('.datepicker').pickadate({
     selectMonths: true, // Creates a dropdown to control month
     selectYears: 15 // Creates a dropdown of 15 years to control year
   });
+
   $('button.btn-flat.picker__today:nth-child(1)').css("padding-left", "0");
   $('button.btn-flat.picker__today').css("font-size","1.1em");
   
-  $('.chips-autocomplete').material_chip({
-    placeholder: 'Enter a tag',
-    secondaryPlaceholder: '+Tag',
-    autocompleteOptions: {
-      data:{Rock:null,Blues:null,"Classic Rock":null,Country:null,Dance:null,Disco:null,Funk:null,Grunge:null,"Hip-Hop":null,Jazz:null,Metal:null,"New Age":null,Oldies:null,Other:null,Pop:null,"R&B":null,Rap:null,Reggae:null,Rock:null,Techno:null,Industrial:null,Alternative:null,Skap:null,"Death Metal":null,Pranks:null,Soundtrack:null,"Euro-Techno":null,Ambient:null,"Trip-Hop":null,Vocal:null,Jazz:null,Fusion:null,Trance:null,Classical:null,Instrumental:null,Acid:null,House:null,Game:null,"Sound Clip":null,Gospel:null,Noise:null,"Alternative Rock":null,Bass:null,Soul:null,Punk:null,Space:null,Meditative:null,"Instrumental Pop":null,"Instrumental Rock":null,Ethnic:null,Gothic:null,Darkwave:null,"Techno-Industrial":null,Electronic:null,"Pop-Folk":null,Eurodance:null,Dream:null,"Southern Rock":null,Comedy:null,Cult:null,Gangsta:null,"Top 40":null,"Christian Rap":null,"Pop/Funk":null,Jungle:null,"Native US":null,Cabaret:null,"New Wave":null,Psychadelic:null,Rave:null,Showtunes:null,Trailer:null,"Lo-Fi":null,Tribal:null,"Acid Punk":null,"Acid Jazz":null,Polka:null,Retro:null,Musical:null,"Rock & Roll":null,"Hard Rock":null,Folk:null,"Folk-Rock":null,"National Folk":null,Swing:null,"Fast Fusion":null,Bebob:null,Latin:null,Revival:null,Celtic:null,Bluegrass:null,Avantgarde:null,"Gothic Rock":null,"Progressive Rock":null,"Psychedelic Rock":null,"Symphonic Rock":null,"Slow Rock":null,"Big Band":null,Chorus:null,"Easy Listening":null,Acoustic:null,Humour:null,Speech:null,Chanson:null,Opera:null,"Chamber Music":null,Sonata:null,Symphony:null,"Booty Bass":null,Primus:null,"Porn Groove":null,Satire:null,"Slow Jam":null,Club:null,Tango:null,Samba:null,Folklore:null,Ballad:null,"Power Ballad":null,"Rhythmic Soul":null,Freestyle:null,Duet:null,"Punk Rock":null,"Drum Solo":null,Acapella:null,"Euro-House":null,"Dance Hall":null,Goa:null,"Drum & Bass":null,"Club - House":null,Hardcore:null,Terror:null,Indie:null,BritPop:null,Negerpunk:null,"Polsk Punk":null,Beat:null,"Christian Gangsta Rap":null,"Heavy Metal":null,"Black Metal":null,Crossover:null,"Contemporary Christian":null,"Christian Rock":null,Merengue:null,Salsa:null,"Thrash Metal":null,Anime:null,JPop:null,Synthpop:null,Trap:null},
-      limit: 10,
-      minLength: 1
-    }
-  });
+  <% if @mode == "EDIT" %>
+
+        var hidden_input_delete_song = $("#input-hidden-id-song-delete");
+
+        <% if @name_tags.split(",").any? %>
+            
+            var arr_tag = [
+            <% @name_tags.split(",").each do | tag | %>
+                {tag: "<%= tag.to_s %>"},
+            <% end %>
+            ];
+
+            $('.chips-autocomplete').material_chip({
+                data: arr_tag
+            });
+        <% end %>
+        <% if @id_songs.split(",").any? %>
+            
+            <% @id_songs.split(",").each do | id | %>
+                song_id = "<%= id.to_s %>";
+                song_buttons = $(".add_song");
+                for (j = 0, len = song_buttons.length; j < len; j++) {
+                    field = song_buttons[j];
+                    if($(field).attr("data-id-song") == song_id){
+                        $(field).addClass("select-song");
+                        id_songs_array.push(song_id);
+                    }
+                }
+            <% end %>
+        hidden_input.val(id_songs_array.toString());
+        <% end %>
+
+  <% else %>
+
+        $('.chips-autocomplete').material_chip({
+            placeholder: 'Enter a tag',
+            secondaryPlaceholder: '+Tag',
+            autocompleteOptions: {
+            limit: 10,
+            minLength: 1
+            }
+        });
+
+  <% end %>
 
   // ----- Functionality: add songs to album.
-    var id_songs_array = new Array();
-    $("a.secondary-content").click(function(){
-        var hidden_input = $("#input-hidden-id-song"); // input escondido donde pondre los id
+    $(".add_song").click(function(){
         var song_id = $(this).attr("data-id-song"); // song id
         
-        if ($(this).hasClass("select-song")){
+        if ($(this).hasClass("select-song")) {
             $(this).removeClass("select-song");
+            id_songs_delete_array.push(song_id);
             id_songs_array.splice(id_songs_array.indexOf(song_id), 1);
         }
-        else{
-            $(this).addClass("select-song");            
-            id_songs_array.push(song_id); 
+
+        else {
+            $(this).addClass("select-song");
+            id_songs_array.push(song_id);
+            id_songs_delete_array.splice(id_songs_delete_array.indexOf(song_id), 1);
+        }
+
+        if (typeof hidden_input_delete_song !== 'undefined') {
+            console.log(hidden_input_delete_song)
+            hidden_input_delete_song.val(id_songs_delete_array.toString());
         }
 
         hidden_input.val(id_songs_array.toString());

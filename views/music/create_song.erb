@@ -1,50 +1,86 @@
 <div class="container" style="margin-top:2.5%">
     <div class="row">
+    <% if @mode == "EDIT" %>
+      <h3> Edit your track </h3>
+    <% else %>
         <h3>Upload Track</h3>
-
-        <form id="user_create_song" action="/music/create/song" method="POST" enctype="multipart/form-data">
-            <label>Materialize File Input</label>
+    <% end %>
+        <form id="user_create_song" <% if @mode == "EDIT" %>
+          action="/music/edit/song/<%= @song.id %>?mode=all"
+        <% else %>
+          action="/music/create/song"
+        <% end %>  method="POST" enctype="multipart/form-data">
+        <% if @mode != "EDIT" %>
+            <label>Upload song</label>
             <div class="file-field input-field">
                 <div class="btn">
                     <span>Browse</span>
-                    <input type="file" name="file" required>
+                    <input type="file" name="file">
                 </div>
                 <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload file">
+                    <input class="file-path validate" type="text" placeholder="Upload song">
                 </div>
             </div>
-
+        <% end %>
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Title" type="text" name="title" required>
+                <input placeholder="Title" type="text" name="title" required
+                    <% if @mode == "EDIT" %>
+                       value="<%=@song.title%>">
+                    <% else %>
+                      >
+                    <% end %>
                 <label>Title</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input placeholder="Description" type="text" name="description" required>
+                <input placeholder="Description" type="text" name="description" required
+                <% if @mode == "EDIT" %>
+                    value="<%=@song.description%>">
+                <% else %>
+                    >
+                <% end %>
                 <label>Description your track</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix"></i>
-                <input id="autocomplete-genre" placeholder="Drum and Bass..." type="text" name="genre" required>
+                <input id="autocomplete-genre" placeholder="Drum and Bass..." type="text" name="genre" required autocomplete="off"
+                <% if @mode == "EDIT" %>
+                    value="<%=@song.genre%>">
+                <% else %>
+                    >
+                <% end %>
                 <label>Genre</label>
             </div>
             <label>Materialize Select</label>
             <select name="type" required>
-              <option selected="selected" value="original">original</option>
-              <option value="remix">remix</option>
-              <option value="live">live</option>
-              <option value="recording">recording</option>
-              <option value="work">work</option>
-              <option value="effect">effect</option>
-              <option value="other">other</option>
-            </select <center>
+                <% ["original", "remix", "live", "recording", "work", "effect", "other"].each do |item| %>
+                    <% if @mode == "EDIT" %>
+                        <% if @song.type.to_s == item %>
+                            <option selected="selected" value="<%= item %>"><%= item %></option>
+                        <% else %>
+                            <option value="<%= item %>"><%= item %></option>                        
+                        <% end %>
+                    <% else %>
+                        <option value="<%= item %>"><%= item %></option>
+                    <% end %>
+                <% end %>
+            </select>
             <label>license</label>
-            <select class="" name="license" required>
-                <option selected="selected" value="creative_commons">All right reserved</option>
-                <option value="all_right_reserved">Creative Commons</option>
+            <select name="license" required>
+                <% {:creative_commons => "Creative Commons", :all_right_reserved => "All right reserved"}.each do |key, value| %>
+                    <% if @mode == "EDIT" %>
+                        <% if @song.license.to_s == key.to_s %>
+                            <option selected="selected" value="<%= key %>"><%= value %></option>
+                        <% else %>
+                            <option value="<%= key %>"><%= value %></option>                        
+                        <% end %>
+                    <% else %>
+                        <option value="<%= key %>"><%= value %></option>
+                    <% end %>
+                <% end %>            
             </select>
             <button class="btn waves-effect waves-light" type="submit" name="action">Upload Track
                 <i class="material-icons right">send</i>

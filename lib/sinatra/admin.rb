@@ -49,7 +49,7 @@ module Sinatra
         content_type 'application/json', :charset => 'utf-8' if request.xhr?
         verify_model_exist(params[:model])
         delete_record(params[:data], params[:model])
-        return { :success => params[:data] }.to_json
+        halt 200,  { :success => params[:data] }.to_json
       end
 
     end

@@ -37,7 +37,9 @@ module MusicHelpers
                         )
 
     filename =  "#{@song.id}" + "_" + params[:file][:filename]
+  
     @song.update(:url_song => "/" + "tracks/" + filename)
+   
     upload_file(settings.music_folder, filename, tmpfile)
     if @song.saved?
       flash[:notice] = "Successfully created..."
@@ -49,35 +51,44 @@ module MusicHelpers
 
   end
 
-def edit_song_ajax(type, id)
-    content_type 'application/json', :charset => 'utf-8' if request.xhr?
-
-    if type == "image" || type == "all" then
+  def edit_song_ajax(mode, id)
+    if mode == "image" then
       if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true
-        return { :error => "Format invalid"}.to_json
+        halt 200,  {:error => "Format invalid"}.to_json
+      else
+        @song = Song.get(id)
+        filename = params[:file][:filename].to_s
+        tmpfile = params[:file][:tempfile]
+        ext = (/\.[^.]*$/.match(filename)).to_s
+        name_file_formated = "#{@song.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+      
+        @song.update(:song_img_url => "songs/" + name_file_formated)
+       
+        upload_file(settings.song_image_folder, name_file_formated,  tmpfile)
+       
+        halt 200,  {:song_image => @song.song_img_url}.to_json
       end
+    elsif mode == "all" then
+        @song = Song.get(id)
+        @song.update(:title => params[:title],
+                     :description => params[:description],
+                     :genre => params[:genre],
+                     :type => params[:type],
+                     :license => params[:license])
+        
+        halt 200, {:song_id => @song.id.to_s}.to_json
     else
-        return { :error => "Request error"}.to_json
+        halt 200,  {:error => "Request error"}.to_json
     end
-
-    @song = Song.get(id)
-    filename = params[:file][:filename].to_s
-    tmpfile = params[:file][:tempfile]
-    ext = (/\.[^.]*$/.match(filename)).to_s
-    name_file_formated = "#{@song.id}" + "_" + filename.gsub(/\s.+/, '') + ext
-    @song.update(:song_img_url => "songs/" + name_file_formated)
-    upload_file(settings.song_image_folder, name_file_formated,  tmpfile)
-
-    return { :song_image => @song.song_img_url}.to_json
   end
 
   def add_replay_ajax
     content_type 'application/json', :charset => 'utf-8' if request.xhr?    
     @song = Song.get(params[:id])
     if @song.update(:replay => @song.replay.to_i + 1)
-      return {:replay => @song.replay}.to_json
+      halt 200,  {:replay => @song.replay}.to_json
     else
-      return {:error => "Wow, a ocurrido un error"}.to_json
+      halt 200,  {:error => "Wow, a ocurrido un error"}.to_json
     end
   end
 
@@ -119,14 +130,14 @@ def edit_song_ajax(type, id)
 
     arr_tags.each { | tag | @album.album_tags.create(:name => tag) }
 
-    arr_id_songs.each do | id |
+    arr_id_songs.each { | id |
       @song = Song.get(id)
       @album.songs << @song
       @album.save
-    end
+    }
 
     flash[:notice] = "New album created!"
-    return redirect "/auth/profile/#{session[:user]}"
+    return redirect "/auth/profile/#{session[:user]}#album"
   end
 
   def find_album
@@ -144,26 +155,62 @@ def edit_song_ajax(type, id)
     end
   end
   
-  def edit_album_ajax(type, id)
-    content_type 'application/json', :charset => 'utf-8' if request.xhr?
-
-    if type == "image" || type == "all" then
+  def edit_album_ajax(mode, id)
+    if mode == "image" then
       if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true
-        return { :error => "Format invalid"}.to_json
+        halt 200,  { :error => "Format invalid"}.to_json
+      else
+        @album = Album.get(id)
+        filename = params[:file][:filename].to_s
+        tmpfile = params[:file][:tempfile]
+        ext = (/\.[^.]*$/.match(filename)).to_s
+        name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+        
+        @album.update(:album_img_url => "albums/" + name_file_formated)
+        
+        upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
+
+        halt 200,  { :album_image => @album.album_img_url}.to_json
       end
+    elsif mode == "all" then
+      @album = Album.get(id)
+
+      arr_tags = params[:tags].to_s.split(",")
+      arr_id_songs = params[:songs_id].to_s.split(",")
+      arr_delete_id_songs = params[:songs_id_delete].to_s.split(",") # NEW CREAR BUCLE PARA ELIMINAR AlbumSong
+
+      @album.update(:name => params[:name],
+                    :description => params[:description],
+                    :date => params[:date])
+
+      @album.album_tags.destroy
+      
+      arr_tags.each {  | tag | @album.album_tags.create(:name => tag) }
+
+      arr_delete_id_songs.each {  | id_song |
+        # Delete AlbumSong if this already exists
+        if relation_album_song = AlbumSong.first(:album_id => @album.id, :song_id => id_song )
+          relation_album_song.destroy
+        end
+
+      }
+
+      arr_id_songs.each {  | id_song |
+
+        # Prevent repeat relationships in AlbumSong if this already exists
+        if relation_album_song = AlbumSong.first(:album_id => @album.id, :song_id => id_song )
+          relation_album_song.destroy
+        end
+        
+        @song = Song.get(id_song)
+        @album.songs << @song
+        @album.save
+
+      }
+        halt 200,  {:album_id => @album.id}.to_json
     else
-        return { :error => "Request error"}.to_json
+        halt 200,  {:error => "Request error"}.to_json
     end
-
-    @album = Album.get(id)
-    filename = params[:file][:filename].to_s
-    tmpfile = params[:file][:tempfile]
-    ext = (/\.[^.]*$/.match(filename)).to_s
-    name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
-    @album.update(:album_img_url => "albums/" + name_file_formated)
-    upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
-
-    return { :album_image => @album.album_img_url}.to_json
   end
 
 end

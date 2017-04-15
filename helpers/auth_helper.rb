@@ -146,10 +146,10 @@ module AuthHelpers
 
     if type == "photo" || type == "banner" then
       if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true
-        return { :error => "Format invalid"}.to_json
+        halt 200,  { :error => "Format invalid"}.to_json
       end
     else
-        return { :error => "Request error"}.to_json
+        halt 200,  { :error => "Request error"}.to_json
     end
 
     @user = User.get(session[:user])
@@ -161,11 +161,11 @@ module AuthHelpers
     if type == "photo"
       @user.user_media.update(:profile_img_url => "profiles/" + name_file_formated)
       upload_file(settings.profiles_folder, name_file_formated,  tmpfile)
-      return { :img_profile => @user.user_media.profile_img_url}.to_json
+      halt 200,  { :img_profile => @user.user_media.profile_img_url}.to_json
     elsif type == "banner"
       @user.user_media.update(:banner_img_url => "banners/" + name_file_formated)
       upload_file(settings.banners_folder, name_file_formated,  tmpfile)
-      return { :img_banner => @user.user_media.banner_img_url}.to_json         
+      halt 200,  { :img_banner => @user.user_media.banner_img_url}.to_json         
     end
   end
 
@@ -173,9 +173,9 @@ module AuthHelpers
     content_type 'application/json', :charset => 'utf-8' if request.xhr?    
     @user = User.get(session[:user])
     if social = @user.user_socials.get(params[:id]) && social.destroy
-      return { :success => "Social link deleted!"}.to_json
+      halt 200,  { :success => "Social link deleted!"}.to_json
     else
-      return { :error => "Error!"}.to_json
+      halt 200,  { :error => "Error!"}.to_json
     end
   end
 

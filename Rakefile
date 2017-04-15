@@ -36,14 +36,10 @@ def create_admin
     return
   end
   unless email.to_s.empty? || username.to_s.empty? || password.to_s.empty?
-    # if User.create!(:username => username,
-    #                 :email => email,
-    #                 :password => password,
-    #                 :role => 'admin')
       if @user = User.create(:username => username,
-                          :email => email, 
-                          :password => password,
-                          :role => 'admin')
+                             :email => email, 
+                             :password => password,
+                             :role => 'admin')
         @user.user_media = UserMedia.create
         @user.user_information = UserInformation.create
         @user.save

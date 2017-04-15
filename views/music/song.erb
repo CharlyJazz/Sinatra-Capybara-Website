@@ -10,11 +10,12 @@
               <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
               <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
               <a class="pre-delete-song  btn-flat" href="#modal-delete-song"><i class="material-icons">delete_forever</i></a>
+              <a href="/music/edit/song/<%= @song.id %>" class="btn-flat"><i class="material-icons">mode_edit</i></a>
               <ul id="dropdown2" class="dropdown-content">
                   <li><a href="<%=@message.facebook_url%>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                   <li><a href="<%=@message.pinterest_url%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
                   <li><a href="<%=@message.twitter_url%>"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                  <li><a href="<%=@message.google_url%>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                  
+                  <li><a href="<%=@message.google_url%>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                           
               </ul>                            
         </div>             
         <figcaption>
@@ -45,7 +46,7 @@
         <h4 class="modal-image-type">Upload any image</h4>
     </div>
     <div class="modal-footer">
-        <form id="form-update-image-song" action="/music/song/edit/<%= @song.id  %>?type=image">
+        <form id="form-update-image-song" action="/music/edit/song/<%= @song.id  %>?mode=image">
             <div class="file-field input-field s3">
                 <div class="btn" style="margin:0 !important">
                     <span>Image</span>
@@ -90,6 +91,7 @@
             })
             .done(function(response) {
               if(response.error){
+                  console.log(response.error);
                   $('#modal1').modal("open")
                   $(".modal-flash-description").text("Only images!");
               }
