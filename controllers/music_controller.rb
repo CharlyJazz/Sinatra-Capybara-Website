@@ -59,7 +59,7 @@ class MusicController < ApplicationController
   end
 
   post '/create/song' do
-    create_music
+    create_song
   end
 
   delete '/song/:id' do

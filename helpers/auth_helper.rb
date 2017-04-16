@@ -34,7 +34,7 @@ module AuthHelpers
   def login_user
     @user = User.first(:email => params[:email])
     if @user.class != User
-      flash[:warning] = "The email no are correct"
+      flash[:warning] = "The email or password no are correct"
       redirect '/auth'
     end
     if @user.password == params[:password]

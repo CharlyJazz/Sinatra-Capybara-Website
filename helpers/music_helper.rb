@@ -22,19 +22,17 @@ module MusicHelpers
     end
   end
 
-  def create_music
+  def create_song
     unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
        flash[:notice] = "No file selected"
        return redirect '/music/create/song'
     end
-
     @song = Song.create(:title => params[:title],
                         :description => params[:description],
                         :genre => params[:genre],
                         :type => params[:type],
                         :license => params[:license],
-                        :user_id => session[:user]
-                        )
+                        :user_id => session[:user])
 
     filename =  "#{@song.id}" + "_" + params[:file][:filename]
   
@@ -135,6 +133,15 @@ module MusicHelpers
       @album.songs << @song
       @album.save
     }
+
+    filename = params[:file][:filename].to_s
+    tmpfile = params[:file][:tempfile]
+    ext = (/\.[^.]*$/.match(filename)).to_s
+    name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+    
+    @album.update(:album_img_url => "albums/" + name_file_formated)
+    
+    upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
 
     flash[:notice] = "New album created!"
     return redirect "/auth/profile/#{session[:user]}#album"
