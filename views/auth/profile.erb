@@ -129,7 +129,7 @@
                     <div class="truncatedUserDescription__wrapper" style="max-height: 85px;">
                         <div class="truncatedUserDescription__content">
                             <div>
-                              <% if @user.user_information %>
+                              <% if @user.user_information.display_name %>
                                 <p>- <%= @user.user_information.first_name%> <%= @user.user_information.last_name%></p>
                                 <p>Spot: <%= @user.user_information.country%> <%= @user.user_information.city%></p>
                                 <p>Bio: <%= @user.user_information.bio%></p>

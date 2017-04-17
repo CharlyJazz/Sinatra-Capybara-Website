@@ -112,5 +112,19 @@ class MusicController < ApplicationController
   delete '/album/:id' do
     delete_album
   end
+
+  post '/comment/:model/:id' do
+    create_comment(params[:model], params[:id], params[:comment])
+  end
+
+  get '/search_comment/:model/:id' do
+    if params[:model] == 'song'
+      query = search_comment_for_song(params[:id])
+    elsif params[:model] == 'album'
+      query = search_comment_for_album(params[:id])
+    else
+      halt 404, {:responde => "Data no found"}.to.json
+    end
+  end
   
 end

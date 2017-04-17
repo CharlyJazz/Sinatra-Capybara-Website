@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col s6 m8">
+  <div class="col s6 m7">
       <a class="change-image-album" href="#modal-change-image">
         <figure class="song-figure">
             <img src="<%= asset_path(@album.album_img_url)%>">
@@ -26,13 +26,11 @@
             <span><%=tag.name%> - </span>
           <% end %>   
           <h5><a href="/auth/profile/<%= @user.id %>">Author: <%= @user.username %></a></h5>
-
         </figcaption>
     </div>
-    <div class="col s8">
+    <div class="col s5">
       <ul class="collection">
       <% @album.songs.each do |song| %>
-        
           <li class="collection-item avatar">
             <a href="/music/song/<%=song.id %>"><img src="<%= asset_path(song.song_img_url)%>" alt="" class="circle"></a> 
             <span class="title"><%=song.title%></span>
@@ -45,11 +43,31 @@
             <audio src="<%=song.url_song%>" controls></audio>     
             <a href="#!" class="secondary-content"><i class="material-icons">play_arrow</i></a>
           </li>
-                 
       <% end %>    
       </ul>
+    </div>      
+    <div class="col s7">
+        <form id="form-comment" action="/music/comment/album/<%= @album.id %>" method="POST">
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input class="input-comment" placeholder="Comment..." maxlength="100" type="text" name="comment" required>
+                <label>Write a comment</label>
+            <button class="btn-floating btn-large waves-effect waves-light red" type="submit" name="action">
+                 <i class="material-icons">add</i>
+            </button>
+            </div>
+        </form>
     </div>
-</div>
+    <div class="col s7">
+        <ul class="collection comments">
+            <% unless @album.comment_albums.any? %>
+                <li class="collection-item avatar no-exist">
+                    <span class="title">This Album no have comments</span>
+                </li>
+            <% end %>                     
+        </ul>        
+    </div>  
+</div> <!-- end row -->
 
 <div id="modal-delete-album" class="modal">
     <div class="modal-content">
@@ -85,7 +103,34 @@
 </div>
 
 <script>
+
+
+
   $( document ).ready(function() {
+    // REQUEST FOR COMMENT DATA FOR THIS SONG
+    $.get({
+        url: '/music/search_comment/album/<%=@album.id%>',
+        dataType: "json",
+
+    }).done(function(response) {
+        console.log(response.query);
+        $('.collection').css("display", "none");
+        for (let i = 0, len = response.query.length; i < len; i++) {
+            var comment = response.query[i];
+            $('.collection.comments').append(`<a href="/auth/profile/${comment.user_id}"> \
+                                    <img src='/assets/${comment.photo}' alt='user photo image' width="60px" class='circle'> \
+                                    <li class='collection-item avatar'> \
+                                        <span class='title'>${comment.username} | ${comment.text} </span> \
+                                    </li>`);
+        }
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        $('.collection').fadeIn(3200);
+    });  
+
     $(".change-image-album").tooltip({
         delay: 40,
         tooltip: "Click for change the image",

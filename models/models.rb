@@ -115,7 +115,7 @@ end
 class CommentAlbum
   include DataMapper::Resource
   property :id, Serial
-  property :text, String
+  property :text, String, :length => 5..100
   property :likes, Integer, :default => 0
 
   belongs_to :album
@@ -125,7 +125,7 @@ end
 class CommentSong
   include DataMapper::Resource
   property :id, Serial
-  property :text, String
+  property :text, String, :length => 5..100
   property :likes, Integer, :default => 0
 
   belongs_to :song

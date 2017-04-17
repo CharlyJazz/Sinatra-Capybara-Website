@@ -109,10 +109,12 @@ module MusicHelpers
   end
 
   def create_album
-    if !params[:file] || FastImage.type(params[:file][:tempfile]).nil? == true ||
-        params[:songs_id].to_s.empty? || params[:tags].to_s.empty? ||
-        params[:description].to_s.empty? || params[:date].to_s.empty? ||
-        params[:name].to_s.empty?
+    if params[:file] and FastImage.type(params[:file][:tempfile]).nil? == true then
+      flash[:error] = "Upload any image..."
+      redirect to("/create/album")
+    elsif params[:songs_id].to_s.empty? || params[:tags].to_s.empty? ||
+          params[:description].to_s.empty? || params[:date].to_s.empty? ||
+          params[:name].to_s.empty?
 
       flash[:error] = "Any field was are empty"
       redirect to("/create/album")
@@ -133,15 +135,17 @@ module MusicHelpers
       @album.songs << @song
       @album.save
     }
-
-    filename = params[:file][:filename].to_s
-    tmpfile = params[:file][:tempfile]
-    ext = (/\.[^.]*$/.match(filename)).to_s
-    name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
     
-    @album.update(:album_img_url => "albums/" + name_file_formated)
-    
-    upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
+    if params[:file]
+      filename = params[:file][:filename].to_s
+      tmpfile = params[:file][:tempfile]
+      ext = (/\.[^.]*$/.match(filename)).to_s
+      name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
+      
+      @album.update(:album_img_url => "albums/" + name_file_formated)
+      
+      upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
+    end
 
     flash[:notice] = "New album created!"
     return redirect "/auth/profile/#{session[:user]}#album"
@@ -218,6 +222,81 @@ module MusicHelpers
     else
         halt 200,  {:error => "Request error"}.to_json
     end
+  end
+
+  def create_comment(model, id, text_body)
+    content_type 'application/json', :charset => 'utf-8' if request.xhr?    
+    
+    [Song, Album].each { | model_class |
+        if model_class.name == model.capitalize
+            @model = model_class
+            break
+        end
+    }
+    
+    comment_model = 'Comment' + @model.name
+    foreign_key_symbol = (@model.name.downcase + "_id").to_sym
+    
+    @comment_model = Object.const_get(comment_model)
+    comment_create = @comment_model.create(:user_id => session[:user],
+                                           foreign_key_symbol => id,
+                                           :text => text_body)
+    # name user, fecha comentario, foto del usuario, y texto comentario
+    if comment_create.saved? then halt 200, {:success => text_body.capitalize}.to_json end
+
+    halt 200, {:error => "error"}.to_json
+  end
+
+  def search_comment_for_song(id_song)
+    query = repository(:default).adapter.select("
+      SELECT DISTINCT
+          users.id,
+          users.username,
+          user_media.profile_img_url,
+          comment_songs.text      
+      FROM
+          users      
+      INNER JOIN
+          user_media               
+              ON users.id = user_media.user_id
+      INNER JOIN
+          comment_songs 
+              ON users.id = comment_songs.user_id
+      INNER JOIN
+          songs
+              ON comment_songs.song_id = #{id_song};"
+      ).map{ |struct| { :user_id => struct.id,
+                        :username => struct.username,
+                        :photo => struct.profile_img_url,
+                        :text => struct.text}
+        }
+    halt 200, { :query => query }.to_json
+  end
+
+  def search_comment_for_album(id_album)
+    query = repository(:default).adapter.select("
+      SELECT DISTINCT
+          users.id,
+          users.username,
+          user_media.profile_img_url,
+          comment_albums.text      
+      FROM
+          (((users      
+      INNER JOIN
+          user_media               
+              ON users.id = user_media.user_id) 
+      INNER JOIN
+          comment_albums 
+              ON users.id = comment_albums.user_id)
+      INNER JOIN
+          songs
+              ON comment_albums.album_id = #{id_album})
+    ").map{ |struct| { :user_id => struct.id,
+                       :username => struct.username,
+                       :photo => struct.profile_img_url,
+                       :text => struct.text}
+        }
+    halt 200, { :query => query }.to_json        
   end
 
 end

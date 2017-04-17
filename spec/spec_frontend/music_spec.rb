@@ -26,7 +26,7 @@ RSpec.describe 'Website' do
       expect(page).to have_selector('div.song__wrapper', count: 5)
     end
 
-    it "when delete any song in profile" do
+    it "when delete song in profile" do
       action_login("charlytester@gmail.com", "password")
       click_link('charlytester')
       click_link('Profile')
@@ -38,7 +38,7 @@ RSpec.describe 'Website' do
       expect(page).to have_selector('div.song__wrapper', count: 4)
     end
 
-    it "when delete any song in song/" do
+    it "when delete song in song/" do
       action_login("charlytester@gmail.com", "password")
       visit '/music/song/1'
       find(:css, 'a.pre-delete-song').click
@@ -47,8 +47,8 @@ RSpec.describe 'Website' do
       expect(Song.all.length).to eq 4
     end
 
-    it 'when create any song' do
-      # This spec are failed...i dont have any idea why      
+    it 'when create song' do
+      # This spec are failed...i dont have  idea why      
       action_login("charlytester@gmail.com", "password")
       click_link('charlytester')
       click_link('Upload')
@@ -62,8 +62,8 @@ RSpec.describe 'Website' do
       expect(page).to have_content 'Successfully created...'
     end
 
-    it 'when edit any song' do
-      # This spec are failed...i dont have any idea why
+    it 'when edit song' do
+      # This spec are failed...i dont have  idea why
       action_login("charlytester@gmail.com", "password")
       click_link('Tracks')
       find(:linkhref, '/music/song/1').click
@@ -99,7 +99,7 @@ RSpec.describe 'Website' do
       expect(page).to have_content 'New album created!'
     end
 
-    it "when delete any album in album/" do
+    it "when delete album in album/" do
       action_login("charlytester@gmail.com", "password")
       visit '/music/album/1'
       find(:css, 'a.pre-delete-album').click
@@ -109,7 +109,7 @@ RSpec.describe 'Website' do
       expect(AlbumTag.all.length).to eq 0      
     end
 
-    it "when delete any album in profile/" do
+    it "when delete album in profile/" do
       action_login("charlytester@gmail.com", "password")
       click_link('charlytester')
       click_link('Profile')
@@ -121,8 +121,8 @@ RSpec.describe 'Website' do
       expect(page).to have_selector('div.album_wrapper', count: 0)
     end
 
-    it "when edit any album" do
-      # This spec are failed...i dont have any idea why
+    it "when edit album" do
+      # This spec are failed...i dont have  idea why
       action_login("charlytester@gmail.com", "password")
       click_link('charlytester')
       click_link('Profile')
@@ -142,6 +142,35 @@ RSpec.describe 'Website' do
       submit_form
       wait_for_ajax
       expect(page).to have_content 'New Album Name'
-    end        
+    end
+
+    it "when comment album" do
+      action_login("charlytester@gmail.com", "password")
+      click_link('charlytester')
+      click_link('Profile')
+      click_link('Albums')
+      page.execute_script "window.scrollBy(0,10000)"
+      find(:linkhref, '/music/album/1').click
+      within("form#form-comment") do
+        fill_in 'comment', with: Forgery(:lorem_ipsum).words(25)
+      end
+      submit_form          
+      wait_for_ajax
+      expect(page).to have_content 'You now: '      
+    end
+    it "when comment song" do
+      action_login("charlytester@gmail.com", "password")
+      click_link('charlytester')
+      click_link('Profile')
+      click_link('Tracks')
+      page.execute_script "window.scrollBy(0,10000)"
+      find(:linkhref, '/music/song/1').click
+      within("form#form-comment") do
+        fill_in 'comment', with: Forgery(:lorem_ipsum).words(25)
+      end
+      submit_form          
+      wait_for_ajax
+      expect(page).to have_content 'You now: '      
+    end      
   end
 end
