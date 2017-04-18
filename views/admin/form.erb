@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col s6 m7">
+  <h1>Create <%=@model%></h1>
+    <form action="" method="POST">
+      <% @form.each do | key, value | %>
+        <% if value.to_s == 'text' %>
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input placeholder="Write"
+                 type="text" name="<%= key %>">                 
+                <label>Write a <%= key.to_s.capitalize %></label>
+            </div>
+        <% elsif value.to_s == 'number' %>
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input disabled placeholder="Number of <%= key.to_s.capitalize %>" type="number"
+                 name="<%= key %>" value=<% if @model.all().any? %> "<%=@model.last(:fields => [:id]).id + 1%>" <% else %> "0" <% end %>>
+                <label>Number of <%= key.to_s.capitalize %></label>
+            </div>
+        <% elsif value.to_s == 'integer' %>
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input type="number"
+                 name="<%= key %>" min="0" value="1">
+                <label>Number of <%= key.to_s.capitalize %></label>
+            </div>        
+        <% elsif value.to_s == 'enum' %>
+            <% @form.each do | _key, _value | %>
+                <% if _key.to_s == key.to_s + "-options" %>
+                  <div style="margin-left:45px">
+                      <label><%= key.to_s.capitalize %></label>
+                      <select name="<%= key %>">
+                      <% _value.split(",").each do | option | %> 
+                          <option value="<%= option %>"> <%= option %> </option>
+                      <% end %>
+                      </select>
+                  </div>                         
+                <% end %>
+            <% end %>
+        <% elsif value.to_s == 'file' %>
+            <label>Upload <%= key.to_s.capitalize %></label>
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Search file</span>
+                    <input type="file" name="file">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="Upload <%= key.to_s.capitalize%>">
+                </div>
+            </div>        
+        <% end %>
+      <% end %>
+      <center>
+      <button class="btn waves-effect waves-light" type="submit" name="action">
+          Create <%=@model.name%>
+          <i class="material-icons right"></i>
+      </button>
+      </center>   
+    </form>
+  </div>
+</div>

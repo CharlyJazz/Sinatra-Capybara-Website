@@ -38,16 +38,23 @@ module Sinatra
       end
 
       app.get '/:model' do
-        verify_model_exist(params[:model])
+        verify_model_exist(params[:model]) # return @model
 
         @query_all_modell = select_from_all_query(@model)
         create_array_result(@query_all_modell)
         render :erb, :'admin/table', :layout => :'admin/layout'
       end
 
+      app.get '/create/:model' do
+        verify_model_exist(params[:model]) # return @model
+        @form = bundle_form(@model)
+        render :erb, :'admin/form', :layout => :'admin/layout'      
+      end
+
       app.delete '/:model' do
-        content_type 'application/json', :charset => 'utf-8' if request.xhr?
         verify_model_exist(params[:model])
+
+        content_type 'application/json', :charset => 'utf-8' if request.xhr?
         delete_record(params[:data], params[:model])
         halt 200,  { :success => params[:data] }.to_json
       end

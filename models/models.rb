@@ -23,7 +23,7 @@ class User
   include DataMapper::Resource
   property :id, Serial
   property :username, String, :length => 1..15
-  property :email, String, :length => 6..125, :unique => true
+  property :email, String, :length => 6..125, :unique => true, :format => :email_address
   property :password, BCryptHash
   property :recover_password, String
   property :role, String, :default => 'user'
@@ -41,8 +41,8 @@ end
 class UserMedia
   include DataMapper::Resource
   property :id, Serial  
-  property :profile_img_url, Text, :default => "profiles/default_profile.jpg", :lazy => false
-  property :banner_img_url, Text, :default => "banners/default_banner.jpg", :lazy => false
+  property :profile_img_url, FilePath, :default => "profiles/default_profile.jpg", :lazy => false
+  property :banner_img_url, FilePath, :default => "banners/default_banner.jpg", :lazy => false
   belongs_to :user, :key => true
 end
 
@@ -54,7 +54,7 @@ class UserInformation
   property :last_name, String, :length => 2..50
   property :country, String, :length => 2..50
   property :city, String, :length => 2..50
-  property :bio, Text, :length => 10..225,   :lazy => false
+  property :bio, Text, :length => 10..225, :lazy => false
 
   belongs_to :user, :key => true
 end
@@ -76,7 +76,7 @@ class Album
   property :date, String
   property :description, String
   property :likes, Integer, :default => 0
-  property :album_img_url, Text, :default => "albums/default_album.jpg", :lazy => false
+  property :album_img_url, FilePath, :default => "albums/default_album.jpg", :lazy => false
  
   has n, :songs, :through => Resource
   has n, :album_tags
@@ -94,18 +94,17 @@ class AlbumTag
 end
 
 class Song
-  # => Crear imagen default
   include DataMapper::Resource
   property :id, Serial
-  property :url_song, String # File music url
+  property :url_song, FilePath # File music url
   property :title, String
   property :description, String
   property :genre, String
-  property :type, Enum[:original, :remix, :live, :recording, :demo, :work, :effect, :other], :default => :original
-  property :license, Enum[:creative_commons, :all_right_reserved]
+  property :type, DataMapper::Property::Enum[:original, :remix, :live, :recording, :demo, :work, :effect, :other], :default => :original
+  property :license, DataMapper::Property::Enum[:creative_commons, :all_right_reserved]
   property :replay, Integer, :default => 0
   property :likes, Integer, :default => 0
-  property :song_img_url, Text, :default => "songs/default_song.png", :lazy => false
+  property :song_img_url, FilePath, :default => "songs/default_song.png", :lazy => false
 
   has n, :albums, :through => Resource
   has n, :comment_songs # => has n and belongs_to (or One-To-Many), CommentSong ----> comment_songs

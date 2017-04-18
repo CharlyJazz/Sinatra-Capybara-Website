@@ -30,8 +30,10 @@ RSpec.describe 'Website' do
     end
 
     it "when login" do
-      visit '/auth/'
-      within("form#login") do
+      action_login("charlytester@gmail.com", "password")
+      click_link('charlytester')
+      click_link('Setting')
+      within("form#setting-form-personal") do
         fill_in 'email', with: 'charlytester@gmail.com'
         fill_in 'password', with: 'password'
       end
@@ -40,6 +42,19 @@ RSpec.describe 'Website' do
       page.has_selector?('form#login')
     end
 
+    it 'when change media images' do
+      action_login("charlytester@gmail.com", "password")
+      click_link('charlytester')
+      click_link('Setting')
+      click_link('Media')      
+      within('form#setting-form-media') do
+        attach_file("image_profile", File.absolute_path('./assets/images/songs/default_song.png'), { make_visible: true })
+        attach_file("image_banner", File.absolute_path('./assets/images/songs/default_song.png'), { make_visible: true })        
+      end
+      click_button("Change images")
+      expect(page).to have_content 'Your media was updated successfully'
+    end
+  
     it "when change password" do
       visit '/auth/change_password'
       within("form#form__change__password") do

@@ -100,5 +100,27 @@ module AdminHelpers
             model_class.get(id).destroy
         end
     end
+
+    def bundle_form(model)
+        @form = Hash.new
+        model.properties.field_map.each { | k, v |
+            if v.kind_of? DataMapper::Property::String and !v.kind_of? DataMapper::Property::FilePath
+                @form[k] = 'text' # text fields
+            elsif v.kind_of? DataMapper::Property::Serial
+                @form[k] = 'number' #id fields
+            elsif v.kind_of? DataMapper::Property::Integer and !v.kind_of? DataMapper::Property::Enum
+                @form[k] = 'integer' # sometimes foreign id field                
+            elsif v.kind_of? DataMapper::Property::BCryptHash
+                @form[k] = 'password' #id fields
+            elsif v.kind_of? DataMapper::Property::Enum
+                @form[k] = 'enum' # enum
+                @form[k+"-options"] = v.options[:flags].join(",")
+            elsif v.kind_of? DataMapper::Property::FilePath
+                @form[k] = 'file' # file
+            end   
+        }
+        puts @form
+        @form
+    end
     
 end

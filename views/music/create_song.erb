@@ -54,7 +54,7 @@
                 <% end %>
                 <label>Genre</label>
             </div>
-            <label>Materialize Select</label>
+            <label>Type of the song</label>
             <select name="type" required>
                 <% ["original", "remix", "live", "recording", "work", "effect", "other"].each do |item| %>
                     <% if @mode == "EDIT" %>
@@ -68,7 +68,7 @@
                     <% end %>
                 <% end %>
             </select>
-            <label>license</label>
+            <label>License of the song</label>
             <select name="license" required>
                 <% {:creative_commons => "Creative Commons", :all_right_reserved => "All right reserved"}.each do |key, value| %>
                     <% if @mode == "EDIT" %>
