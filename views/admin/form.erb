@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col s6 m7">
   <h1>Create <%=@model%></h1>
-    <form action="" method="POST">
+    <form id="form-create-record" method="POST" enctype="multipart/form-data">
       <% @form.each do | key, value | %>
         <% if value.to_s == 'text' %>
             <div class="input-field">
@@ -14,7 +14,7 @@
             <div class="input-field">
                 <i class="material-icons prefix"></i>
                 <input disabled placeholder="Number of <%= key.to_s.capitalize %>" type="number"
-                 name="<%= key %>" value=<% if @model.all().any? %> "<%=@model.last(:fields => [:id]).id + 1%>" <% else %> "0" <% end %>>
+                 name="<%= key %>" value=<% if @model.all().any? %> "<%=@model.last(:fields => [:id]).id + 1%>" <% else %> "1" <% end %>>
                 <label>Number of <%= key.to_s.capitalize %></label>
             </div>
         <% elsif value.to_s == 'integer' %>
@@ -23,7 +23,14 @@
                 <input type="number"
                  name="<%= key %>" min="0" value="1">
                 <label>Number of <%= key.to_s.capitalize %></label>
-            </div>        
+            </div>
+        <% elsif value.to_s == 'password' %>
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input type="password"
+                 name="<%= key %>">
+                <label><%= key.to_s.capitalize %></label>
+            </div>                 
         <% elsif value.to_s == 'enum' %>
             <% @form.each do | _key, _value | %>
                 <% if _key.to_s == key.to_s + "-options" %>
@@ -34,7 +41,7 @@
                           <option value="<%= option %>"> <%= option %> </option>
                       <% end %>
                       </select>
-                  </div>                         
+                  </div>
                 <% end %>
             <% end %>
         <% elsif value.to_s == 'file' %>
@@ -42,12 +49,19 @@
             <div class="file-field input-field">
                 <div class="btn">
                     <span>Search file</span>
-                    <input type="file" name="file">
+                    <input type="file" name="<%= key %>">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" placeholder="Upload <%= key.to_s.capitalize%>">
                 </div>
-            </div>        
+            </div> 
+        <% elsif value.to_s == 'date' %>
+            <div class="input-field">
+                <i class="material-icons prefix"></i>
+                <input type="text"
+                 name="<%= key %>">
+                <label>Number of <%= key.to_s.capitalize %></label>
+            </div>
         <% end %>
       <% end %>
       <center>
@@ -59,3 +73,48 @@
     </form>
   </div>
 </div>
+
+<script>
+
+$(document).ready(function(){
+    form = document.querySelector("form").elements;
+    for (var i = 0, element; element = form[i++];) {
+        if (element.name === "updated_at" || element.name === "created_at"){
+            element.value = Date();
+        }
+    }
+    $("#form-create-record").submit(function(event){
+        event.preventDefault();
+        var that = $(this);
+        $.ajax({
+            url: '/admin/create/<%=@model%>',
+            type: 'POST',
+            dataType: 'json',
+            data: that.serializeArray()
+        }).done(function(response) {
+            console.log("done");
+            if(response.update){
+                $('#modal1').modal("open")
+                $(".modal-flash-description").text(response.update);
+            }
+            else if(response.create){
+                $('#modal1').modal("open")
+                $(".modal-flash-description").text(response.create);
+            }
+            else if(response.prevent_update){
+                $('#modal1').modal("open")
+                $(".modal-flash-description").text(response.prevent_update);
+            }
+            else if(response.no_create){
+                $('#modal1').modal("open")
+                $(".modal-flash-description").text(response.no_create);
+            }              
+        }).fail(function() {
+            console.log("error");
+
+        }).always(function() {
+            console.log("complete");
+        }); 
+    });
+});
+</script>

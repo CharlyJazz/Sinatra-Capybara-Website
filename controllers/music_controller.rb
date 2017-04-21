@@ -58,6 +58,10 @@ class MusicController < ApplicationController
     add_replay_ajax
   end
 
+  post '/song/like' do
+    like_song
+  end
+
   post '/create/song' do
     create_song
   end

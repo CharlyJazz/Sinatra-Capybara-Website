@@ -79,17 +79,10 @@ module AuthHelpers
         return redirect '/auth/setting'
     end
     @user = User.get(session[:user])
-    # Elimino todo lo que esta despues del primer espacio y él,
-    # y concateno su extension.
-    ext = (/\.[^.]*$/.match(name_profile.to_s)).to_s
-    name_profile = "#{@user.id}" + "_" + name_profile.gsub(/\s.+/, '') + ext
-    upload_file(settings.profiles_folder, name_profile,  tmpfile_profile)
-    @user.user_media.update(:profile_img_url => "profiles/" + name_profile)
-
-    ext = (/\.[^.]*$/.match(name_banner.to_s)).to_s
-    name_banner = "#{@user.id}" + "_" + name_banner.gsub(/\s.+/, '') + ext
-    upload_file(settings.banners_folder, name_banner,  tmpfile_banner)
-    @user.user_media.update(:banner_img_url => "banners/" + name_banner)
+    filename = upload_file(@user.id, settings.profiles_folder, name_profile, tmpfile_profile)
+    @user.user_media.update(:profile_img_url => "profiles/" + filename)
+    filename = upload_file(@user.id, settings.banners_folder, name_banner, tmpfile_banner)
+    @user.user_media.update(:banner_img_url => "banners/" + filename)
 
     flash[:notice] = "Your media was updated successfully"
     redirect to("/profile/#{session[:user]}")
@@ -151,20 +144,14 @@ module AuthHelpers
     else
         halt 200,  { :error => "Request error"}.to_json
     end
-
     @user = User.get(session[:user])
-    filename = params[:file][:filename].to_s
-    tmpfile = params[:file][:tempfile]
-    ext = (/\.[^.]*$/.match(filename)).to_s
-    name_file_formated = "#{@user.id}" + "_" + filename.gsub(/\s.+/, '') + ext
-
     if type == "photo"
-      @user.user_media.update(:profile_img_url => "profiles/" + name_file_formated)
-      upload_file(settings.profiles_folder, name_file_formated,  tmpfile)
+      filename = upload_file(@user.id, settings.profiles_folder, params[:file][:filename], params[:file][:tempfile])
+      @user.user_media.update(:profile_img_url => "profiles/" + filename)
       halt 200,  { :img_profile => @user.user_media.profile_img_url}.to_json
     elsif type == "banner"
-      @user.user_media.update(:banner_img_url => "banners/" + name_file_formated)
-      upload_file(settings.banners_folder, name_file_formated,  tmpfile)
+      filename = upload_file(@user.id, settings.banners_folder, params[:file][:filename], params[:file][:tempfile])
+      @user.user_media.update(:banner_img_url => "banners/" + filename)
       halt 200,  { :img_banner => @user.user_media.banner_img_url}.to_json         
     end
   end

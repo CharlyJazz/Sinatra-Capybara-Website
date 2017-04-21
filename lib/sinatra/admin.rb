@@ -8,10 +8,9 @@ require_relative './admin_helper'
 module Sinatra
   module AdminView
     def self.registered(app)
-      app.set :models_in_view, [] # Add model in view
-      app.set :many_to_many_no_delete, [] # This model will not be deleted 
-                                                # if it has many to many relation with
-                                                # another record being deleted
+      app.set :models_in_view, []         # Add model in the extension for create CRUD
+      app.set :many_to_many_no_delete, [] # This model will not be deleted if it has many to many relation
+                                          # with another record being deleted
       app.enable :method_override
       app.helpers AdminHelpers
       
@@ -51,12 +50,14 @@ module Sinatra
         render :erb, :'admin/form', :layout => :'admin/layout'      
       end
 
-      app.delete '/:model' do
-        verify_model_exist(params[:model])
+      app.post '/create/:model' do
+        verify_model_exist(params[:model]) # return @model
+        create_record(@model, create=nil)
+      end
 
-        content_type 'application/json', :charset => 'utf-8' if request.xhr?
-        delete_record(params[:data], params[:model])
-        halt 200,  { :success => params[:data] }.to_json
+      app.delete '/:model' do
+        verify_model_exist(params[:model]) # return @model
+        delete_record(params[:data], @model)
       end
 
     end

@@ -27,12 +27,13 @@ module BeforeHelpers
 
   def before_create_song(n)
     n.times do |i|
-    @song = Song.create(:title => Forgery(:internet).user_name,
+    @song = Song.new(:title => Forgery(:internet).user_name,
                         :description => Forgery(:lorem_ipsum).words(5),
                         :genre => "rock and roll",
                         :type => "original",
                         :license => "all_right_reserved",
                         :user_id => 1)
+    @song.save!
     @song.update(:url_song => "/" + "sound_test/maindrum.wav")
     end
   end

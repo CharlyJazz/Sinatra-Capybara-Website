@@ -39,12 +39,12 @@ def create_admin
       if @user = User.create(:username => username,
                              :email => email, 
                              :password => password,
-                             :role => 'admin')
+                             :role => :admin)
         @user.user_media = UserMedia.create
         @user.user_information = UserInformation.create
         @user.save
         @user.user_media.save
-        @user.user_information.save    
+        @user.user_information.save  
         DataMapper.finalize.auto_upgrade!
         puts "The admin was created successfully...
               Admin: #{username} Date: #{DateTime.now}"

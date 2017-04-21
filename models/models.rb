@@ -1,11 +1,5 @@
-require 'dm-core'
-require 'dm-migrations'
-require 'dm-types'
-require 'dm-validations'
+require 'data_mapper' # => http://datamapper.org/docs/associations.html
 require 'sinatra'
-require 'bcrypt'
-
-# => http://datamapper.org/docs/associations.html
 
 configure :test do
   DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/test.db")
@@ -26,8 +20,10 @@ class User
   property :email, String, :length => 6..125, :unique => true, :format => :email_address
   property :password, BCryptHash
   property :recover_password, String
-  property :role, String, :default => 'user'
- 
+  property :role, DataMapper::Property::Enum[:user, :admin], :default => :user
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50
+
   has 1, :user_information # => (One-to-One)
   has 1, :user_media       # => (One-to-One)
   has n, :user_socials     # => has n and belongs_to (or One-To-Many)
@@ -35,7 +31,17 @@ class User
   has n, :albums           # => has n and belongs_to (or One-To-Many)
   has n, :comment_albums   # => has n and belongs_to (or One-To-Many)
   has n, :comment_songs    # => has n and belongs_to (or One-To-Many)
+  has n, :user_like_songs
 
+
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class UserMedia
@@ -43,7 +49,14 @@ class UserMedia
   property :id, Serial  
   property :profile_img_url, FilePath, :default => "profiles/default_profile.jpg", :lazy => false
   property :banner_img_url, FilePath, :default => "banners/default_banner.jpg", :lazy => false
+  property :updated_at, String, :length => 25..50
+
   belongs_to :user, :key => true
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class UserInformation
@@ -55,42 +68,79 @@ class UserInformation
   property :country, String, :length => 2..50
   property :city, String, :length => 2..50
   property :bio, Text, :length => 10..225, :lazy => false
+  property :updated_at, String, :length => 25..50
 
   belongs_to :user, :key => true
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class UserSocial
   include DataMapper::Resource
   property :id, Serial
-  property :url, Text,   :lazy => false
+  property :url, Text, :lazy => false
   property :name, String
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50
 
   belongs_to :user
+
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class Album
-  # => Crear imagen default
   include DataMapper::Resource
   property :id, Serial
   property :name, String
   property :date, String
   property :description, String
-  property :likes, Integer, :default => 0
   property :album_img_url, FilePath, :default => "albums/default_album.jpg", :lazy => false
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50  
  
   has n, :songs, :through => Resource
   has n, :album_tags
   has n, :comment_albums # => has n and belongs_to (or One-To-Many)
                          # => CommentSong ----> comment_songs
   belongs_to :user
+
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class AlbumTag
   include DataMapper::Resource
   property :id, Serial
   property :name, String
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50  
+  
+  belongs_to :album
 
-  belongs_to :album  
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class Song
@@ -105,30 +155,72 @@ class Song
   property :replay, Integer, :default => 0
   property :likes, Integer, :default => 0
   property :song_img_url, FilePath, :default => "songs/default_song.png", :lazy => false
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50  
 
   has n, :albums, :through => Resource
+  has n, :user_like_songs
   has n, :comment_songs # => has n and belongs_to (or One-To-Many), CommentSong ----> comment_songs
   belongs_to :user
+
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
+
+class UserLikeSong
+  include DataMapper::Resource
+  property :id, Serial
+
+  belongs_to :song
+  belongs_to :user
+
+end
+  
 
 class CommentAlbum
   include DataMapper::Resource
   property :id, Serial
   property :text, String, :length => 5..100
-  property :likes, Integer, :default => 0
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50  
 
   belongs_to :album
-  belongs_to :user  
+  belongs_to :user
+
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 class CommentSong
   include DataMapper::Resource
   property :id, Serial
   property :text, String, :length => 5..100
-  property :likes, Integer, :default => 0
+  property :created_at, String, :length => 25..50
+  property :updated_at, String, :length => 25..50  
 
   belongs_to :song
-  belongs_to :user    
+  belongs_to :user
+
+  after :save do
+    self.created_at = DateTime.now().to_s
+  end
+
+  after :update do
+    self.updated_at = DateTime.now().to_s
+  end
+  
 end
 
 DataMapper.finalize.auto_upgrade!

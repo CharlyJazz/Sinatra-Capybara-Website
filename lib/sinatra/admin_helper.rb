@@ -34,29 +34,22 @@ module AdminHelpers
     def delete_orphan(id, main_model, parent_model, child_model, child_key, cardinality_tipe)
         if cardinality_tipe == "OneToOne"
             records = child_model.all(child_key.to_sym => id)
-            if !records.nil? then records.destroy end
+            if !records.nil? then records.destroy! end
         elsif cardinality_tipe == "OneToMany"
-            if main_model != parent_model
-                ;
-            else
+            if main_model == parent_model
                 begin
                 records = child_model.all(child_key.to_sym => id)
-                if !records.nil? then records.destroy end
+                if !records.nil? then records.destroy! end
                 rescue ArgumentError
-                    table_reference = parent_model.get(id)
                     convert_to_symbol = parent_model.to_s.downcase!
                     convert_to_symbol += "_id"
                     records = child_model.all(convert_to_symbol => id)
-                    if !records.nil? then records.destroy end
+                    if !records.nil? then records.destroy! end
                 end
             end
         elsif cardinality_tipe == "ManyToOne"
             records = child_model.all(child_key.to_sym => id)          
-            if !records.nil? then records.destroy end 
-        elsif cardinality_tipe == "ManyToMany"
-            ;
-        elsif cardinality_tipe == "ManyToManyNoDeleteChild"
-            ;
+            if !records.nil? then records.destroy! end
         end
     end
 
@@ -85,7 +78,7 @@ module AdminHelpers
                         child_key = child_key[0]
                     else
                         child_key = relationship.instance_variable_name.to_s.gsub("@", "") # Passing string of symbol
-                    end                    
+                    end
                     delete_orphan(id, model_class, parent_model, child_model, child_key, tipe)
                 end
             }
@@ -94,33 +87,86 @@ module AdminHelpers
 
     def delete_record(record, model)
         array_id = record.split(",")
-        model_class = Object.const_get(model)
         array_id.each do | id |
-            prevent_orphan_records(id, model_class)
-            model_class.get(id).destroy
+            prevent_orphan_records(id, model)
+            model.get(id).destroy!
         end
+        halt 200,  { :success => params[:data] }.to_json
     end
 
     def bundle_form(model)
+        # I should use the DateTime type of datemapper
+        # but this orm sucks and does not serve any type of timestamp.
+        timestamps = ["created_at", "updated_at", "created_on", "updated_on"]
         @form = Hash.new
-        model.properties.field_map.each { | k, v |
-            if v.kind_of? DataMapper::Property::String and !v.kind_of? DataMapper::Property::FilePath
-                @form[k] = 'text' # text fields
+        model.properties.field_map.each { | k, v | #  k => class of the typeof property, v => name of the property.
+            if v.kind_of? DataMapper::Property::String and !v.kind_of? DataMapper::Property::FilePath and !timestamps.include? k and k != "password"
+                @form[k] = 'text'
+            elsif timestamps.include? k or v.kind_of? DataMapper::Property::DateTime or v.kind_of? DataMapper::Property::Time
+                @form[k] = 'date'
             elsif v.kind_of? DataMapper::Property::Serial
-                @form[k] = 'number' #id fields
+                @form[k] = 'number'
             elsif v.kind_of? DataMapper::Property::Integer and !v.kind_of? DataMapper::Property::Enum
-                @form[k] = 'integer' # sometimes foreign id field                
+                @form[k] = 'integer'
             elsif v.kind_of? DataMapper::Property::BCryptHash
-                @form[k] = 'password' #id fields
+                @form[k] = 'password'
             elsif v.kind_of? DataMapper::Property::Enum
-                @form[k] = 'enum' # enum
+                @form[k] = 'enum'
                 @form[k+"-options"] = v.options[:flags].join(",")
             elsif v.kind_of? DataMapper::Property::FilePath
-                @form[k] = 'file' # file
+                @form[k] = 'file'
             end   
         }
-        puts @form
         @form
     end
+
+    def recursive_hash(h)
+        # Recorre el hash params y veo si hay otros hash en el, usualemente asociados con archivos
+        # si es un archivo entonces lo guardo en una variable que sera otro hash pero de los tempfiles con su filename
+        # para usar esa variable en una funcion que guarde la imagen con su respectivo formato de nombre y ruta de origen
+        h.each_pair { |k, v|
+            if v.is_a?(Hash) # Posible file
+                puts "key: #{k} recursing..."
+                recursive_hash(v)
+            else
+                puts "key: #{k} value: #{v}"
+            end
+        }
+    end
     
+
+    def create_record(model, create=nil)
+        params.delete_if { |key, value| ["action", "splat", "model", "captures"].include? key } # Filter
+        symbol_params = params.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo} # Convert all keys in symbol
+        length_old = model.all.length # Verify if really created other record 
+        if !create == true then
+            model.relationships.each { | relationship |
+                if model == relationship.child_model then
+                    child_key = relationship.child_key.indexes.values[0][0]
+                    if relationship.inverse.kind_of? DataMapper::Associations::OneToOne::Relationship
+                        # Buscare en el modelo hijo o sea User_Information si ya existe un registro con
+                        # el id_user que se mando en el formulario sí es así entonces debo mostrar un modal
+                        # diciendo que ya existe este registro y que si desea actualizarlo o no.
+                        if !relationship.child_model.first(child_key.to_sym => params[child_key.to_sym]).nil?
+                            model.update(symbol_params)
+                            halt 200, {:update => "Record update!"}.to_json
+                        else
+                            create_record(model, create=true)
+                        end
+                    end
+                end
+            }
+        end
+        begin
+            model.create(symbol_params)
+        rescue DataObjects::IntegrityError
+            model.new(symbol_params)
+        end
+        if length_old < model.all.length then
+            halt 200, {:create => "Record create!"}.to_json
+        else
+            halt 200, {:no_create => "Could not create log, some field is failing."}.to_json
+        end
+    end
+
 end

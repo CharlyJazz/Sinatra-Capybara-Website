@@ -8,11 +8,11 @@ module Apphelpers
     if session[:user]
       user = User.first(:id => session[:user])
 
-      if user.role == 'user'
+      if user.role == :user
         return AuthUser.new(user.username)
       end
 
-      if user.role == 'admin'
+      if user.role == :admin
         return Admin.new(user.username)
       end
 
@@ -43,12 +43,17 @@ module Apphelpers
     end
   end
 
-  def upload_file(directory, filename, tmpfile)
+  def upload_file(id, directory, filename, tmpfile)
+    # Prevent error if the filename have spaces e.g: my photo.png to myphoto.png and return.
+    ext = (/\.[^.]*$/.match(filename.to_s)).to_s
+    filename = "#{id}" + "_" + filename.gsub(/\s.+/, '') + ext
     path = File.join(directory, filename)
     File.open(path, "wb") { |f| f.write(tmpfile.read) }
-  end
-end
 
+    return filename
+  end
+
+end
 
 class GuestUser
   def permission_level

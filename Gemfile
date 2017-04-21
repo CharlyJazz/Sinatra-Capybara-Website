@@ -5,13 +5,10 @@ gem "sinatra-extension"
 gem "sinatra-flash"
 gem "uglifier"
 gem "rake"
-gem "dm-core"
-gem "dm-migrations"
-gem "dm-validations"
-gem "dm-aggregates"
-gem "dm-pager"
+
+gem 'datamapper', '~> 1.2'
 gem "dm-sqlite-adapter"
-gem "dm-types"
+
 gem "pony"
 gem 'sprockets'
 gem 'sass'

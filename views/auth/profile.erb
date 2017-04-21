@@ -75,8 +75,8 @@
                             <div class="song-action">
                                 <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
                                 <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
-                                <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
-                                <a class="pre-delete-song  btn-flat" href="#modal-delete" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
+                                <a class="btn-flat" id="like_song"  href="#!"><i class="material-icons" data-id-song="<%=song.id %>">favorite</i><%= song.user_like_songs.count %></a>                                                                                              
+                                <a class="pre-delete-song btn-flat" href="#modal-delete" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
                                 <ul id="dropdown2" class="dropdown-content">
                                     <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/song/<%=song.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                     <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('songs/default_song.png')%>&media=http%3A//localhost%3A8000/music/song/<%=song.id %>&description=<%= song.title %> - <%=song.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -265,7 +265,34 @@
                 console.log("complete");
             });        
         });
+        
 
+
+        $("#like_song").on("click", function(){
+            var id_song = $(this).attr("data-id");
+            var that = this;
+            $.ajax({
+                url: '/music/song/like',
+                type: 'POST',
+                dataType: 'json',
+                data: {id: id_song}
+            }).done(function(response) {
+                if(response.error){
+                    $('#modal1').modal("open")
+                    $(".modal-flash-description").text(response.error);
+                }
+                else if(response.like){
+                    console.log(response.like);
+                    $(that).html("<i class='material-icons'>favorite</i>" + response.like);
+                }  
+            }).fail(function() {
+                console.log("error");
+
+            }).always(function() {
+                console.log("complete");
+            }); 
+        });
+        
         $("audio").on("play",function(){
             var id_song = $(this).attr("data-id");
             var that = this;

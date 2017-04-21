@@ -23,22 +23,22 @@ module MusicHelpers
   end
 
   def create_song
-    unless params[:file] && (tmpfile = params[:file][:tempfile]) && (name = params[:file][:filename])
+    unless params[:file] && (tmpfile = params[:file][:tempfile]) && (filename = params[:file][:filename])
        flash[:notice] = "No file selected"
        return redirect '/music/create/song'
     end
-    @song = Song.create(:title => params[:title],
+
+    @song = Song.new(:title => params[:title],
                         :description => params[:description],
                         :genre => params[:genre],
                         :type => params[:type],
                         :license => params[:license],
                         :user_id => session[:user])
-
-    filename =  "#{@song.id}" + "_" + params[:file][:filename]
-  
+    @song.save!
+    
+    filename = upload_file(@song.id, settings.music_folder, filename, tmpfile)
     @song.update(:url_song => "/" + "tracks/" + filename)
-   
-    upload_file(settings.music_folder, filename, tmpfile)
+
     if @song.saved?
       flash[:notice] = "Successfully created..."
       redirect "/music/song/#{@song.id}"
@@ -55,15 +55,8 @@ module MusicHelpers
         halt 200,  {:error => "Format invalid"}.to_json
       else
         @song = Song.get(id)
-        filename = params[:file][:filename].to_s
-        tmpfile = params[:file][:tempfile]
-        ext = (/\.[^.]*$/.match(filename)).to_s
-        name_file_formated = "#{@song.id}" + "_" + filename.gsub(/\s.+/, '') + ext
-      
-        @song.update(:song_img_url => "songs/" + name_file_formated)
-       
-        upload_file(settings.song_image_folder, name_file_formated,  tmpfile)
-       
+        filename = upload_file(@song.id, settings.song_image_folder, params[:file][:filename], params[:file][:tempfile])
+        @song.update(:song_img_url => "songs/" + filename)
         halt 200,  {:song_image => @song.song_img_url}.to_json
       end
     elsif mode == "all" then
@@ -83,7 +76,9 @@ module MusicHelpers
   def add_replay_ajax
     content_type 'application/json', :charset => 'utf-8' if request.xhr?    
     @song = Song.get(params[:id])
-    if @song.update(:replay => @song.replay.to_i + 1)
+    old_replay = @song.replay
+    @song.update(:replay => @song.replay + 1)
+    if @song.replay > old_replay
       halt 200,  {:replay => @song.replay}.to_json
     else
       halt 200,  {:error => "Wow, a ocurrido un error"}.to_json
@@ -137,14 +132,8 @@ module MusicHelpers
     }
     
     if params[:file]
-      filename = params[:file][:filename].to_s
-      tmpfile = params[:file][:tempfile]
-      ext = (/\.[^.]*$/.match(filename)).to_s
-      name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
-      
-      @album.update(:album_img_url => "albums/" + name_file_formated)
-      
-      upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
+      filename = upload_file(@album.id, settings.album_image_folder, params[:file][:filename], params[:file][:tempfile])
+      @album.update(:album_img_url => "albums/" + filename)
     end
 
     flash[:notice] = "New album created!"
@@ -172,15 +161,8 @@ module MusicHelpers
         halt 200,  { :error => "Format invalid"}.to_json
       else
         @album = Album.get(id)
-        filename = params[:file][:filename].to_s
-        tmpfile = params[:file][:tempfile]
-        ext = (/\.[^.]*$/.match(filename)).to_s
-        name_file_formated = "#{@album.id}" + "_" + filename.gsub(/\s.+/, '') + ext
-        
-        @album.update(:album_img_url => "albums/" + name_file_formated)
-        
-        upload_file(settings.album_image_folder, name_file_formated,  tmpfile)
-
+        filename = upload_file(@album.id, settings.album_image_folder, params[:file][:filename], params[:file][:tempfile])
+        @album.update(:album_img_url => "albums/" + filename)
         halt 200,  { :album_image => @album.album_img_url}.to_json
       end
     elsif mode == "all" then
@@ -297,6 +279,20 @@ module MusicHelpers
                        :text => struct.text}
         }
     halt 200, { :query => query }.to_json        
+  end
+
+  def like_song
+    @song = Song.first(params[:id])
+    if !@song.nil?
+      if !@song.user_like_songs.first(:user_id => session[:user]).nil?
+        @song.user_like_songs.first(:user_id => session[:user]).destroy
+      else
+        @song.user_like_songs.create(:user_id => session[:user])
+      end
+      halt 200, {:like => @song.user_like_songs.count == 0 ? "0": @song.user_like_songs.count }.to_json
+    else
+      halt 303, {:error => 'Error'}.to_json
+    end
   end
 
 end

@@ -9,7 +9,7 @@ RSpec.describe 'Admin Controller' do
 
   describe "admin delete any model", :type => :feature do
     before do
-      before_create_user :amount => 6     # 5 user
+      before_create_user(:amount => 6) # 5
       before_create_social 3
       before_create_song 3
       before_create_comment_song 3, 2, 1  # parameters: n, song_id, user_id

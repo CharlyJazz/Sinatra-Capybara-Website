@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rack/test'
 require 'capybara/rspec'
 
-RSpec.describe 'Website' do
+RSpec.describe 'Music Front-End' do
   def app
     MusicController
   end
