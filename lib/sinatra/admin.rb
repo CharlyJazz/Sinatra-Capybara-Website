@@ -28,6 +28,7 @@ module Sinatra
       end
       
       app.before do
+        is_admin?
         @models = settings.models_in_view
         @many_to_many_no_delete_model = settings.many_to_many_no_delete  
       end

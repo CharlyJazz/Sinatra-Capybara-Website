@@ -69,6 +69,15 @@ class ApplicationController < Sinatra::Base
     })
   end
 
+  set(:auth) do |*roles|   # <- notice the splat here
+  condition do
+      unless logged_in? && roles.any? {|role| set_current_user.in_role? role }
+        login_flash
+        redirect "/auth", 303
+      end
+    end
+  end
+
   not_found do
     render :erb, :'error/not_found'
   end

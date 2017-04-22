@@ -36,11 +36,11 @@ class AuthController < ApplicationController
     login_user
   end
 
-  get '/change_password' do
+  get '/change_password', :auth => [:user, :admin] do
     render :erb, :'auth/change_password'
   end
 
-  post '/change_password' do
+  post '/change_password', :auth => [:user, :admin] do
     update_password
   end
 
@@ -56,6 +56,15 @@ class AuthController < ApplicationController
     render :erb, :'auth/profile'
   end
 
+  ['/', '/register'].each do |r| 
+    before r do
+      if logged_in? then
+         flash[:notice] = "You are logged"
+         redirect to("profile/#{session[:user]}")
+      end
+    end
+  end
+
   get '/register' do
     render :erb, :'auth/register'
   end
@@ -64,26 +73,26 @@ class AuthController < ApplicationController
     create_user
   end
 
-  get '/setting' do
+  get '/setting', :auth => [:user, :admin] do
     @user = User.get(session[:user])
     render :erb, :'auth/setting'
   end
 
-  post '/setting/:action' do
+  post '/setting/:action', :auth => [:user, :admin] do
     if params[:action] == "social" then return setting_social end
     if params[:action] == "personal" then return setting_personal end
     if params[:action] == "media" then return setting_media else redirect '/not_found' end
   end
 
-  delete '/setting/social/:id' do
+  delete '/setting/social/:id', :auth => [:user, :admin] do
     delete_social
   end
 
-  post '/setting/media/ajax' do
+  post '/setting/media/ajax', :auth => [:user, :admin] do
     setting_media_ajax(params[:type])
   end
 
-  get '/logout' do
+  get '/logout', :auth => [:user, :admin] do
     session.clear
     redirect '/'
   end

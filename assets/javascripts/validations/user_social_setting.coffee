@@ -1,7 +1,20 @@
+input_reset_index = () ->
+  count = 1
+  fields = $("#setting-form-social").find("input")
+  for field in fields
+    if $(field).attr("class") == "social_url"
+      $(field).attr("name", "social_url[" + count + "]")
+    else if $(field).attr("class") == "social_name"
+      $(field).attr("name", "social_name[" + count + "]")
+      count++
+  return
+
 max_fields = 10
 wrapper = $('.input_fields_wrap')
 add_button = $('.add_field_button')
+
 x = 1
+
 $(add_button).click (e) ->
   e.preventDefault()
   if x < max_fields
@@ -13,39 +26,31 @@ $(add_button).click (e) ->
                           <div class="input-field col s3">
                               <input class="social_name" name="social_name['+x+']" type="text" class="validate">
                           </div>
-                          <a href="#" class="btn waves-effect waves-light remove_field" data-id="remove-'+x+'">Remove</a></div>
+                          <a href="#" class="btn waves-effect waves-light remove_field" data-id="none">Remove</a></div>
                        </div>'
+  input_reset_index()
   return
-
 
 $(wrapper).on 'click', '.remove_field', (e) ->
   e.preventDefault()
-  id_social = $(this).data("id")
+  id = $(this).data("id")
   $(this).parent('div').remove()
   x--
   that = $(this)
-  fields = $("#setting-form-social").find("input")
   count = 1
-  
-  for field in fields
-    if $(field).attr("class") == "social_url"
-      $(field).attr("name", "social_url[" + count + "]")
-    else if $(field).attr("class") == "social_name"
-      $(field).attr("name", "social_name[" + count + "]")
-      count++
+  input_reset_index()
 
-  id = id_social.substring(id_social.indexOf('-') + 1) # ID
-
-  $.ajax '/auth/setting/social/' + id,
-    type: 'DELETE',
-    dataType: 'json',
-    success: (resp) ->
-      if resp.success then console.log "success #{resp.success}"
-      if resp.error then console.log "error #{resp.error}"
-    error: () ->
-      console.log "error"
-    fail: () ->
-      console.log "fail"
+  if id != "none"
+    $.ajax '/auth/setting/social/' + id,
+      type: 'DELETE',
+      dataType: 'json',
+      success: (resp) ->
+        if resp.success then console.log "success #{resp.success}"
+        if resp.error then console.log "error #{resp.error}"
+      error: () ->
+        console.log "error"
+      fail: () ->
+        console.log "fail"
 
   return
 
@@ -55,16 +60,10 @@ validateUrl = (value) ->
 
 
 $("#setting-form-social").submit (e) ->
-  fields = $("#setting-form-social").find("input")
   _count = 1 
   count = 1
-
-  for field in fields
-    if $(field).attr("class") == "social_url"
-      $(field).attr("name", "social_url[" + _count + "]")
-    else if $(field).attr("class") == "social_name"
-      $(field).attr("name", "social_name[" + _count + "]")
-      _count++
+  fields = $("#setting-form-social").find("input")
+  input_reset_index()
 
   for field in fields
     if $(field).attr("name") == "social_url[" + count + "]"

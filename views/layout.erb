@@ -19,7 +19,7 @@
     <div class="ea k" style="background-image: url('//cdn.shopify.com/s/files/1/1775/8583/t/1/assets/icon-seamless.png?16391932235316416049');"></div>
   </div>
   <div class="nav-wrapper db">
-    <a href="/pages/demo" class="brand-logo"><i class="material-icons">library_music</i>Frank Sinatra App</a>
+    <a href="/" class="brand-logo"><i class="material-icons">library_music</i>Frank Sinatra App</a>
     <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul class="bt hide-on-med-and-down">
       <li class="k"><a href="/">Home</a></li>
@@ -34,12 +34,15 @@
             <%= @current_user.name %> <i class="material-icons bt">arrow_drop_down</i>
           </a></li>
         <ul id='feature-dropdown' class='dropdown-content'>
-          <li><a href="/auth/profile/<%= session[:user]%>">Profile</a></li>
-          <li><a href="/music/create/song">Upload</a></li>
-          <li><a href="/music/create/album">Create Album</a></li>          
-          <li><a href="/auth/setting">Setting</a></li>
-          <li><a href="/auth/change_password">Change password</a></li>
-          <li><a href="/auth/logout">Logout</a></li>
+          <% if @current_user.permission_level == 2 %>
+            <li><a href="/admin"><i class="menu-anchor-icon material-icons">apps</i>Admin</a></li>
+          <% end %>
+          <li><a href="/auth/profile/<%= session[:user]%>"><i class="menu-anchor-icon material-icons">library_music</i>Profile</a></li>
+          <li><a href="/music/create/song"><i class="menu-anchor-icon material-icons">add_box</i>Upload</a></li>
+          <li><a href="/music/create/album"><i class="menu-anchor-icon material-icons">album</i>Create Album</a></li>          
+          <li><a href="/auth/setting"><i class="menu-anchor-icon material-icons">settings_applications</i>Setting</a></li>
+          <li><a href="/auth/change_password"><i class="menu-anchor-icon material-icons">vpn_key</i>Change password</a></li>
+          <li><a href="/auth/logout"><i class="menu-anchor-icon material-icons">exit_to_app</i>Logout</a></li>
         </ul>
       <% end %>
     </ul>

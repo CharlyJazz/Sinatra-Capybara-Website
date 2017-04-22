@@ -4,16 +4,20 @@ module Apphelpers
     "/assets/" + settings.sprockets.find_asset(source).digest_path
   end
 
+  def login_flash
+    flash[:warning] = "You dont access to this page, Login please."
+  end
+
   def current_user
     if session[:user]
       user = User.first(:id => session[:user])
 
       if user.role == :user
-        return AuthUser.new(user.username)
+        return AuthUser.new(user.username, user.role)
       end
 
       if user.role == :admin
-        return Admin.new(user.username)
+        return Admin.new(user.username, user.role)
       end
 
     else
@@ -31,6 +35,10 @@ module Apphelpers
 
   def logged_in?
     !!session[:user]
+  end
+
+  def is_admin?
+    set_current_user.permission_level == 2 or halt 401 
   end
 
   def login_required
@@ -71,12 +79,17 @@ class GuestUser
 end
 
 class AuthUser
-  def initialize(name)
+  def initialize(name, role)
     @name = name
+    @role = role
   end
 
   def permission_level
     1
+  end
+
+  def in_role? role
+    @role
   end
 
   def is_authenticated
@@ -95,12 +108,17 @@ class AuthUser
 end
 
 class Admin
-  def initialize(name)
+  def initialize(name, role)
     @name = name
+    @role = role
   end
 
   def permission_level
     2
+  end
+
+  def in_role? role
+    @role
   end
 
   def is_authenticated

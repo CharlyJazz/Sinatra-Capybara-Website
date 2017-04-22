@@ -1,5 +1,5 @@
 module BeforeHelpers
-  def before_create_user(options={:username=>nil, :email=>nil, :password=>nil, :recover_password=>"secret"})
+  def before_create_user(options={:username=>nil, :email=>nil, :password=>nil})
     if options[:amount] > 1
       options[:amount].times do | i |
         @user = User.create(:username => Forgery(:internet).user_name,
@@ -16,7 +16,7 @@ module BeforeHelpers
         @user = User.create(:username => options[:username],
                             :email => options[:email],
                             :password => options[:password],
-                            :recover_password => options[:recover_password])
+                            :recover_password => if options[:recover_password].nil? then "secret" else options[:recover_password] end)
         @user.user_media = UserMedia.create
         @user.user_information = UserInformation.create
         @user.save

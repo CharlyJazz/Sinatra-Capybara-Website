@@ -54,11 +54,11 @@ module AuthHelpers
       flash[:warning] = "You send a empty field..."
       return redirect 'auth/change_password'
     end
-    @user = User.first(:recover_password => params[:recover_password])
+    @user = User.get(session[:user])
     if params[:password_old] == params[:password_new]
       flash[:warning] = "The password are sames"      
       redirect 'auth/change_password'
-    elsif @user.class != User or @user.password != params[:password_old]
+    elsif @user.class != User or @user.recover_password != params[:recover_password] or @user.password != params[:password_old]
       flash[:warning] = "Yours dates not are corrects"
       redirect 'auth/change_password'
     else
@@ -157,9 +157,8 @@ module AuthHelpers
   end
 
   def delete_social
-    content_type 'application/json', :charset => 'utf-8' if request.xhr?    
     @user = User.get(session[:user])
-    if social = @user.user_socials.get(params[:id]) && social.destroy
+    if (@social = @user.user_socials.get(params[:id]) or halt 404, {:error => "Error"}) and @social.destroy!
       halt 200,  { :success => "Social link deleted!"}.to_json
     else
       halt 200,  { :error => "Error!"}.to_json

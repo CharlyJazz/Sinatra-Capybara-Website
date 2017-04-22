@@ -156,7 +156,7 @@ class Song
   property :likes, Integer, :default => 0
   property :song_img_url, FilePath, :default => "songs/default_song.png", :lazy => false
   property :created_at, String, :length => 25..50
-  property :updated_at, String, :length => 25..50  
+  property :updated_at, String, :length => 25..50
 
   has n, :albums, :through => Resource
   has n, :user_like_songs
