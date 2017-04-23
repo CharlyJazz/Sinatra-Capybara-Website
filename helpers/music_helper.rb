@@ -13,7 +13,7 @@ module MusicHelpers
 
   def delete_song
     song = Song.get(params[:id])
-    if song.destroy
+    if song.destroy!
       flash[:notice] = "Song deleted"
       return redirect "/auth/profile/#{session[:user]}"
     else
@@ -146,7 +146,7 @@ module MusicHelpers
 
   def delete_album
     album = Album.get(params[:id])
-    if album.album_tags.destroy && album.destroy
+    if album.album_tags.destroy! && album.destroy!
       flash[:notice] = "Album deleted"
       return redirect "/auth/profile/#{session[:user]}"
     else
@@ -282,7 +282,7 @@ module MusicHelpers
   end
 
   def like_song
-    @song = Song.first(params[:id])
+    @song = Song.get(params[:id])
     if !@song.nil?
       if !@song.user_like_songs.first(:user_id => session[:user]).nil?
         @song.user_like_songs.first(:user_id => session[:user]).destroy

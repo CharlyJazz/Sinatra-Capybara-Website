@@ -51,7 +51,6 @@ module BeforeHelpers
       @album = Album.create(:name => Forgery(:internet).user_name,
                             :description => Forgery(:lorem_ipsum).words(5),
                             :date => Forgery(:date).date,
-                            :likes => Forgery(:basic).number,
                             :user_id => 1)
       @album_tag = AlbumTag.create(:name => Forgery(:name).company_name,
                                    :album_id => i + 1)

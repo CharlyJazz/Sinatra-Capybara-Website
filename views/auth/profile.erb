@@ -2,21 +2,27 @@
     <div class="row">
         <div class="col s12">
             <div class="card user-card" id="profile" style="background-image: url(<%= asset_path(@user.user_media.banner_img_url)%>)">
-                <h1 style="color:white; text-transform: capitalize; display:table-row-group">
-                     <% if @user.user_information %>
+                <h3 style="color:white; text-transform: capitalize; display:table-row-group">
+                     <% if @user.user_information.display_name %>
                          <%= @user.user_information.display_name%>
                      <%else%>
-                         <%= @user.username%>                        
+                         <%= @user.username %>
                      <%end%>
-                </h1>
+                </h3>
                 <div class="card image-profile">
                     <div class="card-image z-depth-4">
+                    <% if @current_user.is_authenticated && @current_user.id.to_s == params[:id] %>
                       <a class="dialog-change-photo-profile" href="#modal-change-image">
                         <img class="responsive-img" id="img-profile" src="<%= asset_path(@user.user_media.profile_img_url)%>" style="cursor:pointer">                      
                       </a>
+                    <% else %>
+                        <img class="responsive-img" id="img-profile" src="<%= asset_path(@user.user_media.profile_img_url)%>" style="cursor:pointer">
+                    <% end %>
                     </div>
                 </div>
-                <a href="#modal-change-image" class="dialog-change-banner-profile btn transparent btn-upload-banner"><i class="material-icons">&#xE255;</i></a>
+                <% if @current_user.is_authenticated && @current_user.id.to_s == params[:id] %>
+                    <a href="#modal-change-image" class="dialog-change-banner-profile btn transparent btn-upload-banner"><i class="material-icons">&#xE255;</i></a>
+                <% end %>
             </div>
         </div>
         <div class="col s9">
@@ -24,10 +30,10 @@
                 <div class="card-tabs">
                     <ul class="tabs tabs-fixed-width">
                         <li class="tab">
-                            <a href="#albums" class="">Albums</a>
+                            <a href="#albums">Albums</a>
                         </li>
                         <li class="tab">
-                            <a class="" href="#tracks">Tracks</a>
+                            <a href="#tracks" class="active">Tracks</a>
                         </li>
                         <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div>
                     </ul>
@@ -43,19 +49,22 @@
                                 </a>
                             </figure>
                             <div class="song-action">
-                                <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
-                                <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
+                                <% if @current_user.is_authenticated && @current_user.id.to_s == params[:id] %>
                                 <a class="pre-delete-album  btn-flat" href="#modal-delete" data-id-album="<%=album.id %>"><i class="material-icons">delete_forever</i></a>
-                                <ul id="dropdown2" class="dropdown-content">
+                                <% end %>                          
+                            </div>
+                            <div class="song-dates">
+                                <h4 class="song-title"> <%= album.name %></h4>
+                                <p><%=album.description%></p>
+                                <small><%= album.date %></small>
+                            </div>
+                          <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
+                          <ul id="dropdown2" class="dropdown-content">
                                     <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/song/<%=album.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                     <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('albums/default_album.jpg')%>&media=http%3A//localhost%3A8000/music/song/<%=album.id%>&description=<%= album.name %> - <%=album.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
                                     <li><a href="https://twitter.com/home?status=http%3A//localhost%3A8000/music/album/<%=album.id %>"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
                                     <li><a href="https://plus.google.com/share?url=http%3A//localhost%3A8000/music/album/<%=album.id %>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>                                    
-                                </ul>                            
-                            </div>                           
-                            <div class="song-dates">
-                                <p class="song-title"> <%= album.name %> | <span><%=album.description%></span></p>
-                            </div>                            
+                          </ul>
                         </div>
                       <% end %>
                     <% else %>
@@ -74,9 +83,14 @@
                             </figure>
                             <div class="song-action">
                                 <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
-                                <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
-                                <a class="btn-flat" id="like_song"  href="#!"><i class="material-icons" data-id-song="<%=song.id %>">favorite</i><%= song.user_like_songs.count %></a>                                                                                              
+                                <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>
+                                <% if @current_user.is_authenticated %>
+                                <a class="btn-flat like_song" href="#!" data-id-song="<%=song.id %>"><i class="material-icons">favorite</i><%= song.user_like_songs.count %></a>
+                                <% end %>
+                                <% if @current_user.is_authenticated && @current_user.id.to_s == params[:id] %>                                
                                 <a class="pre-delete-song btn-flat" href="#modal-delete" data-id-song="<%=song.id %>"><i class="material-icons">delete_forever</i></a>
+                                <a href="/music/edit/song/<%= song.id %>" class="btn-flat"><i class="material-icons">mode_edit</i></a>
+                                <% end %>
                                 <ul id="dropdown2" class="dropdown-content">
                                     <li><a href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8000/music/song/<%=song.id %>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                                     <li><a href="https://pinterest.com/pin/create/button/?url=<%= asset_path('songs/default_song.png')%>&media=http%3A//localhost%3A8000/music/song/<%=song.id %>&description=<%= song.title %> - <%=song.description%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -265,58 +279,6 @@
                 console.log("complete");
             });        
         });
-        
-
-
-        $("#like_song").on("click", function(){
-            var id_song = $(this).attr("data-id");
-            var that = this;
-            $.ajax({
-                url: '/music/song/like',
-                type: 'POST',
-                dataType: 'json',
-                data: {id: id_song}
-            }).done(function(response) {
-                if(response.error){
-                    $('#modal1').modal("open")
-                    $(".modal-flash-description").text(response.error);
-                }
-                else if(response.like){
-                    console.log(response.like);
-                    $(that).html("<i class='material-icons'>favorite</i>" + response.like);
-                }  
-            }).fail(function() {
-                console.log("error");
-
-            }).always(function() {
-                console.log("complete");
-            }); 
-        });
-        
-        $("audio").on("play",function(){
-            var id_song = $(this).attr("data-id");
-            var that = this;
-            $.ajax({
-                url: '/music/song/replay',
-                type: 'POST',
-                dataType: 'json',
-                data: {id: id_song}
-            }).done(function(response) {
-                if(response.error){
-                    $('#modal1').modal("open")
-                    $(".modal-flash-description").text(response.error);
-                }
-                else if(response.replay){
-                    $(that).parent().find("#song-replay").html("<i class='material-icons'>play_arrow</i>" + response.replay);
-                }  
-            }).fail(function() {
-                console.log("error");
-
-            }).always(function() {
-                console.log("complete");
-            }); 
-        });
-
     });
 
 </script>

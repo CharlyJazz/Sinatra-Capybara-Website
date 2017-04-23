@@ -118,22 +118,7 @@ module AdminHelpers
             end   
         }
         @form
-    end
-
-    def recursive_hash(h)
-        # Recorre el hash params y veo si hay otros hash en el, usualemente asociados con archivos
-        # si es un archivo entonces lo guardo en una variable que sera otro hash pero de los tempfiles con su filename
-        # para usar esa variable en una funcion que guarde la imagen con su respectivo formato de nombre y ruta de origen
-        h.each_pair { |k, v|
-            if v.is_a?(Hash) # Posible file
-                puts "key: #{k} recursing..."
-                recursive_hash(v)
-            else
-                puts "key: #{k} value: #{v}"
-            end
-        }
-    end
-    
+    end    
 
     def create_record(model, create=nil)
         params.delete_if { |key, value| ["action", "splat", "model", "captures"].include? key } # Filter

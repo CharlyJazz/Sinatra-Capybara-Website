@@ -1,16 +1,24 @@
 <div class="row">
   <div class="col s6 m8">
-      <a class="change-image-song" href="#modal-change-image">
-          <figure class="song-figure">
-            <img src="<%= asset_path(@song.song_img_url)%>" width="250px">
-          </figure>
-      </a>
+        <% if @current_user.is_authenticated && @current_user.id == @song.user_id %>
+            <a class="change-image-song" href="#modal-change-image">
+                <figure class="song-figure">
+                <img src="<%= asset_path(@song.song_img_url)%>" width="250px">
+                </figure>
+            </a>
+        <% else %>
+                <figure class="song-figure">
+                <img src="<%= asset_path(@song.song_img_url)%>" width="250px">
+                </figure>      
+        <% end %>
         <div class="song-action" style="margin-top:15px">
               <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
-              <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>  
-              <a class="btn-flat"  href="#!"><i class="material-icons">favorite</i></a>                                                                                              
-              <a class="pre-delete-song  btn-flat" href="#modal-delete-song"><i class="material-icons">delete_forever</i></a>
+              <a class="btn-flat" href="#!"><i class="material-icons">file_download</i></a>  
+              <a class="btn-flat like_song" href="#!" data-id-song="<%=@song.id %>"><i class="material-icons">favorite</i><%=@song.user_like_songs.count%></a>
+              <% if @current_user.is_authenticated && @current_user.id == @song.user_id %>                                                                                        
+              <a class="pre-delete-song btn-flat" href="#modal-delete-song"><i class="material-icons">delete_forever</i></a>
               <a href="/music/edit/song/<%= @song.id %>" class="btn-flat"><i class="material-icons">mode_edit</i></a>
+              <% end %>
               <ul id="dropdown2" class="dropdown-content">
                   <li><a href="<%=@message.facebook_url%>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                   <li><a href="<%=@message.pinterest_url%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -25,9 +33,11 @@
           <p><%=@song.type%></p>
           <p><%=@song.license%></p>
         </figcaption>
-        <audio src="<%=@song.url_song%>" controls></audio>     
+        <audio data-id="<%=@song.id%>" src="<%=@song.url_song%>" controls></audio>
+        <a class="btn-flat align-icon-text" id="song-replay" href="#!"><i class="material-icons">play_arrow</i><%=@song.replay%></a>  
     </div>
     <div class="col s8">
+    <% if @current_user.is_authenticated %>
         <form id="form-comment" action="/music/comment/song/<%= @song.id %>" method="POST">
             <div class="input-field">
                 <i class="material-icons prefix"></i>
@@ -38,17 +48,21 @@
             </button>
             </div>
         </form>
-        </div>
-        <div class="col s8">
-            <ul class="collection comments">
-                <% unless @song.comment_songs.any? %>
-                    <li class="collection-item avatar no-exist">
-                        <span class="title">This song no have comments</span>
-                    </li>
-                <% end %>                     
-            </ul>        
-        </div>
+    <% else %>
+            <code>Login for comment the song</code>
+    <% end %>
     </div>
+    <div class="col s8">
+        <ul class="collection comments">
+            <% unless @song.comment_songs.any? %>
+                <li class="collection-item avatar no-exist">
+                    <span class="title">This song no have comments</span>
+                </li>
+            <% end %>                     
+        </ul>        
+    </div>
+
+</div>
 
 <div id="modal-delete-song" class="modal">
     <div class="modal-content">

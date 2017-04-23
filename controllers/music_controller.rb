@@ -39,18 +39,18 @@ class MusicController < ApplicationController
   end
 
   
-  get '/edit/song/:id' do
+  get '/edit/song/:id', :auth => [:user, :admin], :only_owner => [Song] do
     @mode = "EDIT"
     @song = find_song
     render :erb, :'music/create_song'
   end
 
-  post '/edit/song/:id' do# , :provides => :json do
+  post '/edit/song/:id', :auth => [:user, :admin], :only_owner => [Song] do
     edit_song_ajax(params[:mode], params[:id])
   end
 
 
-  get '/create/song' do
+  get '/create/song', :auth => [:user, :admin] do
     render :erb, :'music/create_song'
   end
 
@@ -58,15 +58,15 @@ class MusicController < ApplicationController
     add_replay_ajax
   end
 
-  post '/song/like' do
+  post '/song/like', :auth => [:user, :admin] do
     like_song
   end
 
-  post '/create/song' do
+  post '/create/song', :auth => [:user, :admin] do
     create_song
   end
 
-  delete '/song/:id' do
+  delete '/song/:id', :auth => [:user, :admin], :only_owner => [Song] do
     delete_song
   end
 
@@ -80,7 +80,7 @@ class MusicController < ApplicationController
     redirect not_found    
   end
 
-  get '/edit/album/:id' do
+  get '/edit/album/:id', :auth => [:user, :admin], :only_owner => [Album] do
     @mode = "EDIT"
     @album = find_album
     find_song_by_user session[:user]
@@ -100,24 +100,24 @@ class MusicController < ApplicationController
     render :erb, :'music/create_album'
   end
 
-  post '/edit/album/:id' do
+  post '/edit/album/:id', :auth => [:user, :admin], :only_owner => [Album] do
     edit_album_ajax(params[:mode], params[:id])
   end  
 
-  get '/create/album' do
+  get '/create/album', :auth => [:user, :admin] do
     find_song_by_user session[:user]
     render :erb, :'music/create_album'
   end  
 
-  post '/create/album' do
+  post '/create/album', :auth => [:user, :admin] do
     create_album
   end
 
-  delete '/album/:id' do
+  delete '/album/:id', :auth => [:user, :admin], :only_owner => [Album] do
     delete_album
   end
 
-  post '/comment/:model/:id' do
+  post '/comment/:model/:id', :auth => [:user, :admin] do
     create_comment(params[:model], params[:id], params[:comment])
   end
 

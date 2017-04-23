@@ -13,11 +13,11 @@ module Apphelpers
       user = User.first(:id => session[:user])
 
       if user.role == :user
-        return AuthUser.new(user.username, user.role)
+        return AuthUser.new(user.username, user.role, user.id)
       end
 
       if user.role == :admin
-        return Admin.new(user.username, user.role)
+        return Admin.new(user.username, user.role, user.id)
       end
 
     else
@@ -79,9 +79,11 @@ class GuestUser
 end
 
 class AuthUser
-  def initialize(name, role)
+  attr_reader :id, :name
+  def initialize(name, role, id)
     @name = name
     @role = role
+    @id = id
   end
 
   def permission_level
@@ -95,11 +97,6 @@ class AuthUser
   def is_authenticated
     true
   end
-
-  def name
-    @name
-  end
-
   # current_user.admin? returns false. current_user.has_a_baby? returns false.
   # (which is a bit of an assumption I suppose)
   def method_missing(m, *args)
@@ -108,9 +105,11 @@ class AuthUser
 end
 
 class Admin
-  def initialize(name, role)
+  attr_reader :id, :name
+  def initialize(name, role, id)
     @name = name
     @role = role
+    @id = id
   end
 
   def permission_level
@@ -123,10 +122,6 @@ class Admin
 
   def is_authenticated
     true
-  end
-
-  def name
-    @name
   end
   # current_user.admin? returns false. current_user.has_a_baby? returns false.
   # (which is a bit of an assumption I suppose)

@@ -4,6 +4,9 @@
 #= require validations/user_create_song
 #= require validations/user_create_comment
 
+#= require ajax/replay_song
+#= require ajax/like_song
+
 $(document).ready ->
   $('.scrollspy').scrollSpy()
   $('select').material_select()

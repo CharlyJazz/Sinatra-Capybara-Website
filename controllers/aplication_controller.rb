@@ -69,11 +69,21 @@ class ApplicationController < Sinatra::Base
     })
   end
 
-  set(:auth) do |*roles|   # <- notice the splat here
+  set(:auth) do |*roles|
   condition do
       unless logged_in? && roles.any? {|role| set_current_user.in_role? role }
         login_flash
         redirect "/auth", 303
+      end
+    end
+  end
+
+  set(:only_owner) do |model|
+  condition do
+      @model = model.get(params[:id]) or halt 404
+      unless  @model.user_id == session[:user]
+        login_flash
+        redirect "/auth/profile/#{session[:user]}", 303
       end
     end
   end

@@ -1,15 +1,23 @@
 <div class="row">
   <div class="col s6 m7">
-      <a class="change-image-album" href="#modal-change-image">
-        <figure class="song-figure">
-            <img src="<%= asset_path(@album.album_img_url)%>">
-        </figure>
-      </a>
+          <% if @current_user.is_authenticated && @current_user.id == @album.user_id %>
+            <a class="change-image-album" href="#modal-change-image">
+                <figure class="song-figure">
+                    <img src="<%= asset_path(@album.album_img_url)%>" width="250px">
+                </figure>
+            </a>
+        <% else %>
+                <figure class="song-figure">
+                    <img src="<%= asset_path(@album.album_img_url)%>" width="250px">
+                </figure>     
+        <% end %>
         <div class="song-action" style="margin-top:15px">
               <a class="btn-flat dropdown-button" href="#!" data-activates="dropdown2"><i class="material-icons">share</i></a>
               <a class="btn-flat"  href="#!"><i class="material-icons">file_download</i></a>
+              <% if @current_user.is_authenticated && @current_user.id == @album.user_id %>
               <a class="pre-delete-album  btn-flat" href="#modal-delete-album"><i class="material-icons">delete_forever</i></a>
-              <a href="/music/edit/album/<%= @album.id %>" class="btn-flat"><i class="material-icons">mode_edit</i></a>              
+              <a href="/music/edit/album/<%= @album.id %>" class="btn-flat"><i class="material-icons">mode_edit</i></a>
+              <% end %>            
               <ul id="dropdown2" class="dropdown-content">
                   <li><a href="<%=@message.facebook_url%>"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                   <li><a href="<%=@message.pinterest_url%>"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
@@ -39,13 +47,14 @@
                Genre: <%=song.genre%>
                <br>
             </p>
-            <audio src="<%=song.url_song%>" controls></audio>     
-            <a href="#!" class="secondary-content"><i class="material-icons">play_arrow</i></a>
+            <audio data-id="<%=song.id%>" src="<%=song.url_song%>" controls></audio>
+            <a href="#!" class="secondary-content align-icon-text" id="song-replay"><i class="material-icons">play_arrow</i><%=song.replay%></a>
           </li>
       <% end %>    
       </ul>
-    </div>      
+    </div>
     <div class="col s7">
+    <% if @current_user.is_authenticated %>
         <form id="form-comment" action="/music/comment/album/<%= @album.id %>" method="POST">
             <div class="input-field">
                 <i class="material-icons prefix"></i>
@@ -56,6 +65,9 @@
             </button>
             </div>
         </form>
+    <% else %>
+        <code>Login for comment the album</code>    
+    <% end %>
     </div>
     <div class="col s7">
         <ul class="collection comments">
@@ -102,17 +114,12 @@
 </div>
 
 <script>
-
-
-
   $( document ).ready(function() {
     // REQUEST FOR COMMENT DATA FOR THIS SONG
     $.get({
         url: '/music/search_comment/album/<%=@album.id%>',
         dataType: "json",
-
     }).done(function(response) {
-        console.log(response.query);
         $('.collection').css("display", "none");
         for (let i = 0, len = response.query.length; i < len; i++) {
             var comment = response.query[i];
@@ -153,7 +160,7 @@
             dataType: 'json',
             cache: false,
             contentType: false,
-            processData: false,                
+            processData: false,
             data: form_data
             })
             .done(function(response) {

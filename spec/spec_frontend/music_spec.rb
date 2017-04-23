@@ -31,7 +31,7 @@ RSpec.describe 'Music Front-End' do
       click_link('charlytester')
       click_link('Profile')
       click_link('Tracks')
-      find("a[data-id-song='1']").click
+      find("a.pre-delete-song[data-id-song='1']").click
       click_button('Yes, delete')
       click_link('Tracks')
       page.execute_script "window.scrollBy(0,10000)"
