@@ -38,7 +38,7 @@ module Apphelpers
   end
 
   def is_admin?
-    set_current_user.permission_level == 2 or halt 401 
+    set_current_user.permission_level == 2 or halt 401
   end
 
   def login_required

@@ -9,20 +9,23 @@ tracks/*
 
 assets/images/albums/*
 !assets/images/albums/.gitkeep
+!assets/images/albums/default_album.jpg
 
 assets/images/songs/*
 !assets/images/songs/.gitkeep
+!assets/images/songs/default_song.png
 
 assets/images/profiles/*
 !assets/images/profiles/.gitkeep
+!assets/images/profiles/default_profile.jpg
 
 assets/images/banners/*
 !assets/images/banners/.gitkeep
+!assets/images/banners/default_banner.jpg
 
 assets/materialize/*
 assets/jquery/*
 assets/jquery-validation/*
 assets/components-font-awesome/*
-
 
 sound_test

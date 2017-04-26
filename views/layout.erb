@@ -8,9 +8,9 @@
   <link rel="stylesheet" type="text/css" href="<%= asset_path('css/font-awesome.min.css') %>" />
   <link rel="stylesheet" type="text/css" href="<%= asset_path('style.css') %>" />
   <script type="text/javascript" src="<%= asset_path('dist/jquery.min.js') %>"></script>
-  <script type="text/javascript" src="<%= asset_path('dist/js/materialize.min.js') %>"></script>
-  <script type="text/javascript" src="<%= asset_path('dist/jquery.validate.min.js') %>"></script>  
+  <script type="text/javascript" src="<%= asset_path('dist/jquery.validate.min.js') %>"></script>
   <script type="text/javascript" src="<%= asset_path('dist/additional-methods.min.js') %>"></script>
+  <script type="text/javascript" src="<%= asset_path('dist/js/materialize.min.js') %>"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
@@ -23,7 +23,6 @@
     <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     <ul class="bt hide-on-med-and-down">
       <li class="k"><a href="/">Home</a></li>
-      <li><a href="/explorer">Explorer</a></li>
       <% if @current_user.is_anonimous %>
       <li><a href="/auth">Login</a></li>
       <li><a href="/auth/register">Register</a></li>
@@ -48,18 +47,17 @@
     </ul>
   </div>
 </nav>
-
+<%= styled_flash %>
 <main>
   <%= yield %>
-  <%= styled_flash %>
-<div id="modal1" class="modal bottom-sheet">
-  <div class="modal-content">
-    <h4 class="modal-flash-description"></h4>
+  <div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content">
+      <h4 class="modal-flash-description"></h4>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
-  </div>
-</div>
 </main>
 
 <footer class="page-footer grey lighten-1">

@@ -10,15 +10,9 @@ class AdminController < ApplicationController
   enable :method_override
   register Sinatra::AdminView
 
-  configure do
-    # set :profiles_folder, settings.root.join('assets', 'images/profiles')
-    # set :banners_folder, settings.root.join('assets', 'images/banners')
-  end
-
   def set_title
     @title ||= "Admin"
   end
-
 
   before do
     set_title

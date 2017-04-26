@@ -9,6 +9,7 @@ RSpec.describe 'Admin Controller' do
 
   describe "admin delete any model", :type => :feature do
     before do
+      before_create_user(:username => "admin_user", :email => "admin@gmail.com", :password => "password", :amount => 1, :role => :admin)
       before_create_user(:amount => 6) # 5
       before_create_social 3
       before_create_song 3
@@ -17,11 +18,15 @@ RSpec.describe 'Admin Controller' do
       before_create_comment_album 3, 2, 1 # parameters: n, album_id, user_id
     end
 
+    it "admin is admin?" do
+      expect(User.first(:username=>"admin_user").role).to eq(:admin)
+    end
+
     it 'when delete user' do
-      delete '/User',  {:data => "1"}
-      expect(User.all.length).to eq 4
-      expect(UserInformation.all.length).to eq 4
-      expect(UserMedia.all.length).to eq 4
+      delete '/User',  {:data => "1"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 5
+      expect(UserInformation.all.length).to eq 5
+      expect(UserMedia.all.length).to eq 5
       expect(UserSocial.all.length).to eq 0 # Almost all models have the id 1
       expect(Song.all.length).to eq 0
       expect(Album.all.length).to eq 0
@@ -30,20 +35,20 @@ RSpec.describe 'Admin Controller' do
     end
 
     it 'when delete user_information' do
-      delete '/UserInformation',  {:data => "1"}
-      expect(User.all.length).to eq 5
-      expect(UserInformation.all.length).to eq 4
+      delete '/UserInformation',  {:data => "1"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 6
+      expect(UserInformation.all.length).to eq 5
     end
 
     it 'when delete user_media' do
-      delete '/UserMedia',  {:data => "1"}
-      expect(User.all.length).to eq 5
-      expect(UserMedia.all.length).to eq 4
+      delete '/UserMedia',  {:data => "1"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 6
+      expect(UserMedia.all.length).to eq 5
     end
     
     it 'when delete album' do
-      delete '/Album',  {:data => "1"}
-      expect(User.all.length).to eq 5      # Should not affect this model
+      delete '/Album',  {:data => "1"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 6      # Should not affect this model
       expect(Song.all.length).to eq 3      # Should not affect this model
       expect(Album.all.length).to eq 2     # Should yes affect this model
       expect(AlbumTag.all.length).to eq 2
@@ -51,24 +56,24 @@ RSpec.describe 'Admin Controller' do
     end
 
     it 'when delete comments of album' do
-      delete '/CommentAlbum', {:data => "1,2,3"}
-      expect(User.all.length).to eq 5      # Should not affect this model
+      delete '/CommentAlbum', {:data => "1,2,3"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 6      # Should not affect this model
       expect(Album.all.length).to eq 3     # Should not affect this model
       expect(Song.all.length).to eq 3      # Should not affect this model
       expect(CommentAlbum.all.length).to eq 0
     end      
 
     it 'when delete song' do
-      delete '/Song', {:data => "2"}
-      expect(User.all.length).to eq 5      # Should not affect this model
+      delete '/Song', {:data => "2"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 6      # Should not affect this model
       expect(Album.all.length).to eq 3     # Should not affect this model
       expect(Song.all.length).to eq 2
       expect(CommentSong.all(:song_id => 2).length).to eq 0
     end
 
     it 'when delete comments of song' do
-      delete '/CommentSong', {:data => "1,2,3"}
-      expect(User.all.length).to eq 5      # Should not affect this model
+      delete '/CommentSong', {:data => "1,2,3"}, "rack.session" => {:user => 1}
+      expect(User.all.length).to eq 6      # Should not affect this model
       expect(Album.all.length).to eq 3     # Should not affect this model
       expect(Song.all.length).to eq 3      # Should not affect this model
       expect(CommentSong.all.length).to eq 0

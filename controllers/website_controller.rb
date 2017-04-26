@@ -6,8 +6,10 @@ require_relative '../models/models'
 require_relative 'aplication_controller'
 
 class WebsiteController < ApplicationController
+  helpers WebsiteHelpers
+
   def set_title
-    @title ||= "Frank Sinatra"
+    @title ||= "Frank Sinatra App"
   end
 
   before do
@@ -16,6 +18,9 @@ class WebsiteController < ApplicationController
   end
 
   get '/' do
+    @songs = Song.all(:limit => 5)
+    @albums = Album.all(:limit => 4)
+    @comments = search_comment_song
     erb :index
   end
 

@@ -1,5 +1,57 @@
 $color: rgb(227, 129, 129);
 
+.sound_body{
+  margin-top: 2.5%;
+  background-color: rgba(0, 150, 136, 0.54);
+  div.sound_body_genre{
+    padding-top: 5px;
+    background-color: #ececec;
+    h5{
+      width: 20%;
+      display: inline-block;
+    }
+    a{
+      display: inline-block;
+      vertical-align: super;
+      i{
+        vertical-align: sub;
+      }
+    }
+  }
+  figure{
+    float: left;
+    img{
+      width: 120px;
+    }
+  }
+  div.information{
+    display: flex;
+    padding-top: 8%;
+    margin-right: 15%;
+    h4{
+      margin-top: 0;
+    }
+  }
+  small.timestamp{
+    float: right;
+    margin-right: 2%
+  }
+  audio{
+    vertical-align: top;
+    width: 100%
+  }
+}
+
+li.last-comment{
+  margin-bottom: 2% !important;
+  small{
+    float: right
+  }
+  blockquote{
+    font-size: 0.7em;
+  }
+}
+
 .user-card{
   height: 180px;
 }
@@ -25,15 +77,20 @@ $color: rgb(227, 129, 129);
   100% {opacity: 0; display: none;}
 }
 
+div#flash{
+  position: absolute;
+  z-index: 99;
+  width: 100%;
+  top: 50%;
+  left: 0;
+}
 .flash {
   text-align: center;
   padding: .3em .4em;
   margin: 0 auto .5em;
   clear: both;
   max-width: 46.923em;
-  /* 610/13 */
   *max-width: 45.750em;
-  /* 610/13.3333 - for IE */
   animation: 4s fadetoggle;
   animation-fill-mode: forwards;
 

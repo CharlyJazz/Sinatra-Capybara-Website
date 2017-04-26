@@ -16,6 +16,7 @@ module BeforeHelpers
         @user = User.create(:username => options[:username],
                             :email => options[:email],
                             :password => options[:password],
+                            :role => options[:role],
                             :recover_password => if options[:recover_password].nil? then "secret" else options[:recover_password] end)
         @user.user_media = UserMedia.create
         @user.user_information = UserInformation.create
@@ -27,14 +28,14 @@ module BeforeHelpers
 
   def before_create_song(n)
     n.times do |i|
-    @song = Song.new(:title => Forgery(:internet).user_name,
-                        :description => Forgery(:lorem_ipsum).words(5),
-                        :genre => "rock and roll",
-                        :type => "original",
-                        :license => "all_right_reserved",
-                        :user_id => 1)
-    @song.save!
-    @song.update(:url_song => "/" + "sound_test/maindrum.wav")
+      @song = Song.new(:title => Forgery(:internet).user_name,
+                       :description => Forgery(:lorem_ipsum).words(5),
+                       :genre => "rock and roll",
+                       :type => "original",
+                       :license => "all_right_reserved",
+                       :user_id => 1)
+      @song.save!
+      @song.update(:url_song => "/" + "sound_test/maindrum.wav")
     end
   end
 
@@ -62,16 +63,14 @@ module BeforeHelpers
 
   def before_create_comment_album(n, album_id, user_id)
     n.times do | i |
-      CommentAlbum.create(:text => Forgery(:lorem_ipsum).words(5),
-                          :likes => Forgery(:basic).number,
+      CommentAlbum.create(:text => Forgery(:lorem_ipsum).words((i+1)*2),
                           :album_id => album_id,
                           :user_id => user_id)
     end
   end
   def before_create_comment_song(n, song_id, user_id)
     n.times do | i |
-      CommentSong.create(:text => Forgery(:lorem_ipsum).words(5),
-                         :likes => Forgery(:basic).number,
+      CommentSong.create(:text => Forgery(:lorem_ipsum).words((i+1)*2),
                          :song_id => song_id,
                          :user_id => user_id)
     end

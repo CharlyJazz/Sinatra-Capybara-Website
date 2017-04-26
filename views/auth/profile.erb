@@ -35,7 +35,6 @@
                         <li class="tab">
                             <a href="#tracks" class="active">Tracks</a>
                         </li>
-                        <div class="indicator" style="right: -0.0500031px; left: 141.05px;"></div>
                     </ul>
                 </div>
                 <div class="card-content grey lighten-4">
@@ -214,6 +213,7 @@
 
 <script>
     $( document ).ready(function() {
+        $("a[class='active']").click()
         var url = "/auth/setting/media/ajax?type=";
 
         $(".pre-delete-song").click(function(){

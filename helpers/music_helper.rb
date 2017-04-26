@@ -271,7 +271,7 @@ module MusicHelpers
           comment_albums 
               ON users.id = comment_albums.user_id)
       INNER JOIN
-          songs
+          albums
               ON comment_albums.album_id = #{id_album})
     ").map{ |struct| { :user_id => struct.id,
                        :username => struct.username,

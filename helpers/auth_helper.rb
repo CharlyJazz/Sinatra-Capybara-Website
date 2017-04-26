@@ -1,5 +1,3 @@
-require 'rack'
-
 module AuthHelpers
   def create_user
     if params[:username].to_s.empty? || params[:email].to_s.empty? ||

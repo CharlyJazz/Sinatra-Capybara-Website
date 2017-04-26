@@ -12,8 +12,7 @@ RSpec.describe 'Admin Front-End' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_max_wait_time = 5
-      before_create_user(:username => "admin_user", :email => "admin@gmail.com",
-                         :password => "password", :amount => 1, :role => "admin")
+      before_create_user(:username => "admin_user", :email => "admin@gmail.com", :password => "password", :amount => 1, :role => :admin)
       before_create_user(:amount => 5)
       before_create_song 7
     end
@@ -24,11 +23,11 @@ RSpec.describe 'Admin Front-End' do
       click_link('User')
       page.execute_script "$('#input-hidden-id-models').show()"
       4.times do | n |
-        within('.form-checkbox-' + (n + 1).to_s) do
-          find('[for=filled-in-' + (n + 1).to_s + ']').click
+        within('.form-checkbox-' + (n + 2).to_s) do
+          find('[for=filled-in-' + (n + 2).to_s + ']').click
         end
       end
-      find(:css, 'a.delete-model > i.material-icons', wait: 10).click
+      find(:css, 'a.delete-model > i.material-icons').click
       wait_for_ajax
       visit '/admin'
       click_link('User')
@@ -36,7 +35,7 @@ RSpec.describe 'Admin Front-End' do
     end
 
     it "when delete song records" do
-      action_login("admin@gmail.com", "random")
+      action_login("admin@gmail.com", "password")
       visit '/admin'
       click_link('Song')
       page.execute_script "$('#input-hidden-id-models').show()"
@@ -91,8 +90,7 @@ RSpec.describe 'Admin Front-End' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_max_wait_time = 5
-      before_create_user(:username => "admin_user", :email => "admin@gmail.com",
-                         :password => "password", :amount => 1, :role => "admin")
+      before_create_user(:username => "admin_user", :email => "admin@gmail.com", :password => "password", :amount => 1, :role => :admin)
     end                              
     
     it 'when create user' , :type => :feature do
@@ -130,6 +128,7 @@ RSpec.describe 'Admin Front-End' do
     end
 
     it 'when create user media' , :type => :feature do
+      # This test should be fail
       action_login("admin@gmail.com", "password")            
       visit '/admin/create/UserMedia'
       within('form') do
@@ -177,6 +176,7 @@ RSpec.describe 'Admin Front-End' do
     end
 
     it 'when create song', :type => :feature do
+      action_login("admin@gmail.com", "password")   
       visit '/admin/create/Song'
       within('form') do
         fill_in 'title', with: Forgery(:lorem_ipsum).words(5)
@@ -192,6 +192,7 @@ RSpec.describe 'Admin Front-End' do
     end      
 
     it 'when create album tag', :type => :feature do
+      action_login("admin@gmail.com", "password")   
       visit '/admin/create/AlbumTag'
       3.times { |n|
       within('form') do
@@ -206,6 +207,7 @@ RSpec.describe 'Admin Front-End' do
     end 
 
     it 'when create Comment for album', :type => :feature do
+      action_login("admin@gmail.com", "password")   
       visit '/admin/create/CommentAlbum'
       within('form') do
         fill_in 'text', with: Forgery(:lorem_ipsum).words(10)
@@ -218,6 +220,7 @@ RSpec.describe 'Admin Front-End' do
     end
 
     it 'when create Comment for song', :type => :feature do
+      action_login("admin@gmail.com", "password")   
       visit '/admin/create/CommentSong'
       within('form') do
         fill_in 'text', with: Forgery(:lorem_ipsum).words(10)

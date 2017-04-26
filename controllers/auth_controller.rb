@@ -56,15 +56,6 @@ class AuthController < ApplicationController
     render :erb, :'auth/profile'
   end
 
-  ['/', '/register'].each do |r| 
-    before r do
-      if logged_in? then
-         flash[:notice] = "You are logged"
-         redirect to("profile/#{session[:user]}")
-      end
-    end
-  end
-
   get '/register' do
     render :erb, :'auth/register'
   end
@@ -96,4 +87,14 @@ class AuthController < ApplicationController
     session.clear
     redirect '/'
   end
+
+  ['/', '/register'].each do |r| 
+    before r do
+      if logged_in? then
+         flash[:notice] = "You are logged"
+         redirect to("profile/#{session[:user]}")
+      end
+    end
+  end
+
 end

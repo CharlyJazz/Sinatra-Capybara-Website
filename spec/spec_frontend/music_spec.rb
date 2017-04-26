@@ -11,8 +11,7 @@ RSpec.describe 'Music Front-End' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_max_wait_time = 5
-      before_create_user(:username => "charlytester", :email => "charlytester@gmail.com",
-                         :password => "password", :amount => 1, :role => "user")
+      before_create_user(:username => "charlytester", :email => "charlytester@gmail.com", :password => "password")
       before_create_song 5
       before_create_album 1
     end
