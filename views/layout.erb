@@ -48,18 +48,29 @@
     </ul>
   </div>
 </nav>
+
+<main>
   <%= yield %>
   <%= styled_flash %>
+<div id="modal1" class="modal bottom-sheet">
+  <div class="modal-content">
+    <h4 class="modal-flash-description"></h4>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+  </div>
+</div>
+</main>
 
-  <div id="modal1" class="modal bottom-sheet">
-    <div class="modal-content">
-      <h4 class="modal-flash-description"></h4>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+<footer class="page-footer grey lighten-1">
+  <div class="container">
+    <div class="row" style="margin-bottom:0">
+      <div class="col s6 offset-s4">
+      <code>'create with love in sinatra!'</code>
+      </div>
     </div>
   </div>
-         
+</footer>
 
 <script>$(document).ready(function(){$('.modal').modal();});</script>
 <script type="text/javascript" src="<%= asset_path('app.js') %>"></script>

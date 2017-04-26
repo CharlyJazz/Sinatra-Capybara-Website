@@ -170,3 +170,13 @@ i.material-icons.menu-anchor-icon{
     margin: 0 15px 0 0;
     vertical-align: bottom
 }
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}

@@ -12,7 +12,6 @@ require_relative 'spec_support/action_helper'
 require_relative 'spec_support/form_helper'
 require_relative 'spec_support/wait_for_ajax'
 
-
 ENV['RACK_ENV'] = 'test'
 
 Dir.glob('./{helpers,controllers,models}/*.rb').each {|file| require file }
