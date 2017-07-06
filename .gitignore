@@ -1,7 +1,8 @@
 *.txt
 *.db
 *.sass-cache
-
+/.idea/
+.bundle/*
 /Gemfile.lock
 
 tracks/*

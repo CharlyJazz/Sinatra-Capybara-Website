@@ -1,5 +1,5 @@
 module BeforeHelpers
-  def before_create_user(options={:username=>nil, :email=>nil, :password=>nil})
+  def before_create_user(options={:username=>nil, :email=>nil, :password=>nil, :amount=>1})
     if options[:amount] > 1
       options[:amount].times do | i |
         @user = User.create(:username => Forgery(:internet).user_name,

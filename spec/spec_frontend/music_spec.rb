@@ -11,7 +11,7 @@ RSpec.describe 'Music Front-End' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_max_wait_time = 5
-      before_create_user(:username => "charlytester", :email => "charlytester@gmail.com", :password => "password")
+      before_create_user(:username => "charlytester", :email => "charlytester@gmail.com", :password => "password", :amount=>1,  :role => "user", :recover_password => "secret_charly")
       before_create_song 5
       before_create_album 1
     end
@@ -47,17 +47,16 @@ RSpec.describe 'Music Front-End' do
     end
 
     it 'when create song' do
-      # This spec are failed...i dont have  idea why      
       action_login("charlytester@gmail.com", "password")
       click_link('charlytester')
       click_link('Upload')
       within("form#user_create_song") do
-        attach_file("file", File.absolute_path('./sound_test/maindrum.wav'), { make_visible: true })  
+        attach_file("file", File.absolute_path('./sound_test/song.mp3'), { make_visible: true })  
         fill_in 'title', with: Forgery(:internet).user_name
         fill_in 'description', with: Forgery(:lorem_ipsum).words(10)
         fill_in 'genre', with: "Rock"
       end
-      submit_form
+      2.times { submit_form }
       expect(page).to have_content 'Successfully created...'
     end
 

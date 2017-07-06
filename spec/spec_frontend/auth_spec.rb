@@ -11,8 +11,7 @@ RSpec.describe 'Auth Front-End' do
     before do
       Capybara.default_driver = :selenium
       Capybara.default_max_wait_time = 0
-      before_create_user(:username => "charlytester", :email => "charlytester@gmail.com",
-                         :password => "password", :amount => 1, :role => "user", :recover_password => "secret_charly")
+      before_create_user(:username => "charlytester", :email => "charlytester@gmail.com", :password => "password", :amount => 1, :role => "user", :recover_password => "secret_charly")
       before_create_social 4
     end
 
