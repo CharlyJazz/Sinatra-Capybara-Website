@@ -10,8 +10,6 @@ $('.like_song').on 'click', ->
       $('#modal1').modal 'open'
       $('.modal-flash-description').text response.error
     else if response.like
-      console.log response.like
-      console.log $(that) 
       $(that).html "<i class='material-icons'>favorite</i>" + response.like
     return
   ).fail(->
