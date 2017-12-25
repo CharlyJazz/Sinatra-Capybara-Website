@@ -7,7 +7,7 @@ module AdminHelpers
                 break
             end
         end 
-        if @model == nil then
+        if @model.nil?
             flash[:error] = "Model no exist"
             redirect to('/')
         end
@@ -20,13 +20,8 @@ module AdminHelpers
     def create_array_result(query)
         @inspect_array = Array.new
         query.each do | register |
-            normalize = register.inspect.gsub("#", "")
-            normalize = normalize.gsub("nil", "empty")
-            attributes = normalize.split(" @")
-            attributes = attributes.drop(1)
-            attributes.each { |attr| attr = attr.gsub!(/.*?(?==)/im, "")
-                               attr.gsub!("=", "")
-                               attr.gsub!(">", "")}
+            attributes = register.inspect.gsub("#", "").gsub("nil", "empty").split(" @").drop(1)
+            attributes.each { |attr| attr = attr.gsub!(/.*?(?==)/im, "").gsub!("=", "").gsub!(">", "") }
             @inspect_array.push(attributes)
         end
     end
@@ -63,12 +58,12 @@ module AdminHelpers
             inverse_cardinality = relationship.inverse.class.name
             if model_class == child_model then cardinality = inverse_cardinality end
             cardinality_tipe.each  { | tipe |
-                if cardinality.include? tipe then
+                if cardinality.include? tipe
                     if tipe != "ManyToMany"
                         child_key = relationship.child_key.indexes.values[0]
                     else
                         settings.many_to_many_no_delete.each  { | _hash |
-                            if _hash[:model_delete] == parent_model && _hash[:model_life] == child_model then
+                            if _hash[:model_delete] == parent_model && _hash[:model_life] == child_model
                                 tipe = "ManyToManyNoDeleteChild"
                             end
                         }
@@ -86,8 +81,7 @@ module AdminHelpers
     end
 
     def delete_record(record, model)
-        array_id = record.split(",")
-        array_id.each do | id |
+        record.split(",").each do | id |
             prevent_orphan_records(id, model)
             model.get(id).destroy!
         end
@@ -147,7 +141,7 @@ module AdminHelpers
         rescue DataObjects::IntegrityError
             model.new(symbol_params)
         end
-        if length_old < model.all.length then
+        if length_old < model.all.length
             halt 200, {:create => "Record create!"}.to_json
         else
             halt 200, {:no_create => "Could not create log, some field is failing."}.to_json

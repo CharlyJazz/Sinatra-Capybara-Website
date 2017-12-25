@@ -29,11 +29,11 @@ module MusicHelpers
     end
 
     @song = Song.new(:title => params[:title],
-                        :description => params[:description],
-                        :genre => params[:genre],
-                        :type => params[:type],
-                        :license => params[:license],
-                        :user_id => session[:user])
+                     :description => params[:description],
+                     :genre => params[:genre],
+                     :type => params[:type],
+                     :license => params[:license],
+                     :user_id => session[:user])
     @song.save!
     
     filename = upload_file(@song.id, settings.music_folder, filename, tmpfile)
