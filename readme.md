@@ -1,4 +1,4 @@
-**Frank Sinatra App**
+**Frank Sinatra- An amazing app**
 
 Modular App in Sinatra, based on Soundcloud and the book Jump Start by Darren Jones
 
